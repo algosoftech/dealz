@@ -27,5 +27,4 @@ public function  __construct()
 
 		$this->load->view('about',$data);
 	}
-
 }
