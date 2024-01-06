@@ -26,5 +26,6 @@ public function  __construct()
 		$data['about']			=	$this->geneal_model->getData($tbl, $where,[]);
 
 		$this->load->view('about',$data);
+		//This is staging
 	}
 }
