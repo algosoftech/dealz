@@ -220,67 +220,127 @@ class DueManagement extends CI_Controller {
 				echo outPut(0,lang('SUCCESS_CODE'),lang('USER_ID_EMPTY'),$result);
 			else:
 
-			    $users_id 					= $this->input->get('users_id');
-
-				$tblName 					=	'da_dueManagement';
-				$shortField 				= 	array('due_management_id'=> -1 );
-				$whereCon['where']			=	array('user_id_deb' => (int)$users_id);
-				$DueManagement 				=	$this->geneal_model->duemanagementweb('multiple',$tblName,$whereCon,$shortField);
-				
-				if($DueManagement):
-					$NewDuManagement = array();
-					foreach ($DueManagement as $key => $items):
-						if($items['bind_person_id'] == $users_id ):
-						 	$NewDuManagement[] = $items;
-						endif;
-					endforeach;
-					$DueManagement = $NewDuManagement;
+				$DZL_USERID  =   $this->input->get('users_id');
+				if($DZL_USERID):
+					$UsersType	 =	$this->common_model->getPaticularFieldByFields('users_type','da_users','users_id',(int)$DZL_USERID);
 				endif;
-				
-				//Array_sorting
-				rsort($DueManagement);
 
-  				$TotalRecharge 				=   0;
-				foreach($DueManagement as $key => $items):
-				 $TotalRecharge = $TotalRecharge + $items['recharge_amt'];
-				endforeach;
-				
-				// Todays total sales details.
-				$whereCon['where_gte'] 		= 	array(array("created_at",date('Y-m-d 00:01')));
-				$whereCon['where_lte'] 		= 	array(array("created_at",date('Y-m-d 23:59')));
-				$todayDueManagement 		=	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField);
-					
-				$todayTotalRecharge = 0;
-				if($todayDueManagement):
-					foreach ($todayDueManagement as $key => $item):
-					 $todayTotalRecharge = $todayTotalRecharge + $item['recharge_amt'];
-					 $totalCash_collected = $totalCash_collected + $item['cash_collected'];
-					endforeach;
+
+				$tblName 	 =	'da_dueManagement';
+				$shortField  = 	array('due_management_id'=> -1 );
+
+				$fromDate =  $this->input->get('fromDate');
+				$toDate   =  $this->input->get('toDate');
+
+				if($fromDate):
+					$data['fromDate'] 		= date('Y-m-d 00:01' ,strtotime($fromDate));
+					$whereCon['where_gte'] 	= array(array("created_at",$data['fromDate']));
+				else:
+					// $data['fromDate'] 		= date('Y-m-d 00:01');
+					// $whereCon['where_gte'] 	= array(array("created_at",$data['fromDate']));
 				endif;
-				
-				$result['TotalRecharge']   		= $TotalRecharge;
-				$result['todayTotalRecharge']   = $todayTotalRecharge;
+				if($toDate):
+					// $data['toDate'] 		= date('Y-m-d 23:59' ,strtotime($toDate));
+					// $whereCon['where_lte'] 	= array(array("created_at",$data['toDate']));
+				else:
+					$data['toDate'] 		= date('Y-m-d 23:59');
+					$whereCon['where_lte'] 	= array(array("created_at",$data['toDate']));
+				endif;
+				$whereCon['where']	 	    = array('user_id_deb' => (int)$DZL_USERID,'bind_person_id' => (string)$DZL_USERID );
 
-				if($DueManagement):
+				// Search by product/retailer details....
+				$salesperson = $this->input->get('salesperson');
 
-					foreach ($DueManagement as $key => $item):
-						$UserIdTo = $item['_id'];
+				if(empty($salesperson)):
+
+					$tbl 			 =  'da_dueManagement';
+				 	$shortField 	 =  array('due_management_id' => -1 );
+					$DueManagement 	 =  $this->geneal_model->duemanagementweb('multiple',$tbl,$whereCon ,$shortField);
+					// $data['DueManagement']   = $DueManagement?$DueManagement:'';
+				else:
+					$data['salesperson'] = $salesperson;
+					if(is_numeric($salesperson)):
+						$sValue = (int)$salesperson;
+						$whereCondition['where']	 = 	array( 'users_mobile' => (int)$sValue ,'status' => 'A');
+						// $whereCon['where']	 = 	array( 'sender_users_mobile' => (int)$sValue ,'record_type' => 'Debit','user_type' => 'Promoter');
+					else:
+						$sValue = $salesperson;
+						$whereCondition['where']	 = 	array( 'users_email' => $sValue ,'status' => 'A');
+						// $whereCon['where']	 = 	array( 'sender_users_email' => $sValue ,'record_type' => 'Debit','user_type' => 'Promoter');
+					endif;
+
+					$Salesperson	   =  $this->common_model->getParticularFieldByMultipleCondition(array('users_id'),'da_users',$whereCondition);
+					$DZL_USERID        =  $Salesperson['users_id']; 
+					$whereCon['where'] = array('user_id_deb' => (int)$DZL_USERID,'bind_person_id' => (string)$DZL_USERID );
+
+					$tblName 			 = 	'da_dueManagement';
+					$shortField 		 = 	array('due_management_id'=> -1 );
+					$Salesperson_Due  	 =	$this->geneal_model->duemanagementweb('multiple',$tblName,$whereCon,$shortField);
+					// $data['Salesperson_Due']    = $Salesperson_Due?$Salesperson_Due:'';
+				endif;
+
+				if($UsersType == "Super Salesperson"):
+					$tblName 				= 	'da_users';
+					$shortField 			= 	'';
+					$whereConsales['where']		=	array('users_type' => 'Sales Person','status' => "A" );
+					$whereConsales['where_in']	=   array("0" => "users_email" ,"1"=>array("manawalanwaseem@gmail.com","shafimak25@gmail.com","ismailkk0520@gmail.com","jaseer26@gmail.com","jaleel.dmi@gmail.com"));
+
+					$salesPersonList 		    = 	$this->common_model->getData('multiple',$tblName,$whereConsales,$shortField);
+					$data['salespersonList']    = $salesPersonList;
+
+				endif;
+				if($Salesperson_Due|| $DueManagement ):
+					$dueData        = $DueManagement?$DueManagement : $Salesperson_Due;
+					$TotalRecharge  =   0;
+					foreach($dueData as $key => $items):
+					 	$TotalRecharge = $TotalRecharge + $items['recharge_amt'];
+
+					 	$UserIdTo = $items['user_id_to'];
 						$tblName 					=	'da_ticket_orders';
 						$shortField 				= 	array('sequence_id'=> -1 );
-
+						if( $data['fromDate'] &&  $data['toDate']):
 						$whereCona  				=	array(
-																'user_id' => (int)$UserIdTo  , 'status' => array('$ne'=> 'CL'),
-																'created_at' => array(  '$gte' => date('Y-m-d 00:01') , '$lte' => date('Y-m-d 23:59'))) ;
+														'user_id' => (int)$UserIdTo  , 'status' => array('$ne'=> 'CL'),
+														'created_at' => array(  '$gte' => $data['fromDate'] , '$lte' => $data['toDate'])
+													 );
+						else:
+						$whereCona  				=	array(
+														'user_id' => (int)$UserIdTo  , 'status' => array('$ne'=> 'CL'),
+														'created_at' => array(  '$gte' => date('Y-m-d 00:01')  , '$lte' => date('Y-m-d 23:59'))
+												 	);
+						endif;
+						$todaysales					= $this->geneal_model->todaysales($tblName,$whereCona,$shortField);
+						if($DueManagement):
+							$DueManagement[$key]['todaySales'] = $todaysales;
+							$data['DueManagement']   = $DueManagement?$DueManagement:'';
+						else:
+							$Salesperson_Due[$key]['todaySales'] = $todaysales;
+							$data['Salesperson_Due']   = $Salesperson_Due?$Salesperson_Due:'';
+						endif;
 
-						$todaysales							=	$this->geneal_model->todaysales($tblName,$whereCona,$shortField);
-						$DueManagement[$key]['todaySales'] = $todaysales;
-					endforeach;
-				endif;
+					endforeach;	
+					$data['TotalRecharge']   	  = $TotalRecharge;
 
-				if($DueManagement):
-					$result['DueManagement'] = $DueManagement;
-					$results = $result;
+
+					// Todays total sales details.
+					$whereCon['where_gte'] 		= 	array(array("created_at",date('Y-m-d 00:01')));
+					$whereCon['where_lte'] 		= 	array(array("created_at",date('Y-m-d 23:59')));
+					$tblName 			 		= 	'da_dueManagement';
+					$shortField  				= 	array('due_management_id'=> -1 );
+					$todayDueManagement 		=	$this->geneal_model->duemanagementweb('multiple',$tblName,$whereCon,$shortField);
+
+					$todayTotalRecharge = 0;
+					if($todayDueManagement):
+						foreach ($todayDueManagement as $key => $item):
+						 $todayTotalRecharge  = $todayTotalRecharge  + $item['recharge_amt'];
+						 $totalCash_collected = $totalCash_collected + $item['cash_collected'];
+						endforeach;
+					endif;
+					$data['todayTotalRecharge']   = $todayTotalRecharge;
 					
+				endif;
+				if($data):
+					$results = $data;
 					echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_ACTION'),$results);	
 				else:
 					echo outPut(0,lang('SUCCESS_CODE'),lang('DATA_NOT_FOUND'),$results);	
@@ -290,7 +350,6 @@ class DueManagement extends CI_Controller {
 		else:
 			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
 		endif;
-
 	}
 
 }

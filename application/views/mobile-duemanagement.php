@@ -14,9 +14,7 @@ $( function() {
         <div class="mob_wrapper inner_bodyarea">
             <section class="inner_head">
                 <a href="<?=base_url('/');?>"><i class="icofont-rounded-left"></i></a>
-                <h1>
-                    Due Management
-                </h1>
+                <h1>Due Management</h1>
             </section>
             <div class="inner_pagedata">
                 <section class="deals_homesec">
@@ -30,7 +28,7 @@ $( function() {
                                 <div class="col-sm-12 col-md-12 col-lg-12 form-group">
                                     <select name="salesperson" class="salesperson form-select w-100" aria-label="Default select example">
                                         <option value=""> Select Sales Person</option>
-                                       <?php foreach ($salespersonList as $key => $items):
+                                         <?php foreach ($salespersonList as $key => $items):
                                          $Saleperson_fullName = $items['users_name'].' '.$items['last_name'];
                                          $Saleperson_email = $items['users_email'];
                                          $Saleperson_mobile = $items['users_mobile'];
@@ -54,6 +52,7 @@ $( function() {
                                     <input type="text" name="toDate" id="toDate" autocomplete="off" value="<?=$toDate;?>" class="form-control form-control-sm" placeholder="To Date" autocomplete='off'>
                                 </div>
                                  <div class="col-sm-6 col-md-6 col-lg-6 form-group text-end">
+                                     <input class="btn btn-secondary btn-submit" type="reset" value="Refersh">                             
                                      <button class="btn btn-danger btn-submit"> Search </button>
                                 </div>
 
@@ -69,6 +68,11 @@ $( function() {
                                           <img src="<?=base_url('/assets/AP-GREEN.png');?>" width="25px" alt="appgreen">
                                           <span class="ared" style="font-weight: bold;"> : <?=number_format($todayTotalRecharge , 2);?></span><br>
                                         </div>
+                                         <div>
+                                          <label class="label">Today's Total Sales :  </label>
+                                          <img src="<?=base_url('/assets/AP-GREEN.png');?>" width="25px" alt="appgreen">
+                                          <span class="ared" style="font-weight: bold;"> : <?=number_format($todaystotalSales , 2);?></span><br>
+                                        </div>
                                     </section>
                                 </div>
                               </div>
@@ -80,8 +84,11 @@ $( function() {
                         <?php if($DueManagement): ?>
                             <?php foreach($DueManagement as $key => $item ) :  ?>
                                 <div class="cardbox">
+                                    
+
+                            <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
                                     <ul>
-                                        <li class="red_txt">
+                                     <li class="red_txt">
                                             <strong>Name</strong>
                                             <span> <?= $item['users_name'].' ' .$item['last_name'];?> </span>
                                         </li>
@@ -93,46 +100,70 @@ $( function() {
                                             <strong>Email</strong>
                                             <span> <?=$item['users_email'];?></span>
                                         </li>
-
-                                        <li class="youbuy">
-                                            <strong>Today's Sale</strong>
-                                            <span> <?= $item['todaySales'];?></span>
+                                        <li class="">
+                                            <strong>Total Sales</strong>
+                                            <span> <?= $item['todaySales'];?> </span>
                                         </li>
-                                        <li>
-                                            <strong>Total Recharges</strong>
-                                            <span><?=$item['count'];?></span>
+                                        <li class="">
+                                            <strong>Available ArabianPoints</strong>
+                                            <span> <?= $item['availableArabianPoints'];?> </span>
                                         </li>
-                                        <li>
-                                            <strong>Recharge Amount</strong>
-                                            <span><?=$item['recharge_amt'];?></span>
-                                        </li>
-                                        <li>
-                                            <strong>Cash Collected Amount</strong>
-                                            <span><?=$item['cash_collected'];?></span>
-                                        </li>
-                                        <li>
-                                            <strong>Due Amount</strong>
-                                            <span><?=  ($item['advanced_amount'] >0) ?  '0': $item['due_amount'];  ?></span>
-                                        </li>
-                                        <li>
-                                            <strong>Advance Amount</strong>
+                                    </ul> 
+                                    <?php else: ?>
+                                        <ul>
+                                            <li class="red_txt">
+                                                <strong>Name</strong>
+                                                <span> <?= $item['users_name'].' ' .$item['last_name'];?> </span>
+                                            </li>
+                                            <li>
+                                                <strong>Mobile</strong>
+                                                <span> <?=$item['country_code'].' '.$item['users_mobile'];?></span>
+                                            </li>
+                                            <li>
+                                                <strong>Email</strong>
+                                                <span> <?=$item['users_email'];?></span>
+                                            </li>
+                                            <li class="youbuy">
+                                                <strong>Today's Sale</strong>
+                                                <span> <?= $item['todaySales'];?></span>
+                                            </li>
+                                            <li>
+                                                <strong>Total Recharges</strong>
+                                                <span><?=$item['count'];?></span>
+                                            </li>
+                                            <li>
+                                                <strong>Recharge Amount</strong>
+                                                <span><?=$item['recharge_amt'];?></span>
+                                            </li>
+                                            <li>
+                                                <strong>Cash Collected Amount</strong>
+                                                <span><?=$item['cash_collected'];?></span>
+                                            </li>
+                                            <li>
+                                                <strong>Due Amount</strong>
+                                                <span><?=  ($item['advanced_amount'] >0) ?  '0': $item['due_amount'];  ?></span>
+                                            </li>
+                                            <li>
+                                                <strong>Advance Amount</strong>
+                                                <span>
+                                                    <?php 
+                                                        if($item['advanced_amount'] <=0 ):
+                                                            echo'0'; 
+                                                        else: 
+                                                            echo (float)$item['advanced_amount']-(float)$item['due_amount']; 
+                                                        endif;
+                                                    ?> 
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <div class="donat_nrecipt">
                                             <span>
-                                                <?php 
-                                                    if($item['advanced_amount'] <=0 ):
-                                                        echo'0'; 
-                                                    else: 
-                                                        echo (float)$item['advanced_amount']-(float)$item['due_amount']; 
-                                                    endif;
-                                                ?> 
+                                            <?php  if($items['product_is_donate'] == "Y"): echo 'Donated'; endif; ?>
                                             </span>
-                                        </li>
-                                    </ul>
-                                    <div class="donat_nrecipt">
-                                        <span>
-                                        <?php  if($items['product_is_donate'] == "Y"): echo 'Donated'; endif; ?>
-                                        </span>
-                                        <a href="<?=base_url('view-due-management/'.manojEncript($item['user_id_to']))?>">View</a>
-                                    </div>
+                                            <a href="<?=base_url('view-due-management/'.manojEncript($item['user_id_to']))?>">View</a>
+                                        </div>
+                                        <?php endif; ?>
+                                        
                                 </div>
                             <?php endforeach; ?>
                         <?php endif; ?>

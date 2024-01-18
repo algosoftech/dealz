@@ -58,10 +58,10 @@
                 <li>
                     <a href="<?=base_url('quick-buy')?>"><i class="icofont-law-document"></i>Quick Orders</a>
                 </li>
+            <?php endif;?>
                 <li>
                     <a href="<?=base_url('due-management')?>"><i class="icofont-law-document"></i> Due Management </a>
                 </li>
-            <?php endif;?>
 
             <li>
                 <a href="<?=base_url('user-agreement');?>"><i class="icofont-law-document"></i> User Agreement</a>

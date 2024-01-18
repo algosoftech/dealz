@@ -314,7 +314,7 @@ class Allwinners extends CI_Controller {
 	************************************************************************/
 	function deletedata($deleteId='')
 	{  
-		$this->admin_model->authCheck('delete_data');
+		$this->admin_model->authCheck();
 		$this->common_model->deleteData('da_winners','winners_id',(int)$deleteId);
 		$this->session->set_flashdata('alert_success',lang('deletesuccess'));
 		

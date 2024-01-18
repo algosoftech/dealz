@@ -17,7 +17,7 @@ $lang['BAD_REQUEST_MSG']								= 	'Your browser sent a request that this server
 $lang['FORBIDDEN_CODE']									= 	403;
 $lang['FORBIDDEN_ACTION']								= 	'error';
 $lang['FORBIDDEN_MSG']									= 	'Your request is incomplete';
-
+$lang['RECHARGE_AMOUNT_ERROR']							= 	'Recharge amount should be greater than 5 Arabian';
 
 /* ***********************    EMPTY	  *********************** */
 $lang['EMAIL_EMPTY']									= 	'Email is empty.';
@@ -71,7 +71,7 @@ $lang['EMAIL_INCORRECT']								= 	'Email is incorrect.';
 $lang['OTP_SENT']										=	'Your One Time Password is sent to ';
 $lang['INVALID_email_otp']				    			= 	'Invalid Email Id or OTP.';
 $lang['PASS_CHANGE_SUCCESS']							=	'Your password  changed successfully.';
-
+$lang['ERROR_SELF_TRANSFER']							= 	"Self transer is not available";
 
 $lang['USER_ID_INCORRECT']								= 	'User ID is incorrect.';
 $lang['UPDATED']				    					= 	'Data Updated.';
@@ -226,3 +226,5 @@ $lang['EMPTY_RedeemByArabianPoint']						=	'Redeem By Arabian Point is required'
 
 $lang['ALREADY_SENT_TO_ADMIN']							=	'Already sent to Admin';
 $lang['ORDER_ERROR']									=   "This order can't be proceed.";
+
+$lang['ALREADY_SENT']									=	'Already sent';

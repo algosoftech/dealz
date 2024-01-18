@@ -329,6 +329,11 @@ class Lotto extends CI_Controller {
 					 	$tableName = 'da_prize';
 					 	$whereCon['where'] = array('product_id' => (int)$product_id);
 					 	$PrizeData = $this->common_model->getData('single',$tableName , $whereCon);
+
+					 	$whereConproduct['where'] = array('products_id' => (int)$product_id);
+					 	$productData = $this->common_model->getFieldInArray('title','da_products' , $whereConproduct);
+					 	$AvailableWinnerCouponList[$key]['title'] = $productData[0];
+
 					 	if($PrizeData):
 					 		$AvailableWinnerCouponList[$key]['prizeData'] = $PrizeData;
 						else:

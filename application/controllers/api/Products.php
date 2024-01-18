@@ -26,10 +26,12 @@ class Products extends CI_Controller {
 	} 
 
 	/* * *********************************************************************
-	 * * Function name : getHomePageData
+	 * * Function name: getHomePageData
 	 * * Developed By : Manoj Kumar
-	 * * Purpose  : This function used for get Home Page Data
-	 * * Date : 27 JUNE 2022
+	 * * Purpose      : This function used for get Home Page Data
+	 * * Date         : 27 JUNE 2022
+	 * * Updated By   : Dilip Halder
+	 * * Updated Date : 18 January 2024
 	 * * **********************************************************************/
 	public function getHomePageData()
 	{	
@@ -37,7 +39,7 @@ class Products extends CI_Controller {
 		$this->generatelogs->putLog('APP',logOutPut($_POST));
 		$result 							= 	array();	
 		if(requestAuthenticate(APIKEY,'POST')):
-			
+
 			if($this->input->post('users_id') && $this->input->post('users_device_id')):
 				$users_device_id  				=	$this->input->post('users_device_id');
 				$users_lat  					=	$this->input->post('users_lat');
@@ -49,8 +51,11 @@ class Products extends CI_Controller {
 				$this->geneal_model->editData('da_users',$param,'users_id',(int)$this->input->post('users_id'));
 			endif;
 
+			// General Data Start
 			$generalData 				=	$this->geneal_model->getData2('single', 'da_general_data', $HSwcon,$HSorder);
-			
+			// General Data End
+
+			// video Slider/Home Slider Start
 			if($generalData['slider_type'] == 'Image'):
 				$HStbl 						=	'da_homepage_slider';
 				$HSwcon['where']          	=  	['page' => 'Homeslider','status'=>'A','show_on'=>'Mobile'];//array('page'=> array('$ne'=> 'Homebanner') );
@@ -76,7 +81,9 @@ class Products extends CI_Controller {
 				$result['videoSlider']		= 	$result;
 				
 			endif;
+			// video Slider/Home Slider End
 
+			// Closing Soon Start
 			$closingSoon 				=	array();
 			$tblName1 					=	'da_products';
 			$where1['where'] 			=	array('stock'=> array('$gt'=> 0),'clossingSoon' => 'Y','status' => 'A');
@@ -92,36 +99,56 @@ class Products extends CI_Controller {
 				endforeach;
 			endif;
 			$result['closingSoon'] 		=	$closingSoon;
-
-			$ourCampaigns 				=	array();
-			$tblName2 					=	'da_products';
-			$where2['where'] 			=	array( 'stock'=> array('$gt'=> 0,),'clossingSoon' => 'N','status' => 'A','remarks'=> array('$ne' => 'lotto-products'));
-			$order2 					=	['seq_order' => 1];
-			
-			$UserId = $this->input->post('users_id');
+			// Closing Soon End
+ 
+			$selectedCampaign  			=	$this->common_model->getData('single','da_selected_campaign');
+			$UserId 		   			=   $this->input->post('users_id');
+			// Checking Product for login Users only..
 			if($UserId):
 				$tableName          = 'da_users';
 				$whereCon['where']  = array('users_id'=> (int)$UserId);
 				$UserDatails 		= $this->common_model->getData('single',$tableName,$whereCon);
-			    $selectedCampaign  =	$this->common_model->getData('single','da_selected_campaign');
-				if(count($selectedCampaign['selected_campaign_list']) >= 1 && $UserDatails['users_type'] != 'Sales Person' && $UserDatails['users_type'] !="Users" && $UserDatails['isSelectedCampaign'] == 'option1'):
-					$tblName2          = 'da_products';
-					$where2['where_in'] = array('0' => 'products_id' , '1' => $selectedCampaign['selected_campaign_list'] );
-					$data2 		= $this->common_model->getData('multiple',$tblName2,$where2 ,$order2);
-				else:
-				 $data2					 =	$this->geneal_model->getData2('multiple',$tblName2,$where2,$order2);
-				endif;
-			else:
-				 $data2					 =	$this->geneal_model->getData2('multiple',$tblName2,$where2,$order2);
-			endif;
-			
+				
+				// echo count($selectedCampaign['selected_campaign_list']);
+				// echo count($selectedCampaign['selected_app_campaign_list']);
+				// die();
 
-			if($data2):
-				foreach($data2 as $info2):
-					$valid2 			= 	$info2['validuptodate'].' '.$info2['validuptotime'].':0';
-					$drawDate2 			= 	$info2['draw_date'].' '.$info2['draw_time'].':0';
+				// Pos Device sortlisted condition added...
+				if(count($selectedCampaign['selected_campaign_list']) >= 1 && $UserDatails['users_type'] == 'Sales Person' 
+				   || count($selectedCampaign['selected_campaign_list']) >= 1 && $UserDatails['users_type'] == 'Retailer' 
+				   || count($selectedCampaign['selected_campaign_list']) >= 1 && $UserDatails['users_type'] == 'Promoter' 
+				):
+					$where2['where_in'] = array('0' => 'products_id' , '1' => $selectedCampaign['selected_campaign_list'] );
+				elseif(count($selectedCampaign['selected_campaign_list']) >= 1 && $UserDatails['users_type'] == 'Users'):
+					$where2['where_in'] = array('0' => 'products_id' , '1' => $selectedCampaign['selected_app_campaign_list'] );
+				endif;
+			// Checking Product for without login Users only..
+			else:
+				if(count($selectedCampaign['selected_app_campaign_list']) >= 1 ):
+					$where2['where_in'] = array('0' => 'products_id' , '1' => $selectedCampaign['selected_app_campaign_list'] );
+				endif;
+			endif;
+
+			$ourCampaigns 				=	array();
+			$tblName2 					=	'da_products';
+			$where2['where'] 			=	array( 
+												  'stock'=> array('$gt'=> 0),
+												  'clossingSoon' => 'N',
+												  'status' => 'A',
+												  "validuptodate" => array('$gte' => date('Y-m-d'))
+											);
+			$Product_shortField 		=	array('seq_order' => 1);
+			// Product listing Start ...
+			$ProductList = $this->geneal_model->getData2('multiple',$tblName2,$where2,$Product_shortField);
+			if($ProductList):
+				foreach($ProductList as $info2):
+					$valid2 			= 	$info2['validuptodate'].' '.$info2['validuptotime'].':00';
+					$drawDate2 			= 	$info2['draw_date'].' '.$info2['draw_time'].':00';
 					$today2 			= 	date('Y-m-d H:i:s');
 					if(strtotime($valid2) > strtotime($today2) && strtotime($drawDate2) > strtotime($today2)):
+
+
+						// wishlist_product code start
 						if($this->input->post('users_id')):
 							$prowhere['where']	=	array('users_id'=>(int)$this->input->post('users_id'),'product_id'=>(int)$info2['products_id']);
 							$prodData			=	$this->common_model->getData('single','da_wishlist',$prowhere);
@@ -137,37 +164,32 @@ class Products extends CI_Controller {
 						else:
 							$info2['wishlist_product']  		= 'N';
 						endif;
+						// wishlist_product code end
 
-						if($this->input->post('users_id')):
-							$USRwhere 							=	[ 'users_id' => (int)$this->input->post('users_id') ];
-							$USRtblName 						=	'da_users';
-							$userDetails 						=	$this->geneal_model->getOnlyOneData($USRtblName, $USRwhere);
-							if($userDetails):
-								$productShareUrl  				= 	generateProductShareUrl($info2['products_id'],$this->input->post('users_id'),$userDetails['referral_code']);
-								$info2['share_url']  			= 	$productShareUrl;
-							else:	
-								$info2['share_url']  			= 	'';
-							endif;
-						else:
-							$info2['share_url']  				= 	'';
+						if($UserDatails):
+							$productShareUrl  				= 	generateProductShareUrl($info2['products_id'],$this->input->post('users_id'),$UserDatails['referral_code']);
+							$info2['share_url']  			= 	$productShareUrl;
+						else:	
+							$info2['share_url']  			= 	'';
 						endif;
-
+ 
 						$product_prise_data 			= 	$this->geneal_model->getParticularDataByParticularField('prize_image','da_prize', 'product_id', $info2['products_id']);
 						if($product_prise_data <> ''):
 							$info2['product_prise_data']  = $product_prise_data;
 						else:
 							$info2['product_prise_data']  = NULL;
 						endif;
-
 						array_push($ourCampaigns,$info2);
 					endif;
 				endforeach;
 			endif;
 			$result['ourCampaigns'] 	=	$ourCampaigns;
+			// Product listing End ...
 
+			// Soldout listing Start ...
 			$tblName3 					=	'da_products';
-			$where3 					=	['isSoldout'	=> 'Y'];
-			$order3 					=	['creation_date' => -1];
+			$where3 					=	array('isSoldout'	=> 'Y');
+			$order3 					=	array('creation_date' => -1);
 			$data3						=	$this->geneal_model->getData($tblName3,$where3,$order3);
 			$data3A = [];
 			foreach ($data3 as $key => $value) {
@@ -180,7 +202,9 @@ class Products extends CI_Controller {
 				array_push($data3A, $value);
 			}
 			$result['recentlySoldOut'] 	=	$data3A;
+			// Soldout listing End ...
 
+			// Recent Winners list start ...
 			$recentWinners 				=	array();
 			$tblName4 					=	'da_winners';
 			$where4 					=	[];
@@ -204,7 +228,9 @@ class Products extends CI_Controller {
 				endforeach;
 			endif;
 			$result['recentWinners'] 	=	$recentWinners;
+			// Recent Winners list End ...
 
+			// Cart start ...
 			if($this->input->post('users_id')):
 				$CTwhere1['where'] 		= 	[ 'user_id'=>(int)$this->input->post('users_id') ];
 				$cartItemsCount			=	$this->geneal_model->getData2('count', 'da_cartItems', $CTwhere1, []);
@@ -212,7 +238,9 @@ class Products extends CI_Controller {
 			else:
 				$result['cartCount'] 	=	0;
 			endif;
+			// Cart End ...
 
+			// Product Request Count Start ...
 			if($this->input->post('users_id')):
 				$tblName 					=	'da_emirate_collection_point';
 				$user_id 					=	$this->input->post('users_id');
@@ -236,12 +264,14 @@ class Products extends CI_Controller {
 				}
 				$result['product_request_count'] = $count;
 			endif;
-
+			// Product Request Count End ...
 			echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_MSG'),$result);
 		else:
 			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
 		endif;
 	}
+	 
+	 
 
 	/* * *********************************************************************
 	 * * Function name : getProductListPageData
@@ -2999,6 +3029,8 @@ class Products extends CI_Controller {
 			$data2						=	$this->geneal_model->getData2('multiple',$tblName2,$where2,$order2);
 			if($data2):
 				foreach($data2 as $info2):
+					$info2['product_name'] = $info2['title'];
+					
 					$valid2 			= 	$info2['validuptodate'].' '.$info2['validuptotime'].':0';
 					$drawDate2 			= 	$info2['draw_date'].' '.$info2['draw_time'].':0';
 					$today2 			= 	date('Y-m-d H:i:s');
@@ -3066,7 +3098,7 @@ class Products extends CI_Controller {
 	}
 
 	/* * *********************************************************************
-	 * * Function name : getHomePageData
+	 * * Function name : testAPI
 	 * * Developed By : Manoj Kumar
 	 * * Purpose  : This function used for get Home Page Data
 	 * * Date : 27 JUNE 2022

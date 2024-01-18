@@ -47,10 +47,17 @@ public function  __construct()
 		$order_status   = $response->_embedded->payment[0]->{'3ds'}->status ;
 		$referance_id   = $response->reference;
 
-		if($order_status == 'SUCCESS'):
+		$transStatus   = $response->_embedded->payment[0]->{'3ds2'}->transStatus ;
+
+
+		// echo "<pre>";
+		// print_r($response);
+		// die();
+
+		if($order_status == 'SUCCESS' || $transStatus == "Y" || $transStatus == "C"  ):
 			$updateParams 					=	array('referance_id' => $referance_id);
 			$url = base_url('order-status');
-		elseif($order_status == 'FAILURE'):
+		elseif($order_status == 'FAILURE' || $transStatus == "N"  || $transStatus == "U" ):
 			$updateParams 					=	array( 'order_status' => 'Failed' , 'referance_id' => $referance_id);
 			$url = base_url('/');
 			$this->session->set_flashdata('error', lang('PAYMENT_FAILED'));

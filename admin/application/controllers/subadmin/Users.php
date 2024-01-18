@@ -20,7 +20,7 @@ class Users extends CI_Controller {
 	 * * **********************************************************************/
 	public function index()
 	{	
-		$this->admin_model->authCheck('view_data');
+		$this->admin_model->authCheck();
 		$this->admin_model->getPermissionType($data); 
 		$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'subadmin';

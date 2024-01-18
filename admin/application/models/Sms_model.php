@@ -98,7 +98,12 @@ class Sms_model extends CI_Model
 	{
 	 	$message		=	"Your 4 digit OTP is. ".$otp;
 		$senderid		=	"DLZARBA";
-		$mobileNumber   =   '+971'.$mobile;
+
+		if($mobile == "919539894273"):
+			$mobileNumber   =   '+91'.$mobile;
+		else:
+			$mobileNumber   =   '+971'.$mobile;
+		endif;
 		$returnMessage	=	$this->sendMessageFunction1($mobileNumber,$message,$senderid);
 		return $returnMessage;
 	}

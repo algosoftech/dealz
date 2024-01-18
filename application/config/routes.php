@@ -294,6 +294,9 @@ $route['api/get-daily-sub-winner-list'] 						= 	'api/common/getDailySubWinneris
 
 $route['api/sub-winner/draw-winner'] 							= 	'api/common/draw_winner';
 $route['api/sub-winner/cancel-draw-winner'] 					= 	'api/common/cancel_draw_winner';
+
+
+$route['api/sub-winner/redeem-by-cash-draw'] 					= 	'api/common/redeem_by_cash_draw';
 //echo '<pre>';  print_r($route); die;
 
 /////////////////////////////		POS DATA 			/////////////////////////////////////
@@ -392,7 +395,3 @@ $route['api/lotto/getWinner'] 									= 	'api/lotto/getWinner';
 $route['lotto/order/(:any)'] 									= 	'order/getlottoOrder/$1';
 
 $route['api/user/addedit_appname'] 							    = 	'api/users/addeditAppname';
-
-
-$route['duemanagement/todaysales'] 								= 	'profile/todaysales';
-

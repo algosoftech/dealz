@@ -99,6 +99,7 @@ $(function(){
                               <thead style="text-align: center;">
                                 <tr role="row">
                                 <th width="5%">S.No.</th>
+                                <th width="20%">POS No</th>
                                 <th width="20%">Order Id.</th>
                                 <th width="20%">Product</th>
                                 <!-- <th width="10%">Qty.</th> -->
@@ -123,6 +124,7 @@ $(function(){
                                 ?>
                                 <tr role="row" class="<?php echo $rowClass; ?>">
                                   <td><?=$i++?></td>
+                                  <td><?=$ALLDATAINFO['pos_number']?$ALLDATAINFO['pos_number']:'N/A';?></td>
                                   <td><?=stripslashes($ALLDATAINFO['ticket_order_id'])?></td>
                                   <td>
                                     <?php  echo stripslashes($ALLDATAINFO['product_title']). ' * '.$ALLDATAINFO['product_qty'].'<br>';  ?>

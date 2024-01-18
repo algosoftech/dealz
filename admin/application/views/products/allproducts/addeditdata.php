@@ -108,31 +108,10 @@
               </div>
           </div>
 
-          <div class="row">
-            <div class="form-group-inner col-lg-2 col-md-2 col-sm-2 col-xs-12 <?php if(form_error('stock')): ?>error<?php endif; ?>">
-                <label>Quantity<span class="required">*</span></label>
-                <input type="number" min="0" name="stock" id="stock" class="form-control required" value="<?php if(set_value('stock')): echo set_value('stock'); else: echo stripslashes($EDITDATA['stock']);endif; ?>" placeholder="Quantity" <?php if(($EDITDATA['stock'])){ ?>readonly <?php } ?>>
-                <?php if(form_error('stock')): ?>
-                    <span for="stock" generated="true" class="help-inline"><?php echo form_error('stock'); ?></span>
-                <?php endif; ?>
-            </div>
-            <div class="form-group-inner col-lg-2 col-md-2 col-sm-2 col-xs-12 <?php if(form_error('target_stock')): ?>error<?php endif; ?>">
-                <label>Target Quantity<span class="required">*</span></label>
-                <input type="number" min="0" name="target_stock" id="target_stock" class="form-control required" value="<?php if(set_value('target_stock')): echo set_value('target_stock'); else: echo stripslashes($EDITDATA['target_stock']);endif; ?>" placeholder="Target Quantity"   <?php if(($EDITDATA['target_stock'])){ ?>readonly <?php } ?>>
-                <?php if(form_error('target_stock')): ?>
-                    <span for="target_stock" generated="true" class="help-inline"><?php echo form_error('target_stock'); ?></span>
-                <?php endif; ?>
-            </div>
-
-            <div class="form-group-inner col-lg-2 col-md-2 col-sm-2 col-xs-12 <?php if(form_error('stock')): ?>error<?php endif; ?>">
-                <label>ADE / iPoints<span class="required">*</span></label>
-                <input type="number" min="0" name="adepoints" id="adepoints" class="form-control required" value="<?php if(set_value('adepoints')): echo set_value('adepoints'); else: echo stripslashes($EDITDATA['adepoints']);endif; ?>" placeholder="ADE / iPoints">
-                <?php if(form_error('adepoints')): ?>
-                    <span for="adepoints" generated="true" class="help-inline"><?php echo form_error('adepoints'); ?></span>
-                <?php endif; ?>
-            </div>
-
-            <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('commingSoon')): ?>error<?php endif; ?>">
+        <div class="row">
+           
+           
+            <div class="form-group-inner col-lg-4 col-md-3 col-sm-4 col-xs-12 <?php if(form_error('commingSoon')): ?>error<?php endif; ?>">
                 <label>Coming Soon</label>
                 <select name="commingSoon" id="commingSoon" class="form-control required">
                     <option hidden>Select Coming Soon</option>
@@ -148,8 +127,7 @@
                     <span for="commingSoon" generated="true" class="help-inline"><?php echo form_error('commingSoon'); ?></span>
                 <?php endif; ?>
             </div>
-
-            <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('clossingSoon')): ?>error<?php endif; ?>">
+            <div class="form-group-inner col-lg-4 col-md-3 col-sm-4 col-xs-12 <?php if(form_error('clossingSoon')): ?>error<?php endif; ?>">
                 <label>Closing Soon Category</label>
                 <select name="clossingSoon" id="clossingSoon" class="form-control required">
                     <option hidden>Select Closing Soon Category</option>
@@ -165,11 +143,131 @@
                     <span for="clossingSoon" generated="true" class="help-inline"><?php echo form_error('clossingSoon'); ?></span>
                 <?php endif; ?>
             </div>
-
-
-
-
         </div>
+
+    <fieldset>
+        <legend>UAE </legend>
+                <div class="row">
+                    
+                    <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12 <?php if(form_error('stock')): ?>error<?php endif; ?>">
+                        <label>ADE / iPoints<span class="required">*</span></label>
+                        <input type="number" min="0" name="adepoints" id="adepoints" class="form-control required" value="<?php if(set_value('adepoints')): echo set_value('adepoints'); else: echo stripslashes($EDITDATA['adepoints']);endif; ?>" placeholder="ADE / iPoints">
+                        <?php if(form_error('adepoints')): ?>
+                            <span for="adepoints" generated="true" class="help-inline"><?php echo form_error('adepoints'); ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12 <?php if(form_error('stock')): ?>error<?php endif; ?>">
+                        <label>Quantity<span class="required">*</span></label>
+                        <input type="number" min="0" name="stock" id="stock" class="form-control required" value="<?php if(set_value('stock')): echo set_value('stock'); else: echo stripslashes($EDITDATA['stock']);endif; ?>" placeholder="Quantity" <?php if(($EDITDATA['stock'])){ ?>readonly <?php } ?>>
+                        <?php if(form_error('stock')): ?>
+                            <span for="stock" generated="true" class="help-inline"><?php echo form_error('stock'); ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12 <?php if(form_error('target_stock')): ?>error<?php endif; ?>">
+                        <label>Target Quantity<span class="required">*</span></label>
+                        <input type="number" min="0" name="target_stock" id="target_stock" class="form-control required" value="<?php if(set_value('target_stock')): echo set_value('target_stock'); else: echo stripslashes($EDITDATA['target_stock']);endif; ?>" placeholder="Target Quantity"   <?php if(($EDITDATA['target_stock'])){ ?>readonly <?php } ?>>
+                        <?php if(form_error('target_stock')): ?>
+                            <span for="target_stock" generated="true" class="help-inline"><?php echo form_error('target_stock'); ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('validuptodate')): ?>error<?php endif; ?>">
+                        <label>Valid Upto Date<span class="required">*</span></label>
+                        <input type="date" name="validuptodate" id="validuptodate" class="form-control required" value="<?php if(set_value('validuptodate')): echo set_value('validuptodate'); else: echo stripslashes($EDITDATA['validuptodate']);endif; ?>">
+                        <?php if(form_error('validuptodate')): ?>
+                            <span for="validuptodate" generated="true" class="help-inline"><?php echo form_error('validuptodate'); ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('validuptotime')): ?>error<?php endif; ?>">
+                        <label>Valid Upto Time<span class="required">*</span></label>
+                        <input type="time" name="validuptotime" id="validuptotime" class="form-control required" value="<?php if(set_value('validuptotime')): echo set_value('validuptotime'); else: echo stripslashes($EDITDATA['validuptotime']);endif; ?>">
+                        <?php if(form_error('validuptotime')): ?>
+                            <span for="validuptotime" generated="true" class="help-inline"><?php echo form_error('validuptotime'); ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('draw_date')): ?>error<?php endif; ?>">
+                        <label>Campaigns Draw Date<span class="required">*</span></label>
+                        <input type="date" name="draw_date" id="draw_date" class="form-control required" value="<?php if(set_value('draw_date')): echo set_value('draw_date'); else: echo stripslashes($EDITDATA['draw_date']);endif; ?>">
+                        <?php if(form_error('draw_date')): ?>
+                            <span for="draw_date" generated="true" class="help-inline"><?php echo form_error('draw_date'); ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('draw_time')): ?>error<?php endif; ?>">
+                        <label>Campaigns Draw Time<span class="required">*</span></label>
+                        <input type="time" name="draw_time" id="draw_time" class="form-control required" value="<?php if(set_value('draw_time')): echo set_value('draw_time'); else: echo stripslashes($EDITDATA['draw_time']);endif; ?>">
+                        <?php if(form_error('draw_time')): ?>
+                            <span for="draw_time" generated="true" class="help-inline"><?php echo form_error('draw_time'); ?></span>
+                        <?php endif; ?>
+                    </div> 
+                </div>
+    </fieldset>
+
+<fieldset>
+    <legend>Saudi Arabia </legend>
+        <div class="row">
+            <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12 <?php if(form_error('stock')): ?>error<?php endif; ?>">
+                <label>SAR / iPoints<span class="required">*</span></label>
+                <input type="number" min="0" name="sa_points" id="sa_points" class="form-control required" value="<?php if(set_value('sa_points')): echo set_value('sa_points'); else: echo stripslashes($EDITDATA['sa_points']);endif; ?>" placeholder="ADE / iPoints">
+                <?php if(form_error('sa_points')): ?>
+                    <span for="sa_points" generated="true" class="help-inline"><?php echo form_error('sa_points'); ?></span>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12 <?php if(form_error('sa_stock')): ?>error<?php endif; ?>">
+                <label>Quantity<span class="required">*</span></label>
+                <input type="number" min="0" name="sa_stock" id="sa_stock" class="form-control required" value="<?php if(set_value('sa_stock')): echo set_value('sa_stock'); else: echo stripslashes($EDITDATA['sa_stock']);endif; ?>" placeholder="Quantity" <?php if(($EDITDATA['sa_stock'])){ ?>readonly <?php } ?>>
+                <?php if(form_error('sa_stock')): ?>
+                    <span for="sa_stock" generated="true" class="help-inline"><?php echo form_error('sa_stock'); ?></span>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12 <?php if(form_error('sa_target_stock')): ?>error<?php endif; ?>">
+                <label>Target Quantity<span class="required">*</span></label>
+                <input type="number" min="0" name="sa_target_stock" id="sa_target_stock" class="form-control required" value="<?php if(set_value('sa_target_stock')): echo set_value('sa_target_stock'); else: echo stripslashes($EDITDATA['sa_target_stock']);endif; ?>" placeholder="Target Quantity"   <?php if(($EDITDATA['sa_target_stock'])){ ?>readonly <?php } ?>>
+                <?php if(form_error('sa_target_stock')): ?>
+                    <span for="sa_target_stock" generated="true" class="help-inline"><?php echo form_error('sa_target_stock'); ?></span>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('sa_validuptodate')): ?>error<?php endif; ?>">
+                <label>Valid Upto Date<span class="required">*</span></label>
+                <input type="date" name="sa_validuptodate" id="sa_validuptodate" class="form-control required" value="<?php if(set_value('sa_validuptodate')): echo set_value('sa_validuptodate'); else: echo stripslashes($EDITDATA['sa_validuptodate']);endif; ?>">
+                <?php if(form_error('sa_validuptodate')): ?>
+                    <span for="sa_validuptodate" generated="true" class="help-inline"><?php echo form_error('sa_validuptodate'); ?></span>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('sa_validuptotime')): ?>error<?php endif; ?>">
+                <label>Valid Upto Time<span class="required">*</span></label>
+                <input type="time" name="sa_validuptotime" id="sa_validuptotime" class="form-control required" value="<?php if(set_value('sa_validuptotime')): echo set_value('sa_validuptotime'); else: echo stripslashes($EDITDATA['sa_validuptotime']);endif; ?>">
+                <?php if(form_error('sa_validuptotime')): ?>
+                    <span for="sa_validuptotime" generated="true" class="help-inline"><?php echo form_error('sa_validuptotime'); ?></span>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('sa_draw_date')): ?>error<?php endif; ?>">
+                <label>Campaigns Draw Date<span class="required">*</span></label>
+                <input type="date" name="sa_draw_date" id="sa_draw_date" class="form-control required" value="<?php if(set_value('sa_draw_date')): echo set_value('sa_draw_date'); else: echo stripslashes($EDITDATA['sa_draw_date']);endif; ?>">
+                <?php if(form_error('sa_draw_date')): ?>
+                    <span for="sa_draw_date" generated="true" class="help-inline"><?php echo form_error('sa_draw_date'); ?></span>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('sa_draw_time')): ?>error<?php endif; ?>">
+                <label>Campaigns Draw Time<span class="required">*</span></label>
+                <input type="time" name="sa_draw_time" id="sa_draw_time" class="form-control required" value="<?php if(set_value('sa_draw_time')): echo set_value('sa_draw_time'); else: echo stripslashes($EDITDATA['sa_draw_time']);endif; ?>">
+                <?php if(form_error('sa_draw_time')): ?>
+                    <span for="sa_draw_time" generated="true" class="help-inline"><?php echo form_error('sa_draw_time'); ?></span>
+                <?php endif; ?>
+            </div> 
+            
+        </div>
+</fieldset>
 
         <div class="row">
 
@@ -222,23 +320,6 @@
                     <span for="countdown_status" generated="true" class="help-inline"><?php echo form_error('countdown_status'); ?></span>
                 <?php endif; ?>
             </div>
-
-            <div class="form-group-inner col-lg-2 col-md-2 col-sm-2 col-xs-12 <?php if(form_error('validuptodate')): ?>error<?php endif; ?>">
-                <label>Valid Upto Date<span class="required">*</span></label>
-                <input type="date" name="validuptodate" id="validuptodate" class="form-control required" value="<?php if(set_value('validuptodate')): echo set_value('validuptodate'); else: echo stripslashes($EDITDATA['validuptodate']);endif; ?>">
-                <?php if(form_error('validuptodate')): ?>
-                    <span for="validuptodate" generated="true" class="help-inline"><?php echo form_error('validuptodate'); ?></span>
-                <?php endif; ?>
-            </div>
-
-            <div class="form-group-inner col-lg-2 col-md-2 col-sm-2 col-xs-12 <?php if(form_error('validuptotime')): ?>error<?php endif; ?>">
-                <label>Valid Upto Time<span class="required">*</span></label>
-                <input type="time" name="validuptotime" id="validuptotime" class="form-control required" value="<?php if(set_value('validuptotime')): echo set_value('validuptotime'); else: echo stripslashes($EDITDATA['validuptotime']);endif; ?>">
-                <?php if(form_error('validuptotime')): ?>
-                    <span for="validuptotime" generated="true" class="help-inline"><?php echo form_error('validuptotime'); ?></span>
-                <?php endif; ?>
-            </div>
-
         </div>
 
         <div class="row">
@@ -258,21 +339,7 @@
                     <span for="is_show_closing" generated="true" class="help-inline"><?php echo form_error('is_show_closing'); ?></span>
                 <?php endif; ?>
             </div>
-            <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('draw_date')): ?>error<?php endif; ?>">
-                <label>Campaigns Draw Date<span class="required">*</span></label>
-                <input type="date" name="draw_date" id="draw_date" class="form-control required" value="<?php if(set_value('draw_date')): echo set_value('draw_date'); else: echo stripslashes($EDITDATA['draw_date']);endif; ?>">
-                <?php if(form_error('draw_date')): ?>
-                    <span for="draw_date" generated="true" class="help-inline"><?php echo form_error('draw_date'); ?></span>
-                <?php endif; ?>
-            </div>
-
-            <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('draw_time')): ?>error<?php endif; ?>">
-                <label>Campaigns Draw Time<span class="required">*</span></label>
-                <input type="time" name="draw_time" id="draw_time" class="form-control required" value="<?php if(set_value('draw_time')): echo set_value('draw_time'); else: echo stripslashes($EDITDATA['draw_time']);endif; ?>">
-                <?php if(form_error('draw_time')): ?>
-                    <span for="draw_time" generated="true" class="help-inline"><?php echo form_error('draw_time'); ?></span>
-                <?php endif; ?>
-            </div> 
+           
 
              <div class="form-group-inner col-lg-3 col-md-3 col-sm-3 col-xs-12 <?php if(form_error('sponsored_coupon')): ?>error<?php endif; ?>">
                 <label>Sponsored Coupon Count</label>

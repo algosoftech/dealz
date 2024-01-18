@@ -14,8 +14,8 @@ public function  __construct()
 ** Developed By 	: AFSAR AlI
 ** Purpose 			: This function used for index
 ** Date 			: 13 APRIL 2022
-** Updated By		:
-** Updated Date 	: 
+** Updated By		: Dilip Halder
+** Updated Date 	: 17 January 2024
 ************************************************************************/ 	
 public function index()
 {  
@@ -79,44 +79,56 @@ public function index()
 	$winnerswheres['where'] =	array('status' => 'A');
 	$data['winners']		=	$this->geneal_model->getData2('multiple',$tbl,$winnerswheres, $order);
 
-	$tbl 					=	'da_products';
-	/*$wcon['where']          =  	array( 'stock'=> array('$ne'=> 0,),
-									  'clossingSoon' => 'N',
-									  'status' => 'A'	
-									);*/
-	$wcon['where']          =  	array( 'stock'=> array('$gt'=> 0,),
+	// Product filter added in as per campaign selected in admin side..... 
+	$selectedCampaign  =	$this->common_model->getData('single','da_selected_campaign');
+	
+	if(count($selectedCampaign['selected_web_campaign_list']) >= 1 
+		// && $UserDatails['users_type'] =="Users"
+	):
+		$where2['where'] 	=	array( 
+									  'stock'		  => array('$gt'=> 0),
+									  'clossingSoon'  => 'N',
+									  'status' 		  => 'A',
+									  "validuptodate" => array('$gte' => date('Y-m-d')),
+									  'products_id'   => array('$in' => $selectedCampaign['selected_web_campaign_list'] )
+								);
+	else:
+		$where2['where'] 	=	array( 
+									  'stock'=> array('$gt'=> 0),
 									  'clossingSoon' => 'N',
 									  'status' => 'A',
-									  'remarks'=> array('$ne' => 'lotto-products')
-									);
-	$shortField 					=	['seq_order' => 1];
+									  "validuptodate" => array('$gte' => date('Y-m-d'))
+								);
+	endif;
 
-	$ProductList		=	$this->geneal_model->getProductWithPrizeDetails('multiple', $tbl, $wcon, $shortField);
-
-	// Campaign filtering by validdate and drawdate wise.
+	$ourCampaigns = array();
+	$tbl 					=	'da_products';
+	$shortField 			=	array('seq_order' => 1);
+	$ProductList 			=	$this->geneal_model->getProductWithPrizeDetails('multiple', $tbl, $where2, $shortField);
 	if($ProductList):
+		foreach($ProductList as $info2):
+			$valid2 			= 	$info2['validuptodate'].' '.$info2['validuptotime'].':00';
+			$drawDate2 			= 	$info2['draw_date'].' '.$info2['draw_time'].':00';
+			$today2 			= 	date('Y-m-d H:i:s');
+			if(strtotime($valid2) > strtotime($today2) && strtotime($drawDate2) > strtotime($today2)):
+				if($UserDatails):
+					$productShareUrl  				= 	generateProductShareUrl($info2['products_id'],$this->input->post('users_id'),$UserDatails['referral_code']);
+					$info2['share_url']  			= 	$productShareUrl;
+				else:	
+					$info2['share_url']  			= 	'';
+				endif;
 
-				$ourCampaigns = [];
-				foreach($ProductList as $info2):
-					$valid2 			= 	$info2['validuptodate'].' '.$info2['validuptotime'].':0';
-					$drawDate2 			= 	$info2['draw_date'].' '.$info2['draw_time'].':0';
-					$today2 			= 	date('Y-m-d H:i:s');
-
-					if(strtotime($valid2) > strtotime($today2) && strtotime($drawDate2) > strtotime($today2)):
-					
-						array_push($ourCampaigns,$info2);
-
-					endif;
-				endforeach;
+				$product_prise_data 			= 	$this->geneal_model->getParticularDataByParticularField('prize_image','da_prize', 'product_id', $info2['products_id']);
+				if($product_prise_data <> ''):
+					$info2['product_prise_data']  = $product_prise_data;
+				else:
+					$info2['product_prise_data']  = NULL;
+				endif;
+				array_push($ourCampaigns,$info2);
 			endif;
-			
-			$data['products'] = $ourCampaigns;
-
-	// end
-
-
-	// echo "<pre>"; print_r($data['products']); die();
-
+		endforeach;
+	endif;
+	$data['products'] 		= $ourCampaigns;
 	$data['cartItems']		=	$this->cart->contents();
 
 	// Previous cart product count checking.

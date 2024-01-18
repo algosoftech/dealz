@@ -51,10 +51,14 @@ class Campaign_option extends CI_Controller {
 		if($this->input->post('SaveChanges')):
 			$error					=	'NO';
 			$this->form_validation->set_rules('selected_campaign_list[]', 'selected_campaign_list', 'trim');
+			$this->form_validation->set_rules('selected_web_campaign_list[]', 'selected_web_campaign_list', 'trim');
+			$this->form_validation->set_rules('selected_app_campaign_list[]', 'selected_app_campaign_list', 'trim');
 			$this->form_validation->set_message('is_unique', 'The %s is already taken');
 
 			if($this->form_validation->run() && $error == 'NO'): 
 				$param['selected_campaign_list'] =	array_map('intval', $this->input->post('selected_campaign_list'));  
+				$param['selected_web_campaign_list'] =	array_map('intval', $this->input->post('selected_web_campaign_list'));  
+				$param['selected_app_campaign_list'] =	array_map('intval', $this->input->post('selected_app_campaign_list'));  
 				if($this->input->post('CurrentDataID') ==''):
 					$param['campaign_id']		=	(int)$this->common_model->getNextSequence('da_selected_campaign');
 					$param['creation_ip']		=	currentIp();
@@ -68,6 +72,7 @@ class Campaign_option extends CI_Controller {
 					$param['update_ip']				 =	currentIp();
 					$param['update_date']		     =	date('Y-m-d h:i');
 					$param['updated_by']		     =	(int)$this->session->userdata('HCAP_ADMIN_ID');
+
 					$this->common_model->editData('da_selected_campaign',$param,'campaign_id',(int)$categoryId);
 					$this->session->set_flashdata('alert_success',lang('updatesuccess'));
 					redirect('pos/campaign_option/index');

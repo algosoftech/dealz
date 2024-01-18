@@ -180,7 +180,16 @@ class Allquickorders extends CI_Controller {
 		// die();
 
 		// $data['ALLDATA'] 					= 	$this->order_model->getQuickordersList('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
-		$data['ALLDATA'] 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
+		$orderData 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
+
+		if($orderData):
+			foreach($orderData as $key => $items):
+			 $won['where'] = array('users_id'=> (int)$items['user_id']);
+			 $userList     =   $this->common_model->getDataByNewQuery('pos_number','single','da_users',$won,$shortField,0,0);
+			 $orderData[$key]['pos_number'] = $userList['pos_number'];
+			endforeach;
+		endif;
+		$data['ALLDATA'] = $orderData;
 
 		$this->layouts->set_title('Quick Orders | Dealz Arabia');
 		$this->layouts->admin_view('orders/quick/index',array(),$data);
@@ -402,41 +411,39 @@ class Allquickorders extends CI_Controller {
 		$tblName 							= 	'da_ticket_orders';
 		$shortField 						= 	array('_id'=>-1);
 
+
+
 		$order 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField);
-
-		// echo "<pre>";
-		// print_r($order);
-		// die();
-
 
         $spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
 		$sheet->setCellValue('A1', 'Sl.No');
-		$sheet->setCellValue('B1', 'Order No');
-		$sheet->setCellValue('C1', 'Product Name');
-		$sheet->setCellValue('D1', 'Product Quantity');
-		$sheet->setCellValue('E1', 'First Name');
-		$sheet->setCellValue('F1', 'Last Name');
-		$sheet->setCellValue('G1', 'User Phone');
-		$sheet->setCellValue('H1', 'User Email');
-		$sheet->setCellValue('I1', 'Seller First Name');
-		$sheet->setCellValue('J1', 'Seller Last Name');
-		$sheet->setCellValue('K1', 'Seller Type');
-		$sheet->setCellValue('L1', 'Seller Email');
-		$sheet->setCellValue('M1', 'Bind with (Name)');
-		$sheet->setCellValue('N1', 'Donated');
-		$sheet->setCellValue('O1', 'Purchase Date');
-		$sheet->setCellValue('P1', 'Purchase Time');
-		$sheet->setCellValue('Q1', 'Total Amount');
-		$sheet->setCellValue('R1', 'Payment Mode');
-		$sheet->setCellValue('S1', 'Payment Status');
-		$sheet->setCellValue('T1', 'Order Status');
-		$sheet->setCellValue('U1', 'Voucher Code');
-		$sheet->setCellValue('V1', 'Voucher Status');
+		$sheet->setCellValue('B1', 'Pos NO');
+		$sheet->setCellValue('C1', 'Order No');
+		$sheet->setCellValue('D1', 'Product Name');
+		$sheet->setCellValue('E1', 'Product Quantity');
+		$sheet->setCellValue('F1', 'First Name');
+		$sheet->setCellValue('G1', 'Last Name');
+		$sheet->setCellValue('H1', 'User Phone');
+		$sheet->setCellValue('I1', 'User Email');
+		$sheet->setCellValue('J1', 'Seller First Name');
+		$sheet->setCellValue('K1', 'Seller Last Name');
+		$sheet->setCellValue('L1', 'Seller Type');
+		$sheet->setCellValue('M1', 'Seller Email');
+		$sheet->setCellValue('N1', 'Bind with (Name)');
+		$sheet->setCellValue('O1', 'Donated');
+		$sheet->setCellValue('P1', 'Purchase Date');
+		$sheet->setCellValue('Q1', 'Purchase Time');
+		$sheet->setCellValue('R1', 'Total Amount');
+		$sheet->setCellValue('S1', 'Payment Mode');
+		$sheet->setCellValue('T1', 'Payment Status');
+		$sheet->setCellValue('U1', 'Order Status');
+		$sheet->setCellValue('V1', 'Voucher Code');
+		$sheet->setCellValue('W1', 'Voucher Status');
 		
-		$sheet->setCellValue('W1', 'Coupon Code');
-		$sheet->setCellValue('X1', 'Last Updated By');
-		$sheet->setCellValue('Y1', 'Last Date');
+		$sheet->setCellValue('X1', 'Coupon Code');
+		$sheet->setCellValue('Y1', 'Last Updated By');
+		$sheet->setCellValue('Z1', 'Last Date');
 		
 		$slno = 1;
 		$start = 2;
@@ -447,20 +454,21 @@ class Allquickorders extends CI_Controller {
               	$sellersDetails = $this->common_model->getData('single','da_users',$wcon);
 			
 				$sheet->setCellValue('A'.$start, $slno);
-				$sheet->setCellValue('B'.$start, $d['ticket_order_id']);
-				$sheet->setCellValue('C'.$start, stripslashes($d['product_title']));
-				$sheet->setCellValue('D'.$start, stripslashes($d['product_qty']));
+				$sheet->setCellValue('B'.$start, $sellersDetails['pos_number']?$sellersDetails['pos_number']:'N/A');
+				$sheet->setCellValue('C'.$start, $d['ticket_order_id']);
+				$sheet->setCellValue('D'.$start, stripslashes($d['product_title']));
+				$sheet->setCellValue('E'.$start, stripslashes($d['product_qty']));
 				
 				//User Details..
-				$sheet->setCellValue('E'.$start, stripslashes($d['order_first_name']));
-				$sheet->setCellValue('F'.$start, stripslashes($d['order_last_name']));
-				$sheet->setCellValue('G'.$start, stripslashes($d['order_users_mobile']));
-				$sheet->setCellValue('H'.$start, stripslashes($d['order_users_email']));
+				$sheet->setCellValue('F'.$start, stripslashes($d['order_first_name']));
+				$sheet->setCellValue('G'.$start, stripslashes($d['order_last_name']));
+				$sheet->setCellValue('H'.$start, stripslashes($d['order_users_mobile']));
+				$sheet->setCellValue('I'.$start, stripslashes($d['order_users_email']));
 
-				$sheet->setCellValue('I'.$start, stripslashes($sellersDetails['users_name']));
-				$sheet->setCellValue('J'.$start, stripslashes($sellersDetails['last_name']));
-				$sheet->setCellValue('K'.$start, stripslashes($sellersDetails['users_type']));
-				$sheet->setCellValue('L'.$start, stripslashes($sellersDetails['users_email']));
+				$sheet->setCellValue('J'.$start, stripslashes($sellersDetails['users_name']));
+				$sheet->setCellValue('K'.$start, stripslashes($sellersDetails['last_name']));
+				$sheet->setCellValue('L'.$start, stripslashes($sellersDetails['users_type']));
+				$sheet->setCellValue('M'.$start, stripslashes($sellersDetails['users_email']));
 				//Seller Details.
 				
 				 $wcon['where'] = array('users_id'=> (int)$sellersDetails['bind_person_id'] );
@@ -471,16 +479,16 @@ class Allquickorders extends CI_Controller {
                  $bindPersonDetails =  $bindWITH['users_name']. " " .$bindWITH['last_name']; 
 
                  if($bindWITH):
-						$sheet->setCellValue('M'.$start, $bindPersonDetails);
+						$sheet->setCellValue('N'.$start, $bindPersonDetails);
 						// $sheet->getStyle('M'.$start)->getAlignment()->setWrapText(true);
                  else:
-						$sheet->setCellValue('M'.$start,  '--');
+						$sheet->setCellValue('N'.$start,  '--');
                  endif;
 
-				$sheet->setCellValue('N'.$start, $d['product_is_donate']);
-				$sheet->setCellValue('O'.$start, date('d-F-Y',strtotime($d['created_at'])));
-				$sheet->setCellValue('P'.$start, date('h:i A',strtotime($d['created_at'])));
-				$sheet->setCellValue('Q'.$start, $d['total_price']);
+				$sheet->setCellValue('O'.$start, $d['product_is_donate']);
+				$sheet->setCellValue('P'.$start, date('d-F-Y',strtotime($d['created_at'])));
+				$sheet->setCellValue('Q'.$start, date('h:i A',strtotime($d['created_at'])));
+				$sheet->setCellValue('R'.$start, $d['total_price']);
 
 
 		       $whereCon['where']   = array( 'isVoucher'=> 'Y' , 'ticket_order_id' => $d['ticket_order_id']);
@@ -492,7 +500,7 @@ class Allquickorders extends CI_Controller {
 		        $buy_voucher =  "Buy Vouchers";
 		       endif;
 
-				$sheet->setCellValue('R'.$start, $buy_voucher);
+				$sheet->setCellValue('S'.$start, $buy_voucher);
 
 
 
@@ -503,8 +511,8 @@ class Allquickorders extends CI_Controller {
 					$order_status = "-";
 				endif;
 				
-				$sheet->setCellValue('S'.$start, $s['order_status']);
-				$sheet->setCellValue('T'.$start, $order_status);
+				$sheet->setCellValue('T'.$start, $s['order_status']);
+				$sheet->setCellValue('U'.$start, $order_status);
 
 
 				$tblName 							= 	'da_ticket_coupons';
@@ -514,17 +522,17 @@ class Allquickorders extends CI_Controller {
 				
 				
 
-				$sheet->setCellValue('U'.$start, $couponList['voucher_code']);
-				$sheet->setCellValue('V'.$start, $couponList['coupon_code_statys'] );
+				$sheet->setCellValue('V'.$start, $couponList['voucher_code']);
+				$sheet->setCellValue('W'.$start, $couponList['coupon_code_statys'] );
 
 				foreach ($couponList['coupon_code'] as $co) {
 					if(!empty($co)):
-						$sheet->setCellValue('W'.$start, $co);
+						$sheet->setCellValue('X'.$start, $co);
 						$start = $start+1;
 					endif;
 				}
 
-				$sheet->setCellValue('X'.$start, $d['updated_by']);
+				$sheet->setCellValue('Y'.$start, $d['updated_by']);
 				if($d['update_date']):
 					$update_date =  date('d-M-Y H:i A',$d['update_date']);
 				else:
@@ -532,7 +540,7 @@ class Allquickorders extends CI_Controller {
 				endif;
 
 
-				$sheet->setCellValue('Y'.$start, $update_date);
+				$sheet->setCellValue('Z'.$start, $update_date);
 				// $sheet->setCellValue('W'.$start, $d['update_date']);
 				
 				// $start = $start+1;
@@ -549,8 +557,8 @@ class Allquickorders extends CI_Controller {
 					],
 				];
 		//Font BOLD
-		$sheet->getStyle('A1:Y1')->getFont()->setBold(true);		
-		$sheet->getStyle('A1:Y1')->applyFromArray($styleThinBlackBorderOutline);
+		$sheet->getStyle('A1:Z1')->getFont()->setBold(true);		
+		$sheet->getStyle('A1:Z1')->applyFromArray($styleThinBlackBorderOutline);
 		//Alignment
 		//fONT SIZE
 		//$sheet->getStyle('A1:D10')->getFont()->setSize(12);

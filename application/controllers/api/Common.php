@@ -1293,6 +1293,53 @@ public function getWinnerList($code = '', $order_id = '', $offset=0, $limit=10, 
 			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
 		endif;
 	}
-   
+   	
+
+   	/* * *********************************************************************
+	 * * Function name : reddem_by_cash_draw
+	 * * Developed By : Dilip Halder
+	 * * Purpose  : This function used to update status of redeem by cash.
+	 * * Date : 08 January 2024
+	 * * **********************************************************************/
+	public function redeem_by_cash_draw()
+	{
+		$apiHeaderData 		=	getApiHeaderData();
+		$this->generatelogs->putLog('APP',logOutPut($_POST));
+		$result 							= 	array();	
+		if(requestAuthenticate(APIKEY,'POST')):
+			
+			if($this->input->post('code') == ''): 
+				echo outPut(0,lang('SUCCESS_CODE'),lang('COUPON_CODE_ID_EMPTY'),$result);
+			elseif($this->input->post('redeem_status') == ''): 
+				echo outPut(0,lang('SUCCESS_CODE'),lang('EMPTY_REDEEMSTATUS'),$result);
+			// elseif($this->input->post('redeem_status') == ''): 
+			// 	echo outPut(0,lang('SUCCESS_CODE'),lang('EMPTY_RedeemByArabianPoint'),$result);
+			// elseif($this->input->post('redeembycash') == ''): 
+			// 	echo outPut(0,lang('SUCCESS_CODE'),lang('EMPTY_RedeemByArabianPoint'),$result);
+			else:
+				
+				$where['where']  =	array('code' => $this->input->post('code'));
+				$tblName 		 =	'wn_daily_winners';
+				$DrawWinnerData	 =	$this->common_model->getData('single',$tblName, $where);
+
+				if(!empty($DrawWinnerData)):
+					if($DrawWinnerData['redeembycash'] == '' || $DrawWinnerData['redeembycash'] == null ):
+						$updateParams['redeem_status'] 	  =  "paid";
+						$updateParams['setteld_status']   =  (int)"1";
+						$updateParams['redeembycash']  	  =  $this->input->post('redeembycash');
+						$result = $this->geneal_model->editData('wn_daily_winners', $updateParams, 'code', $this->input->post('code'));
+						echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_MSG'),$result);
+					else:
+						echo outPut(0,lang('SUCCESS_CODE'),lang('ALREADY_SENT'),$result);
+					endif;
+
+				else:
+					echo outPut(0,lang('SUCCESS_CODE'),lang('DATA_NOT_FOUND'),$result);
+				endif;
+			endif;
+		else:
+			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
+		endif;
+	}
 	
 }

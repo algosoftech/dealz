@@ -88,7 +88,8 @@ defined('SHOW_NO_OF_DATA')      OR 	define('SHOW_NO_OF_DATA', 5); // show no of 
 
 defined('MAIL_FROM_MAIL')      OR define('MAIL_FROM_MAIL', 'info@dealzarabia.com'); 
 defined('MAIL_SITE_FULL_NAME') OR define('MAIL_SITE_FULL_NAME', 'Dealz Arabia'); 
-defined('SENDGRID_KEY') 	   OR define('SENDGRID_KEY', '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'); 
+// defined('SENDGRID_KEY') 	   OR define('SENDGRID_KEY', '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'); 
+defined('SENDGRID_KEY') 	   OR define('SENDGRID_KEY', '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'); 
 
 defined('ANDRIOD_API_ACCESS_KEY')		OR 	define('ANDRIOD_API_ACCESS_KEY','');
 defined('IOS_API_ACCESS_KEY')			OR 	define('IOS_API_ACCESS_KEY','');
@@ -119,8 +120,8 @@ if($_SERVER['SERVER_NAME']=='localhost'):
 	$fileBaseUrl 						=	'http://'.$_SERVER['HTTP_HOST'].'/d-arabia/';
 	$fileFCPATH 						=	$_SERVER['DOCUMENT_ROOT'].'/d-arabia/';
 
-	$baseUrlForWebview					=	'http://'.$_SERVER['HTTP_HOST'].'/d-arabia/';
-	$baseUrlForCommonWeb				=	'http://'.$_SERVER['HTTP_HOST'].'/d-arabia/';
+	$baseUrlForWebview					=	'http://'.$_SERVER['HTTP_HOST'].'/dealzarabia/';
+	$baseUrlForCommonWeb				=	'http://'.$_SERVER['HTTP_HOST'].'/dealzarabia/';
 ///////////// 	/////////////////	
 else: 
 	defined('TIME_DIFFRENCE')			OR 	define('TIME_DIFFRENCE','1800');

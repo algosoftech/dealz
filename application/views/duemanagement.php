@@ -242,6 +242,14 @@
                           <img src="<?=base_url('/assets/AP-GREEN.png');?>" width="25px" alt="appgreen">
                           <span class="ared" style="font-weight: bold;"> : <?=number_format($todayTotalRecharge , 2);?></span><br>
                         </div>
+
+                         <div>
+                          <label class="label">Today's Total Sales : </label>
+                          <img src="<?=base_url('/assets/AP-GREEN.png');?>" width="25px" alt="appgreen">
+                          <span class="ared" style="font-weight: bold;"> : <?=number_format($todaystotalSales , 2);?></span><br>
+                        </div>
+
+                        
                       </div>
                       
                       <div class="col-sm-12 col-md-7">
@@ -354,14 +362,19 @@
                   <tr>
                     <th style="text-align:center;">S.No</th>
                     <th style="text-align:center;">User's Details</th>
-                    <th style="text-align:center;">Today's Sale</th>
-                    <th style="text-align:center;">Total Recharges</th>
-                    <th style="text-align:center;">Recharge Amount</th>
-                    <th style="text-align:center;">Cash Collected Amount</th>
-                    <th style="text-align:center;">Due Amount</th>
-                    <th style="text-align:center;">Advance Amount</th>
-                    <!-- <th style="text-align:center;">Created At</th> -->
-                    <th style="text-align:center;">Action</th>
+                    <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
+                      <th style="text-align:center;">Total Sales</th>
+                      <th style="text-align:center;">Available ArabianPoints</th>
+                    <?php else: ?>
+                      <th style="text-align:center;">Today's Sale</th>
+                      <th style="text-align:center;">Total Recharges</th>
+                      <th style="text-align:center;">Recharge Amount</th>
+                      <th style="text-align:center;">Cash Collected Amount</th>
+                      <th style="text-align:center;">Due Amount</th>
+                      <th style="text-align:center;">Advance Amount</th>
+                      <!-- <th style="text-align:center;">Created At</th> -->
+                      <th style="text-align:center;">Action</th>
+                    <?php endif; ?>
                   </tr>
 
                   <?php if($DueManagement): ?>
@@ -373,6 +386,10 @@
                         <?= 'mobile : ' .$item['country_code'].' ' .$item['users_mobile'] . "<br>";  ?> 
                         <?= 'Email : ' .$item['users_email'] . "<br>" ;  ?> 
                       </td>
+                      <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
+                          <td><?= $item['todaySales'];  ?> </td>
+                          <td><?= $item['availableArabianPoints'];  ?> </td>
+                    <?php else: ?>
                       
                       <td><?= $item['todaySales'];  ?> </td>
                       <td><?= $item['count'];  ?> </td>
@@ -404,11 +421,15 @@
                           </div>
                         </div>
                       </td>
+
+
+                    <?php endif; ?>
+
                       </tr>
                     <?php endforeach ?>
 
                   <?php else: ?>
-                    <tr><td colspan="9"> Data not found. </td></tr>
+                    <tr><td colspan="9" > Data not found. </td></tr>
                   <?php endif; ?>
                       
                   </table>

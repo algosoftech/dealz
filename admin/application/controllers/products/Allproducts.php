@@ -376,6 +376,7 @@ class Allproducts extends CI_Controller {
 	    	$html = '<option value="">No Sub Category</option>';
 	    endif;
         echo $html;
+        die();
 	}
 
 	/***********************************************************************

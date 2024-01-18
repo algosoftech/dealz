@@ -254,7 +254,7 @@ class Alltickets extends CI_Controller {
 	** Date 			: 04 January 2024
 	************************************************************************/
 	function check_tickets_prefix(){
-		$this->admin_model->authCheck('edit_data');
+		$this->admin_model->authCheck();
 		$tickets_prefix  = $this->input->post('tickets_prefix');
 		$product_id      = $this->input->post('product_id');
 

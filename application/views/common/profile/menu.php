@@ -16,7 +16,6 @@ $pickuppoint		=	'';
 $duemanagement    	=   '';
 $wallet    			=   '';
 $quickbuy 			=   '';
-$due_management 	=   '';
 
 
 if($url_save == 'my-profile' || $url_save == 'edit-profile'){
@@ -49,9 +48,10 @@ if($url_save == 'my-profile' || $url_save == 'edit-profile'){
 	$wallet = 'active';
 }elseif($url_save == 'quick-buy'){
 	$quickbuy = 'active';
-}
+} 
 
-
+//$url_save = $this->uri->segment(1);
+//echo $url_save; die();
 
 ?>
 
@@ -327,7 +327,7 @@ content: "+";
 			<li class="<?=$recharge?>"><a href="<?=base_url('top-up-recharge')?>"><span style="padding-right: 10px;"><img src="<?=base_url()?>assets/img/Top-up-recharge.png" class="icon_img" alt="top_up_recharge"></span>Transfer Arabian Points</a></li>
 			<li class="<?=$wallet?>"><a href="<?=base_url('wallet-statement')?>"><span style="padding-right: 10px;"><img src="<?=base_url()?>assets/img/Help.png" class="icon_img" alt="help"></span>Wallet Statement</a></li>
 			
-			<?php if($this->session->userdata('DZL_USERSTYPE') == 'Sales Person' || $this->session->userdata('DZL_USERSTYPE') == 'Freelancer'  || $this->session->userdata('DZL_USERSTYPE') == 'Super Salesperson' || $this->session->userdata('DZL_USERSTYPE') == 'Super Retailer'): ?>
+			<?php if($this->session->userdata('DZL_USERSTYPE') == 'Sales Person' || $this->session->userdata('DZL_USERSTYPE') == 'Freelancer'  || $this->session->userdata('DZL_USERSTYPE') == 'Super Salesperson' || $this->session->userdata('DZL_USERSTYPE') == 'Super Retailer' ): ?>
 			<li class="<?=$duemanagement?>"><a href="<?=base_url('due-management')?>"><span style="padding-right: 10px;"><img src="<?=base_url()?>assets/img/Top-up-recharge.png" class="icon_img"></span>Due Management</a></li>
 			<?php endif; ?>
 			<li class="<?=$myorder?>"><a href="<?=base_url('order-list')?>"><span style="padding-right: 10px;"><img src="<?=base_url()?>assets/img/order.png" class="icon_img" alt="order_img"></span>My Orders</a></li>

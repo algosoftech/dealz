@@ -465,35 +465,30 @@ background-color: var(--color-background);
       <div class="form__radios">
         <?php $count = 1; ?>
         <!-- Updaten on 01-03-2023 : Credit card through purchase we need to set minimal purchase value 6 AED-->
-         <?php  if($enabledPayment['stripe'] == 'enable'): ?>
+        <!--  <?php  if($enabledPayment['stripe'] == 'enable'): ?>
           <div class="form__radio">
             <label for="visa">
-              <!-- <svg class="icon"> <use xlink:href="#icon-visa" /> </svg> -->
-              <?=$count++?>. <?=$enabledPayment['title_stripe']?> </label>
+                <?=$enabledPayment['title_stripe']?> </label>
             <input checked id="stripe" value="stripe" name="payment_method" type="radio" />
           </div>
-         <?php endif; ?>
+         <?php endif; ?> -->
          
-         <?php  if($enabledPayment['telr'] == 'enable'): ?>
+        <!--  <?php  if($enabledPayment['telr'] == 'enable'): ?>
           <div class="form__radio">
             <label for="paypal">
-              <!-- <div style="width:16px;">
-              
-              <img src="<?=base_url('assets/telr.png')?>" style="width: 100%;margin-left:0px;">
-              </div> -->
-              <?=$count++?>. <?=$enabledPayment['title_telr']?> </label>
+               <?=$enabledPayment['title_telr']?> </label>
             <input id="telr" value="telr" name="payment_method" type="radio"/>
           </div>
-        <?php endif; ?>
+        <?php endif; ?> -->
 
         
-            <?php  if($enabledPayment['noon'] == 'enable'): ?>
+            <?php  //if($enabledPayment['noon'] == 'enable'): ?>
              <div class="form__radio">
                 <label for="noon">
                   <?=$count++?>. <?=$enabledPayment['title_noon']?> </label>
                 <input id="noon" value="Noon" name="payment_method" type="radio"/>
               </div>
-            <?php endif; ?>
+            <?php //endif; ?>
 
 
             <?php  //if($enabledPayment['noon'] == 'enable'): 

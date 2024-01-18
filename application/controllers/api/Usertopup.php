@@ -185,9 +185,11 @@ class Usertopup extends CI_Controller {
 
 	/* * *********************************************************************
 	 * * Function name : rechargeToUser
-	 * * Developed By : Manoj Kumar
-	 * * Purpose  : This function used for recharge To User
-	 * * Date : 21 JUNE 2022
+	 * * Developed By  : Manoj Kumar
+	 * * Purpose       : This function used for recharge To User
+	 * * Date 		   : 21 JUNE 2022
+	 * * Uodated By    : Dilip Halder
+	 * * Uodated Date  : 18 January 2024
 	 * * **********************************************************************/
 	public function rechargeToUser()
 	{	
@@ -206,37 +208,28 @@ class Usertopup extends CI_Controller {
 				echo outPut(0,lang('SUCCESS_CODE'),lang('RECHARGE_AMOUNT_ERROR'),$result);
 			else:
 
-				$where 			=	[ 'users_id' => (int)$this->input->get('users_id') ];
+				$where 			=	array('users_id' => (int)$this->input->get('users_id'));
 				$tblName 		=	'da_users';
 				$userDetails 	=	$this->geneal_model->getOnlyOneData($tblName, $where);
-
 				if(!empty($userDetails)):
 					if($userDetails['status'] == 'A'):
-
 						/// check valid users
-						$where1 			= 	[];
 						$recharge_user_email_type = 'MOBILE';
-					    //New conditions
-					    if(is_numeric($this->input->post('recharge_user_email'))){ 
-							if(strlen($this->input->post('recharge_user_email')) >= 9){
-								$where1['where'] 	= 	['users_mobile'=> (int)$this->input->post('recharge_user_email'),'status'=>'A'];
-							}else{
-								$where1['where'] 	= 	['users_mobile'=> (float)$this->input->post('recharge_user_email'),'status'=>'A'];
-							}
+					    if(is_numeric($this->input->post('recharge_user_email'))){
+					    	$where1['where'] 	= 	array('users_mobile'=> (int)$this->input->post('recharge_user_email'),'status'=>'A');
 					    }else{ 
 							$where1['where'] 	= 	['users_email'=>strtolower($this->input->post('recharge_user_email')),'status'=>'A'];
 							$recharge_user_email_type = "EMAIL";
 					    }
 						$checkUser = $this->geneal_model->getOnlyOneData('da_users',$where1['where']);
-						
+
 					    if(!empty($checkUser)):
 					    	if((int)$checkUser['users_id'] != (int)$this->input->get('users_id')):
+						    	
 						    	/* Check sales person and retailser available points */
 						        $whereCon2 				 =	['users_id' => (int)$this->input->get('users_id') ];
 						        $user_data  =  $this->geneal_model->getOnlyOneData('da_users',$whereCon2);
 						        if($user_data):
-
-
 							        	if($this->input->post('percentage')):
 							        		$rechargeAmount 			=	(int)$this->input->post('recharge_amount');
 											$percent 					=	$this->input->post('percentage');
@@ -264,7 +257,7 @@ class Usertopup extends CI_Controller {
 											$availableArabianPoints 	= 	((float)$user_data['availableArabianPoints'] - (float)$this->input->post('recharge_amount'));
 											$totalRechargeAmount = (float)$this->input->post('recharge_amount');
 										endif;
-								        $updatefield        		= 	array( 'availableArabianPoints' => (float)$availableArabianPoints );
+								        $updatefield        			= 	array( 'availableArabianPoints' => (float)$availableArabianPoints );
 								        $this->geneal_model->editData('da_users', $updatefield, 'users_id', (int)$this->input->get('users_id'));
 
 								        /* Load Balance Table -- from user*/
@@ -408,7 +401,7 @@ class Usertopup extends CI_Controller {
 						        	echo outPut(0,lang('SUCCESS_CODE'),lang('LOW_BALANCE'),$result);
 						        endif;
 					        else:
-						    	echo outPut(0,lang('SUCCESS_CODE'),lang('EMAIL_INCORRECT'),$result);
+						    	echo outPut(0,lang('SUCCESS_CODE'),lang('ERROR_SELF_TRANSFER'),$result);
 						    endif;
 					    else:
 							if($recharge_user_email_type == 'MOBILE'):

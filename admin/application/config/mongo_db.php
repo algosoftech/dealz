@@ -31,7 +31,7 @@ if($_SERVER['SERVER_NAME']=='localhost'):
 	$config['mongo_db']['default']['hostname'] 					= 	'localhost';
 	$config['mongo_db']['default']['port'] 						= 	'27017';
 	$config['mongo_db']['default']['username'] 					= 	'dealzarabia_db';
-	$config['mongo_db']['default']['password'] 					= 	'DEALZARABIA@11042022';
+	$config['mongo_db']['default']['password'] 					= 	'DEALZARABIA@29032022';
 	$config['mongo_db']['default']['database'] 					= 	'dealzarabia_db';
 	$config['mongo_db']['default']['db_debug'] 					= 	TRUE;
 	$config['mongo_db']['default']['return_as'] 				= 	'array';
