@@ -115,6 +115,8 @@ elseif($firstSlug == 'winners'):
 	$route['add-winner'] 										= 	'winners/allwinners/addeditdata';
 
 
+elseif($secondSlug == 'allsatickets'):  
+	$route['index'] 											= 	'tickets/allsatickets/index';
 elseif($firstSlug == 'tickets'):  
 	$route['add-ticket'] 										= 	'tickets/alltickets/addeditdata';
 elseif($secondSlug == 'allinventory'):  

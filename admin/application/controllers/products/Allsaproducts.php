@@ -20,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension;
 use PhpOffice\PhpSpreadsheet\Worksheet;
 
-class Allproducts extends CI_Controller {
+class Allsaproducts extends CI_Controller {
 
 	public function  __construct() 
 	{ 
@@ -34,11 +34,9 @@ class Allproducts extends CI_Controller {
 	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 + + Function name 	: index
-	 + + Developed By 	: AFSAR ALI
+	 + + Developed By 	: Dilip Halder
 	 + + Purpose  		: This function used for index
-	 + + Date 			: 05 APRIL 2022
-	 + + Updated Date 	: 
-	 + + Updated By   	:
+	 + + Date 			: 19 January 2024
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function index()
@@ -46,7 +44,7 @@ class Allproducts extends CI_Controller {
 		$this->admin_model->authCheck();
 		$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'products';
-		$data['activeSubMenu'] 				= 	'allproducts';
+		$data['activeSubMenu'] 				= 	'allsaproducts';
 		
 		if($this->input->get('searchField') && $this->input->get('searchValue')):
 			$sField							=	$this->input->get('searchField');
@@ -64,10 +62,10 @@ class Allproducts extends CI_Controller {
 		$shortField 						= 	array('creation_date'=>-1);
 		
 		$baseUrl 							= 	getCurrentControllerPath('index');
-		$this->session->set_userdata('ALLPRODUCTSDATA',currentFullUrl());
+		$this->session->set_userdata('ALLSAPRODUCTSDATA',currentFullUrl());
 		$qStringdata						=	explode('?',currentFullUrl());
 		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
-		$tblName 							= 	'da_products';
+		$tblName 							= 	'da_sa_products';
 		$con 								= 	'';
 		$totalRows 							= 	$this->common_model->getData('count',$tblName,$whereCon,$shortField,'0','0');
 		
@@ -111,29 +109,27 @@ class Allproducts extends CI_Controller {
 		
 		$data['ALLDATA'] 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
 
-		$this->layouts->set_title('All Products (UAE) | Products | Dealz Arabia');
-		$this->layouts->admin_view('products/allproducts/index',array(),$data);
+		$this->layouts->set_title('All Products (SA) | Products | Dealz Arabia');
+		$this->layouts->admin_view('products/allsaproducts/index',array(),$data);
 	}	// END OF FUNCTION
 
 	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 + + Function name : addeditdata
-	 + + Developed By  : AFSAR ALI
+	 + + Developed By  : Dilip Halder
 	 + + Purpose  	   : This function used for Add Edit data
-	 + + Date 		   : 05 APRIL 2022
-	 + + Updated Date  : 
-	 + + Updated By    :
+	 + + Date 		   : 19 January 2024
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function addeditdata($editId='')
 	{		
 		$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'products';
-		$data['activeSubMenu'] 				= 	'allproducts';
+		$data['activeSubMenu'] 				= 	'allsaproducts';
 		
 		if($editId):
 			$this->admin_model->authCheck('edit_data');
-			$data['EDITDATA']				=	$this->common_model->getDataByParticularField('da_products','products_id',(int)$editId);
+			$data['EDITDATA']				=	$this->common_model->getDataByParticularField('da_sa_products','products_id',(int)$editId);
 		else:
 			$this->admin_model->authCheck('add_data');
 		endif;
@@ -167,6 +163,9 @@ class Allproducts extends CI_Controller {
 				endif;
 			endif;
 
+
+			
+
 			$this->form_validation->set_rules('title', 'Title', 'trim|required');
 			$this->form_validation->set_rules('category_id', 'Category', 'trim|required');
 			$this->form_validation->set_rules('sub_category_id', 'Sub Category', 'trim|required');
@@ -174,7 +173,7 @@ class Allproducts extends CI_Controller {
 			$this->form_validation->set_rules('image', 'Image', 'trim');
 			$this->form_validation->set_rules('stock', 'Quantity', 'trim|required');
 			$this->form_validation->set_rules('target_stock', 'Target Quantity', 'trim|required');
-			$this->form_validation->set_rules('adepoints', 'ADE Points', 'trim|required');
+			$this->form_validation->set_rules('points', 'Su Points', 'trim|required');
 			$this->form_validation->set_rules('draw_date', 'Campaigns Draw Date', 'trim');
 			$this->form_validation->set_rules('draw_time', 'Campaigns Draw Tme', 'trim');
 			$this->form_validation->set_rules('commingSoon', 'Comming Soon', 'trim|required');
@@ -191,7 +190,6 @@ class Allproducts extends CI_Controller {
 			$this->form_validation->set_rules('sponsored_coupon', 'Sponsored coupon', 'trim');
 
 			if($this->form_validation->run() && $error == 'NO'):
-				
 				$color_size_details = [];
 				if($this->input->post('is_color') == 'Y'):
 					
@@ -245,14 +243,12 @@ class Allproducts extends CI_Controller {
 				$sub_categoryData							= 	explode('____',$this->input->post('sub_category_id'));
 				$param['sub_category_id']					= 	(int)$sub_categoryData[0];
 				$param['sub_category_name']					= 	$sub_categoryData[1];
-				
+
 				if($_FILES['product_image']['name']):
 					// $ufileName						= 	$_FILES['product_image']['name'];
 					$ufileName						= 	str_replace(" ","_",$_FILES['product_image']['name']);
 					$utmpName						= 	$_FILES['product_image']['tmp_name'];
 					$ufileExt         				= 	pathinfo($ufileName);
-					// $unewFileName 					= 	$this->common_model->microseconds().'.'.$ufileExt['extension'];
-
 					$unewFileName 					= 	$_FILES['slider_image']['name'];
 					$filePath =  fileFCPATH .'assets/productsImage/'.$_FILES['slider_image']['name'];
 					 
@@ -268,7 +264,7 @@ class Allproducts extends CI_Controller {
 				endif;
 				$param['product_image_alt']			= 	addslashes($this->input->post('product_image_alt'));
 				
-				$param['adepoints']					= 	addslashes($this->input->post('adepoints'));
+				$param['points']					= 	addslashes($this->input->post('points'));
 				$param['draw_date']					= 	addslashes($this->input->post('draw_date'));
 				$param['draw_time']					= 	addslashes($this->input->post('draw_time'));
 				$param['commingSoon']				= 	addslashes($this->input->post('commingSoon'));
@@ -292,13 +288,13 @@ class Allproducts extends CI_Controller {
 					$param['stock']				= 	(int)addslashes($this->input->post('stock'));
 					$param['target_stock']		= 	(int)addslashes($this->input->post('target_stock'));
 					$param['inventory_stock']	=	(int)addslashes($this->input->post('stock'));
-					$param['products_id']		=	(int)$this->common_model->getNextSequence('da_products');
+					$param['products_id']		=	(int)$this->common_model->getNextSequence('da_sa_products');
 					$param['product_seq_id']	=	$this->common_model->getNextIdSequence('product_seq_id','products');
 					$param['creation_ip']		=	currentIp();
 					$param['creation_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
 					$param['created_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
 					$param['status']			=	'A';
-					$alastInsertId				=	$this->common_model->addData('da_products',$param);
+					$alastInsertId				=	$this->common_model->addData('da_sa_products',$param);
 					$this->session->set_flashdata('alert_success',lang('addsuccess'));
 				else:
 
@@ -307,7 +303,7 @@ class Allproducts extends CI_Controller {
 					$param['update_ip']			=	currentIp();
 					$param['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
 					$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
-					$this->common_model->editData('da_products',$param,'products_id',(int)$categoryId);
+					$this->common_model->editData('da_sa_products',$param,'products_id',(int)$categoryId);
 					$this->session->set_flashdata('alert_success',lang('updatesuccess'));
 				endif;
 
@@ -316,12 +312,12 @@ class Allproducts extends CI_Controller {
 		endif;
 		
 		$this->layouts->set_title('Add/Edit Products');
-		$this->layouts->admin_view('products/allproducts/addeditdata',array(),$data);
+		$this->layouts->admin_view('products/allsaproducts/addeditdata',array(),$data);
 	}	// END OF FUNCTION		
 
 	/***********************************************************************
 	** Function name 	: changestatus
-	** Developed By 	: Manoj Kumar
+	** Developed By 	: Dilip Halder
 	** Purpose  		: This function used for change status
 	** Date 			: 21 JUNE 2021
 	************************************************************************/
@@ -329,30 +325,30 @@ class Allproducts extends CI_Controller {
 	{  
 		$this->admin_model->authCheck('edit_data');
 		$param['status']		=	$statusType;
-		$this->common_model->editData('da_products',$param,'products_id',(int)$changeStatusId);
+		$this->common_model->editData('da_sa_products',$param,'products_id',(int)$changeStatusId);
 		$this->session->set_flashdata('alert_success',lang('statussuccess'));
 		
-		redirect(correctLink('ALLPRODUCTSDATA',getCurrentControllerPath('index')));
+		redirect(correctLink('ALLSAPRODUCTSDATA',getCurrentControllerPath('index')));
 	}
 
 	/***********************************************************************
 	** Function name 	: deletedata
-	** Developed By 	: Manoj Kumar
+	** Developed By 	: Dilip Halder
 	** Purpose  		: This function used for delete data
 	** Date 			: 21 JUNE 2021
 	************************************************************************/
 	function deletedata($deleteId='')
 	{  
 		$this->admin_model->authCheck('delete_data');
-		$this->common_model->deleteData('da_products','products_id',(int)$deleteId);
+		$this->common_model->deleteData('da_sa_products','products_id',(int)$deleteId);
 		$this->session->set_flashdata('alert_success',lang('deletesuccess'));
 		
-		redirect(correctLink('ALLPRODUCTSDATA',getCurrentControllerPath('index')));
+		redirect(correctLink('ALLSAPRODUCTSDATA',getCurrentControllerPath('index')));
 	}
 
 	/***********************************************************************
 	** Function name 	: getsub_categoryData
-	** Developed By 	: AFSAR ALI
+	** Developed By 	: Dilip Halder
 	** Purpose  		: This function used for delete data
 	** Date 			: 05 APRIL 2022
 	************************************************************************/
@@ -381,17 +377,15 @@ class Allproducts extends CI_Controller {
 
 	/***********************************************************************
 	** Function name : exportexcel
-	** Developed By : Ravi Negi
-	** Purpose  : This function used for export deleted users data
-	** Date : 31 AUG 2021
-	** Updated Date : 10 NOV 2021
-	** Updated By   : Ravi Negi
+	** Developed By  : Dilip Halder
+	** Purpose  	 : This function used for export deleted users data
+	** Date 		 : 31 AUG 2021
 	************************************************************************/
 	function exportexcel()
 	{  
 		/* Export excel button code */
 		$wcon['where']          =   '';
-		$data        			=   $this->common_model->getData('multiple','da_products',$wcon);//echo '<pre>';print_r($data);die;
+		$data        			=   $this->common_model->getData('multiple','da_sa_products',$wcon);//echo '<pre>';print_r($data);die;
 
         $spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
@@ -465,12 +459,12 @@ class Allproducts extends CI_Controller {
 	}
 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 + + Function name 	: index
-	 + + Developed By 	: AFSAR ALI
+	 + + Developed By 	: Dilip Halder
 	 + + Purpose  		: This function used for index
-	 + + Date 			: 05 APRIL 2022
+	 + + Date 			: 19 January 2024
 	 + + Updated Date 	: 
 	 + + Updated By   	:
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -479,7 +473,7 @@ class Allproducts extends CI_Controller {
 	{	
 		$this->admin_model->authCheck();
 		$data['error'] 						= 	'';
-		$data['activeMenu'] 				= 	'products';
+		$data['activeMenu'] 				= 	'producrs';
 		$data['activeSubMenu'] 				= 	'allproducts';
 		
 		if($this->input->get('searchField') && $this->input->get('searchValue')):
@@ -498,7 +492,7 @@ class Allproducts extends CI_Controller {
 		$shortField 						= 	array('user_id'=>-1);
 		
 		$baseUrl 							= 	getCurrentControllerPath('getAllusers/'.$id);
-		$this->session->set_userdata('ALLPRODUCTSDATA',currentFullUrl());
+		$this->session->set_userdata('ALLSAPRODUCTSDATA',currentFullUrl());
 		$qStringdata						=	explode('?',currentFullUrl());
 		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
 		$tblName 							= 	'da_orders_details';
@@ -546,482 +540,471 @@ class Allproducts extends CI_Controller {
 		$data['ALLDATA'] 					= 	$this->geneal_model->getOrderData('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
 
 		$this->layouts->set_title('All Products | Products | Dealz Arabia');
-		$this->layouts->admin_view('products/allproducts/getallusers',array(),$data);
+		$this->layouts->admin_view('products/allsaproducts/getallusers',array(),$data);
 	}	// END OF FUNCTION
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- + + Function name 	: getCoupon
- + + Developed By 	: AFSAR ALI
- + + Purpose  		: This function used for get all coupon
- + + Date 			: 06 APRIL 2022
- + + Updated Date 	: 
- + + Updated By   	:
- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-public function getCoupon($id='')
-{	
-	$this->admin_model->authCheck();
-	$data['error'] 						= 	'';
-	$data['activeMenu'] 				= 	'coupons';
-	$data['activeSubMenu'] 				= 	'allcoupons';
-	$data['products_id']				=	$id;
-	
-	if($this->input->get('searchField') && $this->input->get('searchValue')):
-		$sField							=	$this->input->get('searchField');
-		$sValue							=	$this->input->get('searchValue');
-		$whereCon['search']			 	= 	array('0'=>trim($sField),'1'=>trim($sValue));
-		$data['searchField'] 			= 	$sField;
-		$data['searchValue'] 			= 	$sValue;
-	else:
-		$whereCon['search']		 		= 	"";
-		$data['searchField'] 			= 	'';
-		$data['searchValue'] 			= 	'';
-	endif;
-			
-	$whereCon['where']		 			= 	array('product_id'=>(int)$id);		
-	$shortField 						= 	array('user_id'=>-1);
-	
-	$baseUrl 							= 	getCurrentControllerPath('getCoupon/'.$id);
-	$this->session->set_userdata('ALLPRODUCTSDATA',currentFullUrl());
-	$qStringdata						=	explode('?',currentFullUrl());
-	$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
-	$tblName 							= 	'da_coupons';
-	$con 								= 	'';
-	$totalRows 							= 	$this->geneal_model->getCouponData('count',$tblName,$whereCon,$shortField,'','');
-	
-	if($this->input->get('showLength') == 'All'):
-		$perPage	 					= 	$totalRows;
-		$data['perpage'] 				= 	$this->input->get('showLength');  
-	elseif($this->input->get('showLength')):
-		$perPage	 					= 	$this->input->get('showLength'); 
-		$data['perpage'] 				= 	$this->input->get('showLength'); 
-	else:
-		$perPage	 					= 	SHOW_NO_OF_DATA;
-		$data['perpage'] 				= 	SHOW_NO_OF_DATA; 
-	endif;
-
-	$uriSegment 						= 	5;//getUrlSegment();
-    $data['PAGINATION']					=	adminPagination($baseUrl,$suffix,$totalRows,$perPage,$uriSegment);
-
-   if($this->uri->segment($uriSegment)):
-       $page = $this->uri->segment($uriSegment);
-   else:
-       $page = 0;
-   endif;
-	
-	$data['forAction'] 					= 	$baseUrl; 
-	if($totalRows):
-		$first							=	(int)1;
-		$data['first']					=	$first;
-		
-		if($data['perpage'] == 'All'):
-			$pageData 					=	$totalRows;
-		else:
-			$pageData 					=	$data['perpage'];
-		endif;
-		
-		$last							=	((int)($page)+$pageData)>$totalRows?$totalRows:((int)($page)+$pageData);
-		$data['noOfContent']			=	'Showing '.$first.'-'.$last.' of '.$totalRows.' items';
-	else:
-		$data['first']					=	1;
-		$data['noOfContent']			=	'';
-	endif;
-
-	$data['ALLDATA'] 					= 	$this->geneal_model->getCouponData('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
-
-	$this->layouts->set_title('All Coupons | Coupons | Dealz Arabia');
-	$this->layouts->admin_view('products/allproducts/allcoupons',array(),$data);
-}	// END OF FUNCTION
-
-/***********************************************************************
-** Function name 	: couponExportExcel
-** Developed By 	: Afsar Ali
-** Purpose  		: This function used for export deleted users data
-** Date 			: 06 MAY 2022
-** Updated Date 	: 
-** Updated By   	: 
-************************************************************************/
-function couponExportExcel($pid='')
-{  
-	/* Export excel button code */
-	$wcon['where']          =   array( 'product_id' => (int)$pid );
-	$shortField 			= 	array('user_id'=>-1);
-	$data        			=   $this->geneal_model->getCouponData('multiple','da_coupons',$wcon,$shortField,[],[]);
-	
-    $spreadsheet = new Spreadsheet();
-	$sheet = $spreadsheet->getActiveSheet();
-	$sheet->setCellValue('A1', 'Sl.No');
-	$sheet->setCellValue('B1', 'NAME');
-	$sheet->setCellValue('C1', 'MOBILE NO.');
-	$sheet->setCellValue('D1', 'EMAIL ID');
-	$sheet->setCellValue('E1', 'PRODUCT ID');
-	$sheet->setCellValue('F1', 'PRODUCT NAME');
-	$sheet->setCellValue('G1', 'AED');
-	$sheet->setCellValue('H1', 'COUPON CODE');
-	$sheet->setCellValue('I1', 'ORDER ID');
-	$sheet->setCellValue('J1', 'DATE & TIME');
-	/*$sheet->setCellValue('H1', 'CREATION DATE');
-	$sheet->setCellValue('I1', 'CREATION IP');
-	$sheet->setCellValue('J1', 'VACCINATION STATUS');*/
-	
-	$slno = 1;
-	$start = 2;
-		foreach($data as $d){
-			$sheet->setCellValue('A'.$start, $slno);
-			$sheet->setCellValue('B'.$start, $d['users_name']);
-			$sheet->setCellValue('C'.$start, $d['users_mobile']);
-			$sheet->setCellValue('D'.$start, $d['users_email']);
-			$sheet->setCellValue('E'.$start, (int)$d['product_id']);
-			$sheet->setCellValue('F'.$start, $d['product_title']);
-			$sheet->setCellValue('G'.$start, $d['adepoints']);
-			$sheet->setCellValue('H'.$start, $d['coupon_code']);
-			$sheet->setCellValue('I'.$start, $d['order_id']);
-			$sheet->setCellValue('J'.$start, date('d-m-Y H:i A', strtotime($d['created_at'])));
-			/*$sheet->setCellValue('I'.$start, $d['creation_ip']);
-			$sheet->setCellValue('J'.$start, $d['vaccination_status']);*/
-			
-			
-	$start = $start+1;
-	$slno = $slno+1;
-		}
-	$styleThinBlackBorderOutline = [
-				'borders' => [
-					'allBorders' => [
-						'borderStyle' => Border::BORDER_THIN,
-						'color' => ['argb' => 'FF000000'],
-					],
-				],
-			];
-	//Font BOLD
-	$sheet->getStyle('A1:I1')->getFont()->setBold(true);		
-	$sheet->getStyle('A1:I1000')->applyFromArray($styleThinBlackBorderOutline);
-	//Alignment
-	//fONT SIZE
-	$sheet->getStyle('A1:D10')->getFont()->setSize(12);
-	$sheet->getStyle('A1:D2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-	$sheet->getStyle('A2:D100')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-	//Custom width for Individual Columns
-	$sheet->getColumnDimension('A')->setWidth(5);
-	$sheet->getColumnDimension('B')->setWidth(15);
-	$sheet->getColumnDimension('C')->setWidth(30);
-	$sheet->getColumnDimension('D')->setWidth(30);
-	$sheet->getColumnDimension('E')->setWidth(15);
-	$sheet->getColumnDimension('F')->setWidth(15);
-	$sheet->getColumnDimension('G')->setWidth(15);
-	$sheet->getColumnDimension('H')->setWidth(30);
-	$sheet->getColumnDimension('I')->setWidth(30);
-	
-
-	$curdate = date('d-m-Y H:i:s');
-	$writer = new Xlsx($spreadsheet);
-	$filename = 'Coupons-list'.$curdate;
-	ob_end_clean();
-	header('Content-Type: application/vnd.ms-excel');
-	header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
-	header('Cache-Control: max-age=0');
-	$writer->save('php://output');
-	//endif;
-	/* Export excel END */
-}
-
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- + + Function name 	: index
- + + Developed By 	: AFSAR ALI
- + + Purpose  		: This function used for index
- + + Date 			: 09 MAY 2022
- + + Updated Date 	: 
- + + Updated By   	:
- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-public function prizeList($pid='')
-{	
-
-	$this->admin_model->authCheck();
-	$data['error'] 						= 	'';
-	$data['activeMenu'] 				= 	'prize';
-	$data['activeSubMenu'] 				= 	'allprize';
-	$data['productID'] 					= 	base64_decode($pid);
-	
-	if($this->input->get('searchField') && $this->input->get('searchValue')):
-		$sField							=	$this->input->get('searchField');
-		$sValue							=	$this->input->get('searchValue');
-		$whereCon['like']			 	= 	array('0'=>trim($sField),'1'=>trim($sValue));
-		$data['searchField'] 			= 	$sField;
-		$data['searchValue'] 			= 	$sValue;
-	else:
-		$whereCon['like']		 		= 	"";
-		$data['searchField'] 			= 	'';
-		$data['searchValue'] 			= 	'';
-	endif;
-			
-	$whereCon['where']		 			= 	array('product_id' => (int)$data['productID']);		
-	$shortField 						= 	array('title'=>'ASC');
-	
-	$baseUrl 							= 	getCurrentControllerPath('prizeList/'.$pid);
-	$this->session->set_userdata('ALLPRIZEDATA',currentFullUrl());
-	$qStringdata						=	explode('?',currentFullUrl());
-	$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
-	$tblName 							= 	'da_prize';
-	$con 								= 	'';
-	$totalRows 							= 	$this->common_model->getData('count',$tblName,$whereCon,$shortField,'0','0');
-
-	if($this->input->get('showLength') == 'All'):
-		$perPage	 					= 	$totalRows;
-		$data['perpage'] 				= 	$this->input->get('showLength');  
-	elseif($this->input->get('showLength')):
-		$perPage	 					= 	$this->input->get('showLength'); 
-		$data['perpage'] 				= 	$this->input->get('showLength'); 
-	else:
-		$perPage	 					= 	SHOW_NO_OF_DATA;
-		$data['perpage'] 				= 	SHOW_NO_OF_DATA; 
-	endif;
-
-	$uriSegment 						= 	5;//getUrlSegment();
-    $data['PAGINATION']					=	adminPagination($baseUrl,$suffix,$totalRows,$perPage,$uriSegment);
-
-   if($this->uri->segment($uriSegment)):
-       $page = $this->uri->segment($uriSegment);
-   else:
-       $page = 0;
-   endif;
-	
-	$data['forAction'] 					= 	$baseUrl; 
-	if($totalRows):
-		$first							=	(int)($page)+1;
-		$data['first']					=	$first;
-		
-		if($data['perpage'] == 'All'):
-			$pageData 					=	$totalRows;
-		else:
-			$pageData 					=	$data['perpage'];
-		endif;
-		
-		$last							=	((int)($page)+$pageData)>$totalRows?$totalRows:((int)($page)+$pageData);
-		$data['noOfContent']			=	'Showing '.$first.'-'.$last.' of '.$totalRows.' items';
-	else:
-		$data['first']					=	1;
-		$data['noOfContent']			=	'';
-	endif;
-	
-	$data['ALLDATA'] 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
-
-	$this->layouts->set_title('All Prize | Prize | Dealz Arabia');
-	$this->layouts->admin_view('products/allproducts/allprize',array(),$data);
-}	// END OF FUNCTION
-
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- + + Function name : addprize
- + + Developed By  : AFSAR ALI
- + + Purpose  	   : This function used for Add Edit data
- + + Date 		   : 09 MAY 2022
- + + Updated Date  : 
- + + Updated By    :
- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-public function addprize($editId='')
-{		
-    
-	$data['error'] 						= 	'';
-	$data['activeMenu'] 				= 	'prize';
-	$data['activeSubMenu'] 				= 	'allprize';
-
-	
-	if($editId):
-		$this->admin_model->authCheck('edit_data');
-		$data['EDITDATA']				=	$this->common_model->getDataByParticularField('da_prize','prize_id',(int)$editId);
-		//echo '<pre>';print_r($data['EDITDATA']);die;
-	else:
-		$this->admin_model->authCheck('add_data');
-	endif;
-	
-	if($this->input->post('SaveChanges')):
-		$error					=	'NO';
-
-
-		$this->form_validation->set_rules('title', 'Title', 'trim');
-		$this->form_validation->set_rules('description', 'Description', 'trim');
-		//$this->form_validation->set_rules('image', 'Image', 'trim');
-		$this->form_validation->set_rules('prize_type', 'Prize Type', 'trim');
-		$this->form_validation->set_rules('product_id', 'Product', 'trim');
-
-
-
-		/*if($_FILES['prize_image']['name']){
-
-			$this->form_validation->set_rules('prize_image', 'Image', 'required');
-		}
-		*/
-		if($this->form_validation->run() && $error == 'NO'): 
-
-		   
-			$param['product_id']		= 	(int)$this->session->userdata('productID4Prize');
-			//$param['product_name']		= 	addslashes($productData[1]);
-			$param['title']				= 	addslashes($this->input->post('title'));
-			$param['title_slug']		= 	url_title(strtolower($this->input->post('title')));
-			$param['description']		= 	addslashes($this->input->post('description'));
-			
-			$param['prize_type']		= 	addslashes($this->input->post('prize_type'));
-
-			if($param['prize_type'] == "Cash"):
-				$param['prize1']			= 	(int)addslashes($this->input->post('prize1'));
-				$param['prize2']			= 	(int)addslashes($this->input->post('prize2'));
-				$param['prize3']			= 	(int)addslashes($this->input->post('prize3'));
-			else:
-				$param['prize1']			= 	'';
-				$param['prize2']			= 	'';
-				$param['prize3']			= 	'';
-			endif;
-			
-			if($_FILES['prize_image']['name']):
-				$ufileName						= 	$_FILES['prize_image']['name'];
-				$utmpName						= 	$_FILES['prize_image']['tmp_name'];
-				$ufileExt         				= 	pathinfo($ufileName);
-				// $unewFileName 					= 	$this->common_model->microseconds().'.'.$ufileExt['extension'];
-
-				$unewFileName 					= 	$_FILES['slider_image']['name'];
-				$filePath =  fileFCPATH .'assets/prizeImage/'.$_FILES['slider_image']['name'];
-				 
-				if(file_exists($filePath)):
-					$unewFileName =	$ufileExt['filename'] .'_'.$this->common_model->random_strings(8).'.'.$ufileExt['extension'];
-				endif;
-
-				$this->load->library("upload_crop_img");
-				$uimageLink						=	$this->upload_crop_img->_upload_image($ufileName,$utmpName,'prizeImage',$unewFileName,'');
-				if($uimageLink != 'UPLODEERROR'):
-					$param['prize_image']		= 	$uimageLink;
-				endif;
-			endif;
-			$param['prize_image_alt']	= 	addslashes($this->input->post('prize_image_alt'));
-
-			if($this->input->post('CurrentDataID') ==''):
-				$param['prize_id']		=	(int)$this->common_model->getNextSequence('da_prize');
-				$param['prize_seq_id']	=	$this->common_model->getNextIdSequence('prize_seq_id','prize');
-				$param['creation_ip']		=	currentIp();
-				$param['creation_date']		=	date('Y-m-d H:i');
-				$param['created_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
-				$param['status']			=	'A';
-				$alastInsertId				=	$this->common_model->addData('da_prize',$param);
-				$this->session->set_flashdata('alert_success',lang('addsuccess'));
-			else:
-
-				$categoryId					=	$this->input->post('CurrentDataID');
-				$param['update_ip']			=	currentIp();
-				$param['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
-				$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
-				$this->common_model->editData('da_prize',$param,'prize_id',(int)$categoryId);
-				$this->session->set_flashdata('alert_success',lang('updatesuccess'));
-			endif;
-
-			//redirect(correctLink('MASTERDATAPRODUCTTYPE',getCurrentControllerPath('index')));
-			redirect('products/allproducts/prizeList/'.base64_encode($param['product_id']));
-		endif;
-	endif;
-	
-	$this->layouts->set_title('Add/Edit Prize');
-	$this->layouts->admin_view('products/allproducts/addprize',array(),$data);
-}	// END OF FUNCTION	
-
-/***********************************************************************
-** Function name 	: deletePrize
-** Developed By 	: Manoj Kumar
-** Purpose  		: This function used for delete data
-** Date 			: 16 MAY 2022
-************************************************************************/
-function deletePrize($deleteId='')
-{  
-	$data	=	$this->common_model->getDataByParticularField('da_prize','prize_id',(int)$deleteId);
-	$imagepath =  fileFCPATH.$data['prize_image'];
-	@unlink($imagepath);
-	
-	$this->admin_model->authCheck('delete_data');
-	$this->common_model->deleteData('da_prize','prize_id',(int)$deleteId);
-	$this->session->set_flashdata('alert_success',lang('deletesuccess'));
-	
-	redirect(correctLink('ALLPRIZEDATA',getCurrentControllerPath('index')));
-}
-
-/***********************************************************************
-** Function name 	: updatestock
-** Developed By 	: Afsar Ali
-** Purpose  		: This function used for delete data
-** Date 			: 23 MAY 2022
-************************************************************************/
-function updatestock($pid=''){
-
-	$data['error'] 						= 	'';
+	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 + + Function name 	: getCoupon
+	 + + Developed By 	: Dilip Halder
+	 + + Purpose  		: This function used for get all coupon
+	 + + Date 			: 19 January 2024
+	 + + Updated Date 	: 
+	 + + Updated By   	:
+	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+	public function getCoupon($id='')
+	{	
+		$this->admin_model->authCheck();
+		$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'products';
-		$data['activeSubMenu'] 				= 	'allproducts';
-		if($pid):
-			$data['EDITDATA']				=	$this->common_model->getDataByParticularField('da_products','products_id',(int)$pid);
+		$data['activeSubMenu'] 				= 	'allsaproducts';
+		$data['products_id']				=	$id;
+		
+		if($this->input->get('searchField') && $this->input->get('searchValue')):
+			$sField							=	$this->input->get('searchField');
+			$sValue							=	$this->input->get('searchValue');
+			$whereCon['search']			 	= 	array('0'=>trim($sField),'1'=>trim($sValue));
+			$data['searchField'] 			= 	$sField;
+			$data['searchValue'] 			= 	$sValue;
+		else:
+			$whereCon['search']		 		= 	"";
+			$data['searchField'] 			= 	'';
+			$data['searchValue'] 			= 	'';
 		endif;
+				
+		$whereCon['where']		 			= 	array('product_id'=>(int)$id);		
+		$shortField 						= 	array('user_id'=>-1);
+		
+		$baseUrl 							= 	getCurrentControllerPath('getCoupon/'.$id);
+		$this->session->set_userdata('ALLSAPRODUCTSDATA',currentFullUrl());
+		$qStringdata						=	explode('?',currentFullUrl());
+		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
+		$tblName 							= 	'da_sa_coupons';
+		$con 								= 	'';
+		$totalRows 							= 	$this->geneal_model->getCouponData('count',$tblName,$whereCon,$shortField,'','');
+		
+		if($this->input->get('showLength') == 'All'):
+			$perPage	 					= 	$totalRows;
+			$data['perpage'] 				= 	$this->input->get('showLength');  
+		elseif($this->input->get('showLength')):
+			$perPage	 					= 	$this->input->get('showLength'); 
+			$data['perpage'] 				= 	$this->input->get('showLength'); 
+		else:
+			$perPage	 					= 	SHOW_NO_OF_DATA;
+			$data['perpage'] 				= 	SHOW_NO_OF_DATA; 
+		endif;
+
+		$uriSegment 						= 	5;//getUrlSegment();
+	    $data['PAGINATION']					=	adminPagination($baseUrl,$suffix,$totalRows,$perPage,$uriSegment);
+
+	   if($this->uri->segment($uriSegment)):
+	       $page = $this->uri->segment($uriSegment);
+	   else:
+	       $page = 0;
+	   endif;
+		
+		$data['forAction'] 					= 	$baseUrl; 
+		if($totalRows):
+			$first							=	(int)1;
+			$data['first']					=	$first;
+			
+			if($data['perpage'] == 'All'):
+				$pageData 					=	$totalRows;
+			else:
+				$pageData 					=	$data['perpage'];
+			endif;
+			
+			$last							=	((int)($page)+$pageData)>$totalRows?$totalRows:((int)($page)+$pageData);
+			$data['noOfContent']			=	'Showing '.$first.'-'.$last.' of '.$totalRows.' items';
+		else:
+			$data['first']					=	1;
+			$data['noOfContent']			=	'';
+		endif;
+
+		$data['ALLDATA'] 					= 	$this->geneal_model->getCouponData('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
+
+		$this->layouts->set_title('All Coupons | Coupons | Dealz Arabia');
+		$this->layouts->admin_view('products/allsaproducts/allcoupons',array(),$data);
+	}	// END OF FUNCTION
+
+	/***********************************************************************
+	** Function name 	: couponExportExcel
+	** Developed By 	: Dilip Halder
+	** Purpose  		: This function used for export deleted users data
+	** Date 			: 06 MAY 2022
+	** Updated Date 	: 
+	** Updated By   	: 
+	************************************************************************/
+	function couponExportExcel($pid='')
+	{  
+		/* Export excel button code */
+		$wcon['where']          =   array( 'product_id' => (int)$pid );
+		$shortField 			= 	array('user_id'=>-1);
+		$data        			=   $this->geneal_model->getCouponData('multiple','da_coupons',$wcon,$shortField,[],[]);
+		
+	    $spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setCellValue('A1', 'Sl.No');
+		$sheet->setCellValue('B1', 'NAME');
+		$sheet->setCellValue('C1', 'MOBILE NO.');
+		$sheet->setCellValue('D1', 'EMAIL ID');
+		$sheet->setCellValue('E1', 'PRODUCT ID');
+		$sheet->setCellValue('F1', 'PRODUCT NAME');
+		$sheet->setCellValue('G1', 'AED');
+		$sheet->setCellValue('H1', 'COUPON CODE');
+		$sheet->setCellValue('I1', 'ORDER ID');
+		$sheet->setCellValue('J1', 'DATE & TIME');
+		/*$sheet->setCellValue('H1', 'CREATION DATE');
+		$sheet->setCellValue('I1', 'CREATION IP');
+		$sheet->setCellValue('J1', 'VACCINATION STATUS');*/
+		
+		$slno = 1;
+		$start = 2;
+			foreach($data as $d){
+				$sheet->setCellValue('A'.$start, $slno);
+				$sheet->setCellValue('B'.$start, $d['users_name']);
+				$sheet->setCellValue('C'.$start, $d['users_mobile']);
+				$sheet->setCellValue('D'.$start, $d['users_email']);
+				$sheet->setCellValue('E'.$start, (int)$d['product_id']);
+				$sheet->setCellValue('F'.$start, $d['product_title']);
+				$sheet->setCellValue('G'.$start, $d['adepoints']);
+				$sheet->setCellValue('H'.$start, $d['coupon_code']);
+				$sheet->setCellValue('I'.$start, $d['order_id']);
+				$sheet->setCellValue('J'.$start, date('d-m-Y H:i A', strtotime($d['created_at'])));
+				/*$sheet->setCellValue('I'.$start, $d['creation_ip']);
+				$sheet->setCellValue('J'.$start, $d['vaccination_status']);*/
+				
+				
+		$start = $start+1;
+		$slno = $slno+1;
+			}
+		$styleThinBlackBorderOutline = [
+					'borders' => [
+						'allBorders' => [
+							'borderStyle' => Border::BORDER_THIN,
+							'color' => ['argb' => 'FF000000'],
+						],
+					],
+				];
+		//Font BOLD
+		$sheet->getStyle('A1:I1')->getFont()->setBold(true);		
+		$sheet->getStyle('A1:I1000')->applyFromArray($styleThinBlackBorderOutline);
+		//Alignment
+		//fONT SIZE
+		$sheet->getStyle('A1:D10')->getFont()->setSize(12);
+		$sheet->getStyle('A1:D2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+		$sheet->getStyle('A2:D100')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		//Custom width for Individual Columns
+		$sheet->getColumnDimension('A')->setWidth(5);
+		$sheet->getColumnDimension('B')->setWidth(15);
+		$sheet->getColumnDimension('C')->setWidth(30);
+		$sheet->getColumnDimension('D')->setWidth(30);
+		$sheet->getColumnDimension('E')->setWidth(15);
+		$sheet->getColumnDimension('F')->setWidth(15);
+		$sheet->getColumnDimension('G')->setWidth(15);
+		$sheet->getColumnDimension('H')->setWidth(30);
+		$sheet->getColumnDimension('I')->setWidth(30);
+		
+
+		$curdate = date('d-m-Y H:i:s');
+		$writer = new Xlsx($spreadsheet);
+		$filename = 'Coupons-list'.$curdate;
+		ob_end_clean();
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+		header('Cache-Control: max-age=0');
+		$writer->save('php://output');
+		//endif;
+		/* Export excel END */
+	}
+
+	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 + + Function name 	: index
+	 + + Developed By 	: Dilip Halder
+	 + + Purpose  		: This function used for index
+	 + + Date 			: 19 January 2024
+	 + + Updated Date 	: 
+	 + + Updated By   	:
+	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+	public function prizeList($pid='')
+	{	
+
+		$this->admin_model->authCheck();
+		$data['error'] 						= 	'';
+		$data['activeMenu'] 				= 	'products';
+		$data['activeSubMenu'] 				= 	'allsaproducts';
+		$data['productID'] 					= 	base64_decode($pid);
+		
+		if($this->input->get('searchField') && $this->input->get('searchValue')):
+			$sField							=	$this->input->get('searchField');
+			$sValue							=	$this->input->get('searchValue');
+			$whereCon['like']			 	= 	array('0'=>trim($sField),'1'=>trim($sValue));
+			$data['searchField'] 			= 	$sField;
+			$data['searchValue'] 			= 	$sValue;
+		else:
+			$whereCon['like']		 		= 	"";
+			$data['searchField'] 			= 	'';
+			$data['searchValue'] 			= 	'';
+		endif;
+				
+		$whereCon['where']		 			= 	array('product_id' => (int)$data['productID']);		
+		$shortField 						= 	array('title'=>'ASC');
+		
+		$baseUrl 							= 	getCurrentControllerPath('prizeList/'.$pid);
+		$this->session->set_userdata('ALLSAPRIZEDATA',currentFullUrl());
+		$qStringdata						=	explode('?',currentFullUrl());
+		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
+		$tblName 							= 	'da_sa_prize';
+		$con 								= 	'';
+		$totalRows 							= 	$this->common_model->getData('count',$tblName,$whereCon,$shortField,'0','0');
+
+		if($this->input->get('showLength') == 'All'):
+			$perPage	 					= 	$totalRows;
+			$data['perpage'] 				= 	$this->input->get('showLength');  
+		elseif($this->input->get('showLength')):
+			$perPage	 					= 	$this->input->get('showLength'); 
+			$data['perpage'] 				= 	$this->input->get('showLength'); 
+		else:
+			$perPage	 					= 	SHOW_NO_OF_DATA;
+			$data['perpage'] 				= 	SHOW_NO_OF_DATA; 
+		endif;
+
+		$uriSegment 						= 	5;//getUrlSegment();
+	    $data['PAGINATION']					=	adminPagination($baseUrl,$suffix,$totalRows,$perPage,$uriSegment);
+
+	   if($this->uri->segment($uriSegment)):
+	       $page = $this->uri->segment($uriSegment);
+	   else:
+	       $page = 0;
+	   endif;
+		
+		$data['forAction'] 					= 	$baseUrl; 
+		if($totalRows):
+			$first							=	(int)($page)+1;
+			$data['first']					=	$first;
+			
+			if($data['perpage'] == 'All'):
+				$pageData 					=	$totalRows;
+			else:
+				$pageData 					=	$data['perpage'];
+			endif;
+			
+			$last							=	((int)($page)+$pageData)>$totalRows?$totalRows:((int)($page)+$pageData);
+			$data['noOfContent']			=	'Showing '.$first.'-'.$last.' of '.$totalRows.' items';
+		else:
+			$data['first']					=	1;
+			$data['noOfContent']			=	'';
+		endif;
+		
+		$data['ALLDATA'] 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
+
+		$this->layouts->set_title('All Prize | Prize | Dealz Arabia');
+		$this->layouts->admin_view('products/allsaproducts/allprize',array(),$data);
+	}	// END OF FUNCTION
+
+	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 + + Function name : addprize
+	 + + Developed By  : Dilip Halder
+	 + + Purpose  	   : This function used for Add Edit data
+	 + + Date 		   : 19 January 2024
+	 + + Updated Date  : 
+	 + + Updated By    :
+	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+	public function addprize($editId='')
+	{		
+	    
+		$data['error'] 						= 	'';
+		$data['activeMenu'] 				= 	'prize';
+		$data['activeSubMenu'] 				= 	'allprize';
+
+		
+		if($editId):
+			$this->admin_model->authCheck('edit_data');
+			$data['EDITDATA']				=	$this->common_model->getDataByParticularField('da_sa_prize','prize_id',(int)$editId);
+			//echo '<pre>';print_r($data['EDITDATA']);die;
+		else:
+			$this->admin_model->authCheck('add_data');
+		endif;
+		
 		if($this->input->post('SaveChanges')):
 			$error					=	'NO';
-			$this->form_validation->set_rules('stock', 'Stock', 'trim');
+
+			// Validation start 
+			$this->form_validation->set_rules('title', 'Title', 'trim');
+			$this->form_validation->set_rules('description', 'Description', 'trim');
+			$this->form_validation->set_rules('prize_type', 'Prize Type', 'trim');
+			$this->form_validation->set_rules('product_id', 'Product', 'trim');
+			// Validation end 
+			
 			if($this->form_validation->run() && $error == 'NO'): 
-				$praduct			=	$this->common_model->getDataByParticularField('da_products','products_id',(int)$pid);
-				$totalstock 		= 	$praduct['totalStock'];
-				$availablestock 	= 	$praduct['stock'];
-				$inventory_stock	=	$praduct['inventory_stock'];
+				$param['product_id']		= 	(int)$this->session->userdata('productID4Prize');
+				$param['title']				= 	addslashes($this->input->post('title'));
+				$param['title_slug']		= 	url_title(strtolower($this->input->post('title')));
+				$param['description']		= 	addslashes($this->input->post('description'));
+				
+				$param['prize_type']		= 	addslashes($this->input->post('prize_type'));
 
-				$utotalstock 		= (int)$totalstock + (int)$this->input->post('stock');
+				if($param['prize_type'] == "Cash"):
+					$param['prize1']			= 	(int)addslashes($this->input->post('prize1'));
+					$param['prize2']			= 	(int)addslashes($this->input->post('prize2'));
+					$param['prize3']			= 	(int)addslashes($this->input->post('prize3'));
+				else:
+					$param['prize1']			= 	'';
+					$param['prize2']			= 	'';
+					$param['prize3']			= 	'';
+				endif;
+				
+				if($_FILES['prize_image']['name']):
+					$ufileName						= 	$_FILES['prize_image']['name'];
+					$utmpName						= 	$_FILES['prize_image']['tmp_name'];
+					$ufileExt         				= 	pathinfo($ufileName);
+					// $unewFileName 					= 	$this->common_model->microseconds().'.'.$ufileExt['extension'];
 
-				$uavailablestock 		= (int)$availablestock + (int)$this->input->post('stock');
+					$unewFileName 					= 	$_FILES['slider_image']['name'];
+					$filePath =  fileFCPATH .'assets/prizeImage/'.$_FILES['slider_image']['name'];
+					 
+					if(file_exists($filePath)):
+						$unewFileName =	$ufileExt['filename'] .'_'.$this->common_model->random_strings(8).'.'.$ufileExt['extension'];
+					endif;
 
-				$uinventory_stock 		= (int)$inventory_stock + (int)$this->input->post('stock');
+					$this->load->library("upload_crop_img");
+					$uimageLink						=	$this->upload_crop_img->_upload_image($ufileName,$utmpName,'prizeImage',$unewFileName,'');
+					if($uimageLink != 'UPLODEERROR'):
+						$param['prize_image']		= 	$uimageLink;
+					endif;
+				endif;
+				$param['prize_image_alt']	= 	addslashes($this->input->post('prize_image_alt'));
 
-				$param['totalStock']		= 	(int)$utotalstock;
-				$param['target_stock']		= 	(int)$utotalstock;
-				$param['stock']				= 	(int)$uavailablestock;
-				$param['inventory_stock']	= 	(int)$uinventory_stock;
+				if($this->input->post('CurrentDataID') ==''):
+					$param['prize_id']		=	(int)$this->common_model->getNextSequence('da_sa_prize');
+					$param['prize_seq_id']	=	$this->common_model->getNextIdSequence('prize_seq_id','prize');
+					$param['creation_ip']		=	currentIp();
+					$param['creation_date']		=	date('Y-m-d H:i');
+					$param['created_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
+					$param['status']			=	'A';
+					$alastInsertId				=	$this->common_model->addData('da_sa_prize',$param);
+					$this->session->set_flashdata('alert_success',lang('addsuccess'));
+				else:
 
-				$param['update_ip']			=	currentIp();
-				$param['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
-				$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
-				$this->common_model->editData('da_products',$param,'products_id',(int)$pid);
-				$this->session->set_flashdata('alert_success',lang('updatesuccess'));
-				redirect('products/allproducts/index/');
+					$categoryId					=	$this->input->post('CurrentDataID');
+					$param['update_ip']			=	currentIp();
+					$param['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
+					$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
+					$this->common_model->editData('da_sa_prize',$param,'prize_id',(int)$categoryId);
+					$this->session->set_flashdata('alert_success',lang('updatesuccess'));
+				endif;
+
+				//redirect(correctLink('MASTERDATAPRODUCTTYPE',getCurrentControllerPath('index')));
+				redirect('products/allsaproducts/prizeList/'.base64_encode($param['product_id']));
 			endif;
 		endif;
-		$this->layouts->set_title('Add Stock');
-		$this->layouts->admin_view('products/allproducts/stockupdate',array(),$data);
-} // END OF FUNCTION
+		
+		$this->layouts->set_title('Add/Edit Prize');
+		$this->layouts->admin_view('products/allsaproducts/addprize',array(),$data);
+	}	// END OF FUNCTION	
 
-/***********************************************************************
-** Function name 	: orderstatus
-** Developed By 	: Afsar Ali
-** Purpose  		: This function used for change order status
-** Date 			: 23 MAY 2022
-************************************************************************/
-function orderstatus($changeStatusId='',$statusType='')
-{  
-	//echo $changeStatusId; die();
-	$this->admin_model->authCheck('edit_data');
-	$param['order_status']		=	$statusType;
-	$this->common_model->editData('da_orders',$param,'order_id',$changeStatusId);
-	$this->session->set_flashdata('alert_success',lang('statussuccess'));
-	
-	redirect(correctLink('ALLPRODUCTSDATA',getCurrentControllerPath('index')));
-}
+	/***********************************************************************
+	** Function name 	: deletePrize
+	** Developed By 	: Dilip Halder
+	** Purpose  		: This function used for delete data
+	** Date 			: 16 MAY 2022
+	************************************************************************/
+	function deletePrize($deleteId='')
+	{  
+		$data	=	$this->common_model->getDataByParticularField('da_sa_prize','prize_id',(int)$deleteId);
+		$imagepath =  fileFCPATH.$data['prize_image'];
+		@unlink($imagepath);
+		$this->admin_model->authCheck('delete_data');
+		$this->common_model->deleteData('da_sa_prize','prize_id',(int)$deleteId);
+		$this->session->set_flashdata('alert_success',lang('deletesuccess'));
+		
+		redirect(correctLink('ALLSAPRIZEDATA',getCurrentControllerPath('index')));
+	}
 
-/***********************************************************************
-** Function name 	: changesoldoutstatus
-** Developed By 	: Afsar Ali
-** Purpose  		: This function used for change soldout status
-** Date 			: 17 MAY 2023
-************************************************************************/
-function changesoldoutstatus($changeStatusId='',$statusType='')
-{  
-	// echo $changeStatusId; die();
-	$this->admin_model->authCheck('edit_data');
-	$param['isSoldout']		=	$statusType;
-	// echo $param['isSoldout'];die();
-	$this->common_model->editData('da_products',$param,'products_id',(int)$changeStatusId);
-	$this->session->set_flashdata('alert_success',lang('statussuccess'));
-	
-	redirect(correctLink('ALLPRODUCTSDATA',getCurrentControllerPath('index')));
-}
+	/***********************************************************************
+	** Function name 	: updatestock
+	** Developed By 	: Dilip Halder
+	** Purpose  		: This function used for delete data
+	** Date 			: 23 MAY 2022
+	************************************************************************/
+	function updatestock($pid=''){
+
+		$data['error'] 						= 	'';
+			$data['activeMenu'] 				= 	'products';
+			$data['activeSubMenu'] 				= 	'allsaproducts';
+			if($pid):
+				$data['EDITDATA']				=	$this->common_model->getDataByParticularField('da_sa_products','products_id',(int)$pid);
+			endif;
+			if($this->input->post('SaveChanges')):
+				$error					=	'NO';
+				$this->form_validation->set_rules('stock', 'Stock', 'trim');
+				if($this->form_validation->run() && $error == 'NO'): 
+					$praduct			=	$this->common_model->getDataByParticularField('da_sa_products','products_id',(int)$pid);
+					$totalstock 		= 	$praduct['totalStock'];
+					$availablestock 	= 	$praduct['stock'];
+					$inventory_stock	=	$praduct['inventory_stock'];
+
+					$utotalstock 		= (int)$totalstock + (int)$this->input->post('stock');
+
+					$uavailablestock 		= (int)$availablestock + (int)$this->input->post('stock');
+
+					$uinventory_stock 		= (int)$inventory_stock + (int)$this->input->post('stock');
+
+					$param['totalStock']		= 	(int)$utotalstock;
+					$param['target_stock']		= 	(int)$utotalstock;
+					$param['stock']				= 	(int)$uavailablestock;
+					$param['inventory_stock']	= 	(int)$uinventory_stock;
+
+					$param['update_ip']			=	currentIp();
+					$param['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
+					$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
+					$this->common_model->editData('da_sa_products',$param,'products_id',(int)$pid);
+					$this->session->set_flashdata('alert_success',lang('updatesuccess'));
+					redirect('products/allsaproducts/index/');
+				endif;
+			endif;
+			$this->layouts->set_title('Add Stock');
+			$this->layouts->admin_view('products/allsaproducts/stockupdate',array(),$data);
+	} // END OF FUNCTION
+
+	/***********************************************************************
+	** Function name 	: orderstatus
+	** Developed By 	: Dilip Halder
+	** Purpose  		: This function used for change order status
+	** Date 			: 23 MAY 2022
+	************************************************************************/
+	function orderstatus($changeStatusId='',$statusType='')
+	{  
+		//echo $changeStatusId; die();
+		$this->admin_model->authCheck('edit_data');
+		$param['order_status']		=	$statusType;
+		$this->common_model->editData('da_orders',$param,'order_id',$changeStatusId);
+		$this->session->set_flashdata('alert_success',lang('statussuccess'));
+		
+		redirect(correctLink('ALLSAPRODUCTSDATA',getCurrentControllerPath('index')));
+	}
+
+	/***********************************************************************
+	** Function name 	: changesoldoutstatus
+	** Developed By 	: Dilip Halder
+	** Purpose  		: This function used for change soldout status
+	** Date 			: 17 MAY 2023
+	************************************************************************/
+	function changesoldoutstatus($changeStatusId='',$statusType='')
+	{  
+		// echo $changeStatusId; die();
+		$this->admin_model->authCheck('edit_data');
+		$param['isSoldout']		=	$statusType;
+		// echo $param['isSoldout'];die();
+		$this->common_model->editData('da_sa_products',$param,'products_id',(int)$changeStatusId);
+		$this->session->set_flashdata('alert_success',lang('statussuccess'));
+		
+		redirect(correctLink('ALLSAPRODUCTSDATA',getCurrentControllerPath('index')));
+	}
 
 }

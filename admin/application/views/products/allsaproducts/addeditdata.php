@@ -125,10 +125,10 @@
             </div>
 
             <div class="form-group-inner col-lg-2 col-md-2 col-sm-2 col-xs-12 <?php if(form_error('stock')): ?>error<?php endif; ?>">
-                <label>ADE / iPoints<span class="required">*</span></label>
-                <input type="number" min="0" name="adepoints" id="adepoints" class="form-control required" value="<?php if(set_value('adepoints')): echo set_value('adepoints'); else: echo stripslashes($EDITDATA['adepoints']);endif; ?>" placeholder="ADE / iPoints">
-                <?php if(form_error('adepoints')): ?>
-                    <span for="adepoints" generated="true" class="help-inline"><?php echo form_error('adepoints'); ?></span>
+                <label>SA / iPoints<span class="required">*</span></label>
+                <input type="number" min="0" name="points" id="points" class="form-control required" value="<?php if(set_value('points')): echo set_value('points'); else: echo stripslashes($EDITDATA['points']);endif; ?>" placeholder="sa_ / iPoints">
+                <?php if(form_error('points')): ?>
+                    <span for="points" generated="true" class="help-inline"><?php echo form_error('points'); ?></span>
                 <?php endif; ?>
             </div>
 
