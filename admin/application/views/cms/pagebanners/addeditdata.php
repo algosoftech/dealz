@@ -102,6 +102,23 @@ $(function(){
                         <?php endif; ?>
                       </div>
 
+
+                      <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12 <?php if(form_error('country_code')): ?>error<?php endif; ?>">
+                                        
+                          <label>Country Code<span class="required">*</span></label><br>
+                          <select name="country_code" id="country_code" class="form-control required select-search">
+                          <option value="">Select Country Code</option>
+                           <?php if($countryCodeData): foreach($countryCodeData as $countryCodeKey=>$countryCodeValue): ?>
+                                  <option value="<?php echo $countryCodeKey; ?>" <?php if($EDITDATA['country_code'] == $countryCodeKey): echo 'selected="selected"'; endif; ?>><?php echo $countryCodeValue; ?></option>
+                              <?php endforeach; endif; ?>
+                          </select>
+                          <?php if(form_error('country_code')): ?>
+                          <label for="country_code" generated="true" class="error"><?php echo form_error('country_code'); ?></label>
+                          <?php endif; ?>
+                      </div>
+
+
+
                     </div>
                     <div class="row">
                       <div class="login-btn-inner col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -122,8 +139,13 @@ $(function(){
         <!-- [ Main Content ] end -->
     </div>
 </div>
-<script>
-
+<link href="{ASSET_INCLUDE_URL}dist/css/fSelect.css" rel="stylesheet">
+<script src="{ASSET_INCLUDE_URL}dist/js/fSelect.js"></script> 
+<script type="text/javascript">
+  $(document).ready(function(){  
+    $('.select-search').fSelect();
+</script>
+<script> 
   function ImageDelete(imageName,id,typ)
   {//alert(id);
     if(confirm("Sure to delete?"))

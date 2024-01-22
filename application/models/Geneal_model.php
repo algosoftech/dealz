@@ -283,7 +283,9 @@ public function getData2($action='',$tbl_name='',$wcon='',$shortField='',$num_pa
 	if(isset($wcon['like']) && $wcon['like'])	$this->mongo_db->like($wcon['like'][0],$wcon['like'][1],'i',TRUE,TRUE);
 	if($shortField)				$this->mongo_db->order_by($shortField);				
 	if($num_page):				$this->mongo_db->limit($cnt);
-								$this->mongo_db->offset($num_page);						
+								$this->mongo_db->offset($num_page);
+	elseif($num_page == 'zero'):$this->mongo_db->limit($cnt);
+								$this->mongo_db->offset(0);								
 	endif;
 	if($action == 'count'):	
 		return $this->mongo_db->count($tbl_name);

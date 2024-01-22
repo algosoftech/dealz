@@ -70,7 +70,7 @@ $(function(){
                         <button class="uplaod-btn btn btn-sm btn-primary" id="uplaod-btn" disabled title="Upload CSV file first" >Upload</button>
                       </div>
                       <div class="upload-btn-wrapper">
-                        <input type="reset" class="btn btn-sm btn-secondary">
+                        <input type="reset" class="btn btn-sm btn-secondary" value="Cancle">
                       </div>
                     </div>
                   </div>
@@ -103,14 +103,10 @@ $(function(){
                         <div class="col-sm-3 col-md-3">
                           <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
                             <option value="">Select Field</option>
+                            <option value="status" <?php if($searchField == 'status')echo 'selected="selected"'; ?>>Status (Active, Inactive )</option>
                             <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Order ID </option>
-                            <option value="coupon_code" <?php if($searchField == 'coupon_code')echo 'selected="selected"'; ?>>Coupon Code </option>
-                            <option value="product_name" <?php if($searchField == 'product_name')echo 'selected="selected"'; ?>>Product Name </option>
-
-                            <option value="draw_date" <?php if($searchField == 'draw_date')echo 'selected="selected"'; ?>>Draw Date (YYYY-MM-DD) </option>
-                            <option value="setteld_by_name" <?php if($searchField == 'setteld_by_name')echo 'selected="selected"'; ?>>Setteld Name </option>
-                            <option value="collection_status" <?php if($searchField == 'collection_status')echo 'selected="selected"'; ?>>Collection Status (Zero and 1) </option>
-
+                            <option value="code" <?php if($searchField == 'code')echo 'selected="selected"'; ?>>Coupon Code </option>
+                            <option value="created_at" <?php if($searchField == 'created_at')echo 'selected="selected"'; ?>>Created Date</option>
                           </select>
                         </div>
                         <div class="col-sm-3 col-md-3">
@@ -127,9 +123,11 @@ $(function(){
                               <thead style="text-align: center;">
                                 <tr role="row">
                                   <th width="5%" style="text-align: center;">S.No.</th>
+                                  <th width="20%">Name</th>
                                   <th width="20%">Order ID</th>
                                   <th width="20%">Coupon Code</th>
                                   <th width="20%">Amount</th>
+                                  <th width="20%">Created Date</th>
                                   <th width="20%">status</th>
                                   <th width="10%">Action</th>
                                 </tr>
@@ -140,28 +138,34 @@ $(function(){
                                 ?>
                                 <tr role="row" class="<?php echo $rowClass; ?>">
                                   <td style="text-align: center;"><?=$i++?></td>
-                                  <td><?=stripslashes($ALLDATAINFO['order_id'])?></td>
+                                  <td><?=stripslashes($ALLDATAINFO['first_name'].' '.$ALLDATAINFO['last_name'] )?></td>
+                                  <td><?=stripslashes($ALLDATAINFO['order_id']?$ALLDATAINFO['order_id']:"N/A")?></td>
                                   <td><?=$ALLDATAINFO['code']?></td>
                                   <td><?=number_format($ALLDATAINFO['amount'],2)?></td>
-                                  <td>
-                                    <?php if($ALLDATAINFO['status'] == 0): ?>
-                                      <span style="color:green">Paid</span>
-                                    <?php else: ?>
-                                      <span style="color:red">Due</span>
-                                    <?php endif; ?>
+                                  <td><?=$ALLDATAINFO['created_at'];?></td>
+                                    <td style="text-align: right;">
+                                      <?php if($ALLDATAINFO['status'] == 1 ): ?>
+                                        <?=showStatus('A')?>
+                                      <?php else: ?>
+                                        <?=showStatus('I')?>
+                                      <?php endif; ?>
                                   </td>
                                   <td>
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                       <ul class="dropdown-menu" role="menu">
-                                         <li> <a href="<?php echo getCurrentControllerPath('userdetails/'.$ALLDATAINFO['order_id'].'/'.$ALLDATAINFO['users_id'])?>"  ><i class="fas fa-eye"></i>VIEW DETAILS</a> </li>
                                         <li>
-                                          <?php if($ALLDATAINFO['setteld_status'] == 0): ?>
-                                            <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['order_id'].'/A')?>" onClick="return confirm('Want to mark as paid!');" ><i class="fas fa-thumbs-up"></i>Approve</a>
-                                          <?php elseif($ALLDATAINFO['setteld_status'] == '1'): ?>
-                                            <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['order_id'].'/R')?>" onClick="return confirm('Want to mark as due!');"><i class="fas fa-thumbs-down"></i> Reverse</a>
+                                          <?php if($ALLDATAINFO['status'] == 1): ?>
+                                            <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['voucher_id'].'/0')?>" onClick="return confirm('Do you want to change status');" ><i class="fas fa-thumbs-down"></i>Inactive</a>
+                                          <?php elseif($ALLDATAINFO['status'] == 0): ?>
+                                            <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['voucher_id'].'/1')?>" onClick="return confirm('Do you want to change status');"><i class="fas fa-thumbs-up"></i> Active</a>
                                           <?php endif; ?>
                                         </li>
+                                        <?php if($ALLDATAINFO['soft_delete'] == 0): ?>
+                                          <li> 
+                                              <a href="<?php echo getCurrentControllerPath('deletedata/'.$ALLDATAINFO['voucher_id'])?>" onClick="return confirm('Do you want to delete');" ><i class="fas fa-trash"></i>Delete</a> 
+                                          </li>
+                                        <?php endif; ?>
                                       </ul>
                                     </div>
                                   </td>

@@ -20,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension;
 use PhpOffice\PhpSpreadsheet\Worksheet;
 
-class Draw_winners extends CI_Controller {
+class Online_draw extends CI_Controller {
 
 	public function  __construct() 
 	{ 
@@ -44,7 +44,7 @@ class Draw_winners extends CI_Controller {
 		$this->admin_model->authCheck();
 		$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'sub_winners';
-		$data['activeSubMenu'] 				= 	'draw_winners';
+		$data['activeSubMenu'] 				= 	'online_draw';
 		
 		if($this->input->get('searchField') && $this->input->get('searchValue')):
 			if($this->input->get('searchField') == 'collection_status'):
@@ -68,9 +68,15 @@ class Draw_winners extends CI_Controller {
 				$data['searchValue'] 			= $sValue;
 			endif;
 		else:
-			$data['searchField'] 				= '';
-			$data['searchValue'] 				= '';
-			$whereCon['where']					= array('soft_delete'=>array('$ne'=>1) , 'redeemeByArabianPoint' => 'Y');
+			
+		$whereCon['where']			= array(
+									  'soft_delete'=>array('$eq'=>1)
+								    );
+
+		$whereCon['where_or'] 		= array(
+									  'redeemeByArabianPoint' => 'Y',
+									  'redeembycash' => 'Y'
+									); 
 		endif;
 		
 		$shortField 						= 	array('_id'=> -1);
@@ -80,7 +86,12 @@ class Draw_winners extends CI_Controller {
 		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
 		$tblName 							= 	'wn_draw_winners';
 		$con 								= 	'';
+
 		$totalRows 							= 	$this->common_model->getData('count',$tblName,$whereCon,$shortField,'0','0');
+
+
+
+
 
 		if($this->input->get('showLength') == 'All'):
 			$perPage	 					= 	$totalRows;

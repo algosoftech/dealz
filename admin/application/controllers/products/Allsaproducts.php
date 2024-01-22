@@ -264,7 +264,7 @@ class Allsaproducts extends CI_Controller {
 				endif;
 				$param['product_image_alt']			= 	addslashes($this->input->post('product_image_alt'));
 				
-				$param['points']					= 	addslashes($this->input->post('points'));
+				$param['points']					= 	(float)addslashes($this->input->post('points'));
 				$param['draw_date']					= 	addslashes($this->input->post('draw_date'));
 				$param['draw_time']					= 	addslashes($this->input->post('draw_time'));
 				$param['commingSoon']				= 	addslashes($this->input->post('commingSoon'));

@@ -102,8 +102,8 @@ class Pagebanners extends CI_Controller {
 	 + + Developed By  : Manoj Kumar
 	 + + Purpose  	   : This function used for Add Edit data
 	 + + Date 		   : 14 JUNE 2021
-	 + + Updated Date  : 
-	 + + Updated By    :
+	 + + Updated Date  : 22 January 2024
+	 + + Updated By    : Dilip Halder
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function addeditdata($editId='')
@@ -186,7 +186,7 @@ class Pagebanners extends CI_Controller {
 				redirect(correctLink('CMSPAGEBANNER',getCurrentControllerPath('index')));
 			endif;
 		endif;
-		
+		$data['countryCodeData']    =   countryCodeList();
 		$this->layouts->set_title('Add/Edit Page Banner | CMS | Dealz Arabia');
 		$this->layouts->admin_view('cms/pagebanners/addeditdata',array(),$data);
 	}	// END OF FUNCTION	

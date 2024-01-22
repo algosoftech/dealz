@@ -651,11 +651,7 @@ public function checkDeplicacy(){
 	$user 	= $_POST['user'];
 
 	if (is_numeric($user)) {
-		if(strlen($user) >= 9){
-			$user_data = $this->common_model->getDataByParticularField('da_users', 'users_mobile', (int)$user);
-		}else{
-			$user_data = $this->common_model->getDataByParticularField('da_users', 'users_mobile', $user);
-		}
+		$user_data = $this->common_model->getDataByParticularField('da_users', 'users_mobile', (int)$user);
 	}else{		
 		$user_data = $this->common_model->getDataByParticularField('da_users', 'users_email', $user);	
 	}

@@ -58,6 +58,7 @@ class Voucher extends CI_Controller {
 		            $param = array();
 		            while(($data = fgetcsv($handle, 1000, ",")) !== false) {
 		            	if($i > 0):
+		            		$param['voucher_id']		=	(int)$this->common_model->getNextSequence('wn_test_daily_winners');
 		            		$param['order_id']			=	$data[2];
 		            		$param['first_name']		=	$data[0];
 		            		$param['last_name']			=	$data[1];
@@ -88,38 +89,34 @@ class Voucher extends CI_Controller {
 		endif;
 
 		if($this->input->get('searchField') && $this->input->get('searchValue')):
-			if($this->input->get('searchField') == 'collection_status'):
-				$sField							=	$this->input->get('searchField');
-				$sValue							=	$this->input->get('searchValue');
-				if(strtoupper($sValue) == 'ZERO'):
-					$sValue = 0;
-				endif;
-				$whereCon['where']				=	array('soft_delete'=>array('$ne'=>1), 'collection_status' => (int)$sValue);
-				$data['searchField'] 			= 	$sField;
-				$data['searchValue'] 			= 	$sValue;
 
-			elseif($this->input->get('searchField') =='draw_date'):
-				$searchValue 					= date('Y-m-d',strtotime($this->input->get('searchValue')));
-				$whereCon['where']				= array('draw_date'=> $searchValue);
+			$sField							= $this->input->get('searchField');
+			$sValue							= $this->input->get('searchValue');
+			$data['searchField'] 			= $sField;
+			$data['searchValue'] 			= $sValue;
+
+			if($sField =='status'):
+				if($sValue == 'Inactive'):
+					$sFieldState = (int)"0";
+				else:
+					$sFieldState = (int)"1";
+				endif;
+				$whereCon['where']				= array($sField => $sFieldState);
 			else:
-				$sField							= $this->input->get('searchField');
-				$sValue							= $this->input->get('searchValue');
 				$whereCon['like']			 	= array('0'=>trim($sField),'1'=>trim($sValue));
-				$data['searchField'] 			= $sField;
-				$data['searchValue'] 			= $sValue;
 			endif;
 		else:
 			$data['searchField'] 				= '';
 			$data['searchValue'] 				= '';
 			$whereCon['where']					= array('soft_delete'=>array('$ne'=>1));
 		endif;
-		
+
 		$shortField 						= 	array('_id'=> -1);
 		$baseUrl 							= 	getCurrentControllerPath('index');
 		$this->session->set_userdata('ALLVOUCHERDATA',currentFullUrl());
 		$qStringdata						=	explode('?',currentFullUrl());
 		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
-		$tblName 							= 	'wn_daily_winners';
+		$tblName 							= 	'wn_test_daily_winners';
 		$con 								= 	'';
 		$totalRows 							= 	$this->common_model->getData('count',$tblName,$whereCon,$shortField,'0','0');
 
@@ -160,6 +157,10 @@ class Voucher extends CI_Controller {
 			$data['first']					=	1;
 			$data['noOfContent']			=	'';
 		endif;
+
+
+		
+
 		$data['ALLDATA'] 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
 		$this->layouts->set_title(' Daily Winners | Dealz Arabia');
 		$this->layouts->admin_view('subwinners/voucher/index',array(),$data);
@@ -167,89 +168,35 @@ class Voucher extends CI_Controller {
 
 	/***********************************************************************
 	** Function name 	: changestatus
-	** Developed By 	: Afsar Ali
+	** Developed By 	: Dilip Halder
 	** Purpose  		: This function used for change status
-	** Date 			: 08 JULY 2023
-	** Updatead By 		: Dilip halder
-	** Date 			; 23 December 2023
+	** Date 			: 21 January 2024
 	************************************************************************/
 	function changestatus($changeStatusId='',$statusType='')
 	{   
+		// checking editing permission..
 		$this->admin_model->authCheck('edit_data');
-		//Checking total order count.
-		$tblName1 			 = 'wn_daily_winners';
-		$whereCon1['where']  = array('order_id' =>  $changeStatusId);
-
-		if($statusType == "A"):
-			$param['redeem_status']			=	'redeemed';
-			$param['redeemeByArabianPoint'] =	'Y';
-			$param['setteld_status']		=	(int)1;
-
-		elseif($statusType == "R"):
-			$param['redeem_status']			=	'pending';
-			$param['redeemeByArabianPoint'] =	'Y';
-			$param['setteld_status']		=	(int)0;
-
-		endif;
-		$this->common_model->editData('wn_daily_winners',$param,'order_id' , $changeStatusId);
-
-		$DrawData   		   = $this->common_model->getData('single',$tblName1,$whereCon1,$shortField2);
-		$whereUserCon['where'] = array('users_id' =>  (int)$DrawData['users_id']);
-		$UserDetails    	   = $this->common_model->getData('single','da_users',$whereUserCon);
-
-		if($statusType == "A"):
-			$totalArabianPoints 	=  $UserDetails['totalArabianPoints']+ $DrawData['amount'];
-			$availableArabianPoints =  $UserDetails['totalArabianPoints']+ $DrawData['amount'];
-		elseif($statusType == "R"):
-			$totalArabianPoints 	=  $UserDetails['totalArabianPoints']- $DrawData['amount'];
-			$availableArabianPoints =  $UserDetails['totalArabianPoints']- $DrawData['amount'];
-		endif;
-
-		$param 	= array('totalArabianPoints' => (float)$totalArabianPoints , 'availableArabianPoints' => (float)$availableArabianPoints) ; 
-		$this->common_model->editData('da_users',$param,'users_id',(int)$DrawData['users_id']);
-		
-
-		$this->sms_model->creditAp($UserDetails,$DrawData,$statusType);
+	 	$param['status'] 	 = (int)$statusType;
+		//Updating status
+		$tblName1 			 = 'wn_test_daily_winners';
+		$this->common_model->editData('wn_test_daily_winners',$param,'voucher_id' , (int)$changeStatusId);
 		$this->session->set_flashdata('alert_success',lang('statussuccess'));
-		
 		redirect(correctLink('ALLVOUCHERDATA',getCurrentControllerPath('index')));
 	}
 
 	/***********************************************************************
-	** Function name 	: userdetails
+	** Function name 	: deletedata
 	** Developed By 	: Dilip Halder
-	** Purpose  		: This function used for change status
-	** Date 			: 23 December 2023
+	** Purpose  		: This function used for delete data
+	** Date 			: 21 January 2024
 	************************************************************************/
-	public function userdetails($orderid='',$userId='')
-	{	
-		$this->admin_model->authCheck();
-		$data['error'] 						= 	'';
-		$data['activeMenu'] 				= 	'sub_winners';
-		$data['activeSubMenu'] 				= 	'draw_winners';
-		//Checking User Details
-		$tblName 			 = 'da_users';
-		$whereCon['where']   = array('users_id' => (int)$userId, 'status' => 'A');
-		$shortField 		 = array('users_id' => -1); 
-		$data['userdetails'] = $this->common_model->getData('single',$tblName,$whereCon,$shortField);
-		//Checking total order count.
-		$tblName1 			 = 'da_orders';
-		$whereCon1['where']  = array('user_id' => (int)$userId,'order_status' => 'Success' ,'status' => array('$ne' => 'CL'));
-		$shortField1 		 = array('user_id' => -1); 
-		$data['order_count'] 		 = $this->common_model->getData('count',$tblName1,$whereCon1,$shortField1);
-		//Checking total order count.
-		$tblName2 			 = 'da_ticket_orders';
-		$whereCon2['where']  = array('user_id' => (int)$userId,'order_status' => 'Success' ,'status' => array('$ne' => 'CL'));
-		$shortField2 		 = array('user_id' => -1); 
-		$data['quick_order_count'] 		 = $this->common_model->getData('count',$tblName2,$whereCon2,$shortField2);
-		
-		$baseUrl 			 = 	getCurrentControllerPath('index');
-		$this->session->set_userdata('ALLVOUCHERDATA',currentFullUrl());
-
-		// echo "<pre>"; print_r($data); die();
-
-		$this->layouts->set_title(' Draw Winners - User Details | Dealz Arabia');
-		$this->layouts->admin_view('subwinners/voucher/addeditdata',array(),$data);
-	}	// END OF FUNCTION
+	function deletedata($deleteId='')
+	{  
+		$this->admin_model->authCheck('delete_data');
+		$param['soft_delete'] = (int)1;
+		$this->common_model->editData('wn_test_daily_winners',$param,'voucher_id' ,(int)$deleteId);
+		$this->session->set_flashdata('alert_success',lang('deletesuccess'));
+		redirect(correctLink('ALLVOUCHERDATA',getCurrentControllerPath('index')));
+	}
 
 }

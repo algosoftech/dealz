@@ -31,7 +31,7 @@ class Products extends CI_Controller {
 	 * * Purpose      : This function used for get Home Page Data
 	 * * Date         : 27 JUNE 2022
 	 * * Updated By   : Dilip Halder
-	 * * Updated Date : 18 January 2024
+	 * * Updated Date : 22 January 2024
 	 * * **********************************************************************/
 	public function getHomePageData()
 	{	
@@ -51,6 +51,24 @@ class Products extends CI_Controller {
 				$this->geneal_model->editData('da_users',$param,'users_id',(int)$this->input->post('users_id'));
 			endif;
 
+			$UserId 					=   $this->input->post('users_id');
+			if($UserId):
+				$tableName          = 'da_users';
+				$whereCon['where']  = array('users_id'=> (int)$UserId);
+				$UserDatails 		= $this->common_model->getData('single',$tableName,$whereCon);
+			endif;
+
+			$country_code = $UserDatails['country_code'];
+
+			if($country_code == ""):
+				$db_slug = '';
+			// elseif($country_code == "+971"): // United Arab Emirates
+			// 	$db_slug = 'uae_';
+			elseif($country_code == "+968"): // Oman
+				$db_slug = 'om_';
+			elseif($country_code == "+966"): // Saudi Arabia
+				$db_slug = 'sa_';
+			endif;
 			// General Data Start
 			$generalData 				=	$this->geneal_model->getData2('single', 'da_general_data', $HSwcon,$HSorder);
 			// General Data End
@@ -85,7 +103,7 @@ class Products extends CI_Controller {
 
 			// Closing Soon Start
 			$closingSoon 				=	array();
-			$tblName1 					=	'da_products';
+			$tblName1 					=	'da_'.$db_slug.'products';
 			$where1['where'] 			=	array('stock'=> array('$gt'=> 0),'clossingSoon' => 'Y','status' => 'A');
 			$order1 					=	['seq_order' => 1];
 			$data1						=	$this->geneal_model->getProductWithPrizeDetails('multiple',$tblName1,$where1,$order1);
@@ -101,14 +119,11 @@ class Products extends CI_Controller {
 			$result['closingSoon'] 		=	$closingSoon;
 			// Closing Soon End
  
-			$selectedCampaign  			=	$this->common_model->getData('single','da_selected_campaign');
-			$UserId 		   			=   $this->input->post('users_id');
+			$selectedCampaign  			=	$this->common_model->getData('single','da_'.$db_slug.'selected_campaign');
+			 
+
 			// Checking Product for login Users only..
 			if($UserId):
-				$tableName          = 'da_users';
-				$whereCon['where']  = array('users_id'=> (int)$UserId);
-				$UserDatails 		= $this->common_model->getData('single',$tableName,$whereCon);
-				
 				// echo count($selectedCampaign['selected_campaign_list']);
 				// echo count($selectedCampaign['selected_app_campaign_list']);
 				// die();
@@ -129,8 +144,11 @@ class Products extends CI_Controller {
 				endif;
 			endif;
 
+
+			
+
 			$ourCampaigns 				=	array();
-			$tblName2 					=	'da_products';
+			$tblName2 					=	'da_'.$db_slug.'products';
 			$where2['where'] 			=	array( 
 												  'stock'=> array('$gt'=> 0),
 												  'clossingSoon' => 'N',
@@ -146,8 +164,6 @@ class Products extends CI_Controller {
 					$drawDate2 			= 	$info2['draw_date'].' '.$info2['draw_time'].':00';
 					$today2 			= 	date('Y-m-d H:i:s');
 					if(strtotime($valid2) > strtotime($today2) && strtotime($drawDate2) > strtotime($today2)):
-
-
 						// wishlist_product code start
 						if($this->input->post('users_id')):
 							$prowhere['where']	=	array('users_id'=>(int)$this->input->post('users_id'),'product_id'=>(int)$info2['products_id']);
@@ -173,7 +189,7 @@ class Products extends CI_Controller {
 							$info2['share_url']  			= 	'';
 						endif;
  
-						$product_prise_data 			= 	$this->geneal_model->getParticularDataByParticularField('prize_image','da_prize', 'product_id', $info2['products_id']);
+						$product_prise_data 			= 	$this->geneal_model->getParticularDataByParticularField('prize_image','da_'.$db_slug.'prize', 'product_id', $info2['products_id']);
 						if($product_prise_data <> ''):
 							$info2['product_prise_data']  = $product_prise_data;
 						else:
@@ -187,7 +203,7 @@ class Products extends CI_Controller {
 			// Product listing End ...
 
 			// Soldout listing Start ...
-			$tblName3 					=	'da_products';
+			$tblName3 					=	'da_'.$db_slug.'products';
 			$where3 					=	array('isSoldout'	=> 'Y');
 			$order3 					=	array('creation_date' => -1);
 			$data3						=	$this->geneal_model->getData($tblName3,$where3,$order3);
@@ -207,9 +223,10 @@ class Products extends CI_Controller {
 			// Recent Winners list start ...
 			$recentWinners 				=	array();
 			$tblName4 					=	'da_winners';
-			$where4 					=	[];
-			$order4 					=	['creation_date' => 'desc'];
-			$data4						=	$this->geneal_model->getData($tblName4,$where4,$order4);
+			$orderFields 				=   array('coupon_id' => -1);
+			$page 						=   'zero';
+			$per_page 					=   20;
+			$data4						=	$this->geneal_model->getData2('multiple',$tblName4,$where4,$orderFields ,$page ,$per_page);
 			if($data4):
 				foreach($data4 as $info4):
 					$valid4 			= 	$info4['announcedDate'].' '.$info4['announcedTime'].':0';
@@ -229,7 +246,7 @@ class Products extends CI_Controller {
 			endif;
 			$result['recentWinners'] 	=	$recentWinners;
 			// Recent Winners list End ...
-
+			
 			// Cart start ...
 			if($this->input->post('users_id')):
 				$CTwhere1['where'] 		= 	[ 'user_id'=>(int)$this->input->post('users_id') ];
@@ -239,10 +256,11 @@ class Products extends CI_Controller {
 				$result['cartCount'] 	=	0;
 			endif;
 			// Cart End ...
+				
 
 			// Product Request Count Start ...
-			if($this->input->post('users_id')):
-				$tblName 					=	'da_emirate_collection_point';
+			if($UserId):
+				$tblName 					=	'da_'.$db_slug.'emirate_collection_point';
 				$user_id 					=	$this->input->post('users_id');
 				$wcon['where']				=	array('users_id' => (int)$user_id); 
 				$collectionPointList		=	$this->geneal_model->getData2('multiple', $tblName, $wcon);

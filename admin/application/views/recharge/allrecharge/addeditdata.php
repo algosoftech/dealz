@@ -182,7 +182,7 @@ $('#user').change(function(){
                 $('#availableArabianPoints').empty().append('Enter valid mobile number');
                 $('.recharge_btn').attr("disabled", true);
 
-            }else if( userData.length >=9 ){
+            }else if( userData.length >=8 ){
 
                 var user = $(this).val();
                 var ur      = '<?=base_url().'/recharge/allrecharge/checkDeplicacy'?>';
