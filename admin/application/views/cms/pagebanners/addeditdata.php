@@ -88,7 +88,6 @@ $(function(){
                           <span for="pagename" generated="true" class="help-inline"><?php echo form_error('pagename'); ?></span>
                         <?php endif; ?>
                       </div>
-
                       <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12 <?php if(form_error('show_on')): ?>error<?php endif; ?>">
                          <label>Banner/Slider Show On<span class="required">*</span></label>
                         <?php if(set_value('show_on')): $show_on = set_value('show_on'); elseif($EDITDATA['show_on']): $show_on = stripslashes($EDITDATA['show_on']); else: $show_on = ''; endif; ?>
@@ -101,8 +100,6 @@ $(function(){
                           <span for="show_on" generated="true" class="help-inline"><?php echo form_error('show_on'); ?></span>
                         <?php endif; ?>
                       </div>
-
-
                       <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12 <?php if(form_error('country_code')): ?>error<?php endif; ?>">
                                         
                           <label>Country Code<span class="required">*</span></label><br>
@@ -116,9 +113,6 @@ $(function(){
                           <label for="country_code" generated="true" class="error"><?php echo form_error('country_code'); ?></label>
                           <?php endif; ?>
                       </div>
-
-
-
                     </div>
                     <div class="row">
                       <div class="login-btn-inner col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -139,13 +133,27 @@ $(function(){
         <!-- [ Main Content ] end -->
     </div>
 </div>
+
 <link href="{ASSET_INCLUDE_URL}dist/css/fSelect.css" rel="stylesheet">
 <script src="{ASSET_INCLUDE_URL}dist/js/fSelect.js"></script> 
 <script type="text/javascript">
-  $(document).ready(function(){  
-    $('.select-search').fSelect();
-</script>
-<script> 
+
+  $(document).ready(function(){
+    $('.select-search').fSelect({
+        placeholder: 'Select some options',
+        numDisplayed: 3,
+        overflowText: '{n} selected',
+        noResultsText: 'No results found',
+        searchText: 'Search country code',
+        showSearch: true,
+        required => true
+    });
+  });
+
+
+
+
+
   function ImageDelete(imageName,id,typ)
   {//alert(id);
     if(confirm("Sure to delete?"))

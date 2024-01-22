@@ -306,7 +306,7 @@ class DueManagement extends CI_Controller {
 						else:
 						$whereCona  				=	array(
 														'user_id' => (int)$UserIdTo  , 'status' => array('$ne'=> 'CL'),
-														'created_at' => array(  '$gte' => date('Y-m-d 00:01')  , '$lte' => date('Y-m-d 23:59'))
+														'created_at' => array('$gte' => date('Y-m-d 00:01')  , '$lte' => date('Y-m-d 23:59'))
 												 	);
 						endif;
 						$todaysales					= $this->geneal_model->todaysales($tblName,$whereCona,$shortField);

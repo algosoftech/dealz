@@ -18,8 +18,8 @@ class Pagebanners extends CI_Controller {
 	 + + Developed By 	: Manoj Kumar
 	 + + Purpose  		: This function used for index
 	 + + Date 			: 31 MARCH 2022
-	 + + Updated Date 	: 
-	 + + Updated By   	:
+	 + + Updated Date 	: 22 January 2024
+	 + + Updated By   	: Dilip Halder
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function index()
@@ -120,7 +120,6 @@ class Pagebanners extends CI_Controller {
 		endif;
 
 		$data['PAGESDATA']					=	pagesListData();
-		
 		if($this->input->post('SaveChanges')):
 			$error					=	'NO';
 
@@ -148,9 +147,6 @@ class Pagebanners extends CI_Controller {
 						$unewFileName =	$ufileExt['filename'] .'_'.$this->common_model->random_strings(8).'.'.$ufileExt['extension'];
 					endif;
 
-
-
-
 					$this->load->library("upload_crop_img");
 					$uimageLink						=	$this->upload_crop_img->_upload_image($ufileName,$utmpName,'homepageSliderImage',$unewFileName,'');
 					if($uimageLink != 'UPLODEERROR'):
@@ -164,7 +160,7 @@ class Pagebanners extends CI_Controller {
 				$param['slider_description']		= 	$this->input->post('slider_description');
 				$param['page']                      =   stripslashes($this->input->post('pagename'));
 				$param['show_on']                   =   stripslashes($this->input->post('show_on'));
-				
+				$param['country_code']              =   stripslashes($this->input->post('country_code'));
 				
 				if($this->input->post('CurrentDataID') ==''):
 					$param['slider_id']			=	(int)$this->common_model->getNextSequence('da_homepage_slider');
