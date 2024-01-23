@@ -73,7 +73,7 @@ else:
 	$fourthlug				=	isset($curUrl[5])?$curUrl[5]:'';
 	$extractData 			=	'/admin/';
 endif;
-$functionArray 				=	array('getsubcategoryData','exportexcel','videoDelete','index','addeditdata','addprize','deletedata','changestatus','imageUpload','imageDelete','deleteContent','memberDelete','viewdata','changedatastatus','getdatabyajax','getCityData','getStatisticsByUserID','registrationListByEmail','getmaratArea','checkRetailer','users_list','exportAllUsers','getTicketData','getCampaignSalesData','getSponsoredData','getRefferalData','getSignupBonusData','getMembershipData','getRechargeData','checkDeplicacy','generatecoupons','userdetails','addOption');
+$functionArray 				=	array('getsubcategoryData','exportexcel','videoDelete','index','addeditdata','addprize','deletedata','changestatus','imageUpload','imageDelete','deleteContent','memberDelete','viewdata','changedatastatus','getdatabyajax','getCityData','getStatisticsByUserID','registrationListByEmail','getmaratArea','checkRetailer','users_list','exportAllUsers','getTicketData','getCampaignSalesData','getSponsoredData','getRefferalData','getSignupBonusData','getMembershipData','getRechargeData','checkDeplicacy','generatecoupons','userdetails','addOption','upload_subwinners');
 
 if($firstSlug == 'login'):  
 	$route['login'] 											= 	'login/index';

@@ -1617,6 +1617,13 @@ public function couponList()
 				$whereConsales['where_in']	=   array("0" => "users_email" ,"1"=>array("manawalanwaseem@gmail.com","shafimak25@gmail.com","ismailkk0520@gmail.com","jaseer26@gmail.com","jaleel.dmi@gmail.com","ajmal2nasar@gmail.com","asrafk.ae@gmail.com"));
 			elseif($this->session->userdata('DZL_USERSTYPE') == "Super Retailer"):
 				$whereConsales['where_in']	=   array("0" => "users_email" ,"1"=>array("dealzfaisal@gmail.com","shabeer0606@gmail.com","ashiqpcpalam@gmail.com"));
+				// $whereConsales['where'] =	array(
+				// 			"status"     => "A",
+				// 			'$or'	=>	array(
+				// 				array('users_email' => array('$in' => array("dealzfaisal@gmail.com","shabeer0606@gmail.com","ashiqpcpalam@gmail.com","safaalmadeena2@gmail.com"))),
+								
+				// 				array('users_mobile' => array('$in' => array(557274514,553415088,563365032,526263007,503554451,503107201,569279712,504144128,521053885,552901914))),
+				// 			) );
 			endif;
 			
 			$salesPersonList 		    = 	$this->common_model->getData('multiple',$tblName,$whereConsales,$shortField);

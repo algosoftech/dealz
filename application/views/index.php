@@ -314,7 +314,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-8 col-12 text-align">
                                 <div class="product-des">
                                     <?php if ($item['title']): ?>
-                                        <h5  class="product__content">Buy<span class="buy_text" style="font-weight:700;"> <?=stripslashes($item['title'])?></span> &</h5>
+                                        <h5  class="product__content">Buy<span class="buy_text" style="font-weight:700;"> <?=stripslashes($item['title'])?></span> </h5>
                                     <?php endif ?>
                                     <h2><i class="winner__text">Win!</i></h2>
                                     <?php if($item['prizeDetails'][0]['prize1'] != 0 && $item['prizeDetails'][0]['prize2'] != 0 ): ?>

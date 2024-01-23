@@ -164,13 +164,18 @@ public function check($check=''){
 
 public function test_function($oid=""){
 	
-	// $table 	      = 'da_notifications_details';
-	// $fieldName    = 'notification_id';
-	// $fieldValue   = (int)200000000029626;
-
+	// $table 	      = "wn_daily_winners";
+	// $fieldName    = "created_by";
+	// $fieldValue   = "Admin";
 	// $users		  = $this->common_model->deleteData($table,$fieldName,$fieldValue);
 
-	// echo $users;
+	// $where['where'] = array('modified_at' => array('$gte' => "2024-01-23" ) );
+	// $table 	      = "wn_daily_winners";
+	// $where['where'] = array('created_by' => "Admin");
+	// $users		    = $this->common_model->getdata('count',$table,$where);
+	echo "<pre>";
+	print_r($users);
+	die();
 
 }
 

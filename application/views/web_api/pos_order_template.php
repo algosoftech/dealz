@@ -44,7 +44,7 @@ endif;
 
     table,tr {
         width:100%;
-        line-height :2;
+        line-height :1.6;
     }
 
     .order-title ,.order-details {
@@ -121,11 +121,21 @@ endif;
         border-bottom: 2px dashed #808080bd;
         padding: 5px 0px;
     }
-
+    .border-bottom{
+        text-align: center;
+        font-family: sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        border-bottom: 2px dashed #808080bd;
+        padding: 5px 0px; 
+    }
     table {
         margin: 20px auto;
     }
 
+    .coupon-heading {
+        vertical-align: baseline;
+    }
     </style>
 </head>
 <body >
@@ -155,14 +165,24 @@ endif;
                 <td class="order-title"> Purchased On  </td>
                 <td class="order-details">  '.date('d M, Y H:m A' ,strtotime($orderData[0]["created_at"]) ).' </td>
             </tr>
+        </table>
+        <table class="border-top-bottom">
+            <tr>
+                <td class="order-title"> Description </td>
+                <td class="order-details">Amount</td>
+            </tr>
+        </table>
+        <table class="border-bottom">
             <tr>
                 <td class="order-title"> Wired or Ear Phone  </td>
                 <td class="order-details">10 AED</td>
             </tr>
             <tr>
-                <td class="order-title"> Coupon Code</td>
-                <td class="order-details">MN01011</td>
+                <td class="order-title coupon-heading"> Coupon Code</td>
+                <td class="order-details">MN01011 <br>MN01011<br>MN01011<br>MN01011</td>
             </tr>
+        </table>
+        <table class="border-bottom"> 
             <tr>
                 <td class="order-title"> Total Qty.</td>
                 <td class="order-details">01</td>
@@ -176,7 +196,7 @@ endif;
                 <td class="order-details">10 AED</td>
             </tr>
         </table>
-        <table class="border-top-bottom">
+        <table class="border-bottom">
             <tr>
                 <td class="order-title"> Purchased By </td>
                 <td class="order-details">  Prinice <br> +971 50 889 5589 </td>

@@ -57,25 +57,62 @@ $(function(){
                 <h5>Manage Voucher List</h5>
               </div>
               <div class="card-body">
-
-                <form class="" method="post" enctype="multipart/form-data" >
-
-                  <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                      <div class="upload-btn-wrapper">
-                        <button class="select-btn">Upload a file</button>
-                        <input type="file" name="csvFile"  id="file-select" accept=".csv" />
-                      </div>
-                      <div class="upload-btn-wrapper">
-                        <button class="uplaod-btn btn btn-sm btn-primary" id="uplaod-btn" disabled title="Upload CSV file first" >Upload</button>
-                      </div>
-                      <div class="upload-btn-wrapper">
-                        <input type="reset" class="btn btn-sm btn-secondary" value="Cancle">
-                      </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                      <form class="" method="post" enctype="multipart/form-data" >
+                        <div class="row">
+                          <div class="col-sm-12 col-md-12 col-lg-12">
+                            <fieldset>
+                              <legend>Daily Dealz Plus</legend>
+                              <h6>
+                                  Uplaod Daily Draws CSV 
+                                  <sup>
+                                    <a href="<?=fileBaseUrl.'assets/csv-sample.csv'?>">Sample</a>
+                                  </sup>
+                                </h6>
+                                <div class="upload-btn-wrapper">
+                                  <button class="select-btn">Upload a file</button>
+                                  <input type="file" name="csvFile"  id="daily-dealz-plus" accept=".csv" />
+                                </div>
+                                <div class="upload-btn-wrapper">
+                                  <button class="uplaod-btn btn btn-sm btn-primary" id="daily-upload-btn" disabled title="Upload CSV file first" >Upload</button>
+                                </div>
+                                <div class="upload-btn-wrapper">
+                                  <input type="reset" class="btn btn-sm btn-secondary" value="Cancel">
+                                </div>
+                            </fieldset>
+                          </div>
+                        </div>
+                      </form>
                     </div>
-                  </div>
-                  
-                </form>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                      <form class="" method="post" action="<?=getCurrentControllerPath('upload_subwinners')?>"  enctype="multipart/form-data" >
+                        <div class="row">
+                          <div class="col-sm-12 col-md-12 col-lg-12">
+                            <fieldset>
+                              <legend>Sub Winners</legend>
+                              <h6>
+                                Uplaod Daily Draws CSV 
+                                <sup>
+                                  <a href="<?=fileBaseUrl.'assets/csv-sample.csv'?>">Sample</a>
+                                </sup>
+                              </h6>
+                                <div class="upload-btn-wrapper">
+                                  <button class="select-btn">Upload a file</button>
+                                  <input type="file" name="csvFile"  id="subwinner" accept=".csv" />
+                                </div>
+                                <div class="upload-btn-wrapper">
+                                  <button class="uplaod-btn btn btn-sm btn-primary" id="subwinner-upload-btn" disabled title="Upload CSV file first" >Upload</button>
+                                </div>
+                                <div class="upload-btn-wrapper">
+                                  <input type="reset" class="btn btn-sm btn-secondary" value="Cancel">
+                                </div>
+                            </fieldset>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                </div>
 
 
                 <form id="Data_Form" name="Data_Form" method="get" action="<?php echo $forAction; ?>">
@@ -254,9 +291,17 @@ $(function(){
 </div>
 
 <script>
-  $('#file-select').on('change', function(){
+  $('#daily-dealz-plus').on('change', function(){
     let file = $(this).val();
-    $('#uplaod-btn').attr('disabled' , false);
+    $('#daily-upload-btn').attr('disabled' , false);
+  });
+
+  $('#subwinner').on('change', function(){
+
+
+    let file = $(this).val();
+    console.log(file)
+    $('#subwinner-upload-btn').attr('disabled' , false);
   });
 
 </script>
