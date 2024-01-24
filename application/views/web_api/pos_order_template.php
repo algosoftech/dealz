@@ -1,18 +1,8 @@
 <?php 
 
-$nameData = explode(' ',$name);
-$count = count($nameData);
-if($count > 2) :
-    $newName = $nameData[0].' '.$nameData[$count -1];
-elseif($count == 1):
-    $newName = $nameData[0];
-else:
-    $newName = $name;
-endif;
-
-    $logo = base_url('assets/img/dealzlogo.png');
-
-    $html = ' 
+// 
+$logo = base_url('assets/img/dealzlogo.png');
+$html = ' 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -153,17 +143,13 @@ endif;
         <table class="my-order-section">
             <tr>
                 <td class="order-title">My Order # </td>
-                <td class="order-details"> DFG484964684</td>
+                <td class="order-details">'.$orderData['order_id'].'</td>
             </tr> 
         </table>
         <table>
             <tr>
-                <td class="order-title">POS</td>
-                <td class="order-details"> Merchant AL HILAL TRADING</td>
-            </tr>
-            <tr>
                 <td class="order-title"> Purchased On  </td>
-                <td class="order-details">  '.date('d M, Y H:m A' ,strtotime($orderData[0]["created_at"]) ).' </td>
+                <td class="order-details">'.date('d M, Y H:i A ', strtotime($orderData['created_at'])).'</td>
             </tr>
         </table>
         <table class="border-top-bottom">
@@ -172,34 +158,51 @@ endif;
                 <td class="order-details">Amount</td>
             </tr>
         </table>
-        <table class="border-bottom">
-            <tr>
-                <td class="order-title"> Wired or Ear Phone  </td>
-                <td class="order-details">10 AED</td>
-            </tr>
-            <tr>
-                <td class="order-title coupon-heading"> Coupon Code</td>
-                <td class="order-details">MN01011 <br>MN01011<br>MN01011<br>MN01011</td>
-            </tr>
-        </table>
+
+        <table class="border-bottom">';
+            foreach ($productData as $key => $items):
+        $html .='<tr>
+                    <td class="order-title">'.$items['title']. ' x '.$items['quantity']. '</td>
+                    <td class="order-details">'.$items['price'].' AED</td>
+                </tr>
+                <tr>
+                    <td class="order-title">Promotional Campaign Value</td>
+                    <td class="order-details">'.$items['prize_title'].'</td>
+                </tr>
+                <tr>
+                    <td class="order-title">Promotional Campaign Validity</td>
+                    <td class="order-details">'.date('d.m.Y',strtotime($items['draw_date'])).'</td>
+                </tr>
+                <tr>
+                    <td class="order-title coupon-heading"> Coupon Code</td>
+                    <td class="order-details"> ';
+                    foreach($items['coupon'] as $coupon_code):
+                        $html .=$coupon_code.'<br>';
+                    endforeach;
+                    '</td>
+                </tr>
+
+               ';
+            endforeach;
+       $html .=' </table>
         <table class="border-bottom"> 
             <tr>
                 <td class="order-title"> Total Qty.</td>
-                <td class="order-details">01</td>
+                <td class="order-details">'.$totalQTY.'</td>
             </tr>
             <tr>
                 <td class="order-title">NetAmount <br> <span>(inclusive Vat)</span></td>
-                <td class="order-details">10 AED</td>
+                <td class="order-details">'.$orderData['total_price'].' AED</td>
             </tr>
             <tr>
                 <td class="order-title">Total AED<br> <span>(Cash)</span></td>
-                <td class="order-details">10 AED</td>
+                <td class="order-details">'.$orderData['total_price'].' AED</td>
             </tr>
         </table>
         <table class="border-bottom">
             <tr>
                 <td class="order-title"> Purchased By </td>
-                <td class="order-details">  Prinice <br> +971 50 889 5589 </td>
+                <td class="order-details">'.$name.' <br> '.$mobile.' </td>
             </tr>
         </table>
 
@@ -211,26 +214,13 @@ endif;
                 <p> A Promotional Coupon has been issued with the Purchase</p>
             </div>
         </div>
-
-        <table class="promotional-section">
-            <tr>
-                <td class="order-title">Promotional Campaign Value</td>
-                <td class="order-details">80,000 AED</td>
-            </tr>
-            <tr>
-                <td class="order-title">Promotional Campaign Validity</td>
-                <td class="order-details">29.01.2024</td>
-            </tr>
-        </table>
-        
-
         <div class="footer-container">
             <div class="heading-section">
                 <h1>For more details</h1>
             </div>
             <div>
                 <p class="information-section"> visit <a href='.$base_url.'> www.dealzarabia.com </a> <br>
-                    call us @ <a href="tel:045541927">04 554 1927</a> 
+                    call us @ <a href="tel:043558533">04 355 8533</a> 
                 </p>
                 <p> Email: info@dealzarabia.com</p>
             </div>
@@ -241,11 +231,17 @@ endif;
             <div style="text-align: center;">
                 <img src='.base_url('/assets/img/ap_help_qr_code.png').' alt="QR">
             </div>
-        </div>
-        
-       ';
+        </div>';
 
+        // echo $html; die();
 
-    echo $html;
-
-    die();
+  $headerpdf='';
+  $footerpdf='';
+  $mpdf = new \Mpdf(['debug' => true]);
+  $mpdf->SetHTMLHeader($headerpdf);
+  $mpdf->SetHTMLFooter($footerpdf);
+  $mpdf->SetDisplayMode('fullpage');
+  $mpdf->AddPage();
+  $mpdf->WriteHTML($html);
+  $mpdf->Output($orderData['order_id'].'.pdf','D');
+?>     

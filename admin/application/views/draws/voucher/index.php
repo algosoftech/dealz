@@ -119,8 +119,6 @@ $(function(){
                   <div class="dt-responsive table-responsive">
                     <div id="simpletable_wrapper" class="dataTables_wrapper dt-bootstrap4">
                       
-                      
-
                       <div class="row">
                         <div class="col-sm-3 col-md-3">
                           <div class="dataTables_length" id="simpletable_length">
@@ -138,6 +136,12 @@ $(function(){
                           </div>
                         </div>
                         <div class="col-sm-3 col-md-3">
+                          <select class="custom-select custom-select-sm form-control form-control-sm" aria-label="Default select example">
+                            <option value="1">Daily Dealz Plus</option>
+                            <option value="2">Sub Winners</option>
+                          </select>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
                           <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
                             <option value="">Select Field</option>
                             <option value="status" <?php if($searchField == 'status')echo 'selected="selected"'; ?>>Status (Active, Inactive )</option>
@@ -149,10 +153,11 @@ $(function(){
                         <div class="col-sm-3 col-md-3">
                           <input type="text" name="searchValue" id="searchValue" value="<?php echo $searchValue; ?>" class="form-control form-control-sm" placeholder="Enter Search Text">
                         </div>
-                        <div class="col-sm-3 col-md-3">
+                        <div class="col-sm-1 col-md-1">
                           <input type="submit" name="Search" value="Search" class="btn btn-sm btn-primary">
                         </div>
                       </div>
+
                       <div class="row">
                         <div class="col-sm-12">
                           <div class="table-responsive">

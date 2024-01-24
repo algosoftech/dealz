@@ -1580,10 +1580,12 @@ public function  __construct()
 
 
 	/* * *********************************************************************
-	 * * Function name : download_invoice
-	 * * Developed By : Dilip
-	 * * Purpose  : This function used for download invoice
-	 * * Date :: 01 FEB 2023
+	 * * Function name 	: download_invoice
+	 * * Developed By 	: Dilip
+	 * * Purpose  		: This function used for download invoice
+	 * * Date 			: 01 FEB 2023
+	 * * Updated BY 	: Dilip Halder
+	 * * Updated Date 	: 24 January 2024
 	 * * **********************************************************************/
 	public function download_invoice($oid ='')
 	{
@@ -1593,20 +1595,95 @@ public function  __construct()
 		$shortField 			= 	array('_id'=> -1 );
 		$whereCon['where']		= 	array('order_id'=>$oid);
 	
-		$orderData  =	$this->geneal_model->getordersList('single', $tblName, $whereCon,$shortField);
-			
-		$where2 					=	['users_id' => (int)$orderData['user_id'] ];
-		$userData					=	$this->geneal_model->getOnlyOneData('da_users', $where2);
+		$orderData     			=	$this->geneal_model->getData2('single', $tblName, $whereCon,$shortField);
+		// $orderData  =	$this->geneal_model->getordersList('single', $tblName, $whereCon,$shortField);
+		
+		// OrderDetails
+		// User details fetching
+		$where2 			    =	array('users_id' => (int)$orderData['user_id']);
+		$userData				=	$this->geneal_model->getOnlyOneData('da_users', $where2);
+		// echo "<pre>"; print_r($orderData); die();
 
-		//$name = explode('@',$data['orderData']['user_email']);
-		$name = $userData['users_name'];
-		$data['orderData'] = $orderData;
-		$data['name'] = $name;
-	
+		// coupon code start here.
+        $tblName                =   'da_coupons';
+        $shortField             =   array('coupon_id'=> 1 );
+        $whereCon['where']      =   array('order_id'=> $oid);
+        $couponlist             =  $this->geneal_model->getData2('multiple', $tblName, $whereCon,$shortField);
+        // coupon code end here.
+
+       // Product details code start here.
+        $tblName                =  'da_orders_details';
+        $shortField             =  array('_id'=> -1 );
+        $whereCon['where']      =  array('order_id'=>$oid);
+        $orderDetails         =  $this->geneal_model->getData2('multiple', $tblName, $whereCon,$shortField);
+
+
+        $productName = array();
+        $key = 0;// 
+        foreach($couponlist as $couponKey => $coupons):
+            // Product details code start here.
+            $tblName                =  'da_products';
+            $shortField             =  array('_id'=> -1 );
+            $whereCon['where']      =  array('products_id'=>(int)$coupons['product_id']);
+            $ProductDetails         =  $this->geneal_model->getData2('single', $tblName, $whereCon,$shortField);
+            $price                  = $ProductDetails['adepoints']?$ProductDetails['adepoints']:$ProductDetails['points'];
+
+          	$tblName                =  'da_prize';
+            $shortField             =  array('_id'=> -1 );
+            $whereCon['where']      =  array('product_id'=>(int)$coupons['product_id']);
+            $PrizeData         =  $this->geneal_model->getData2('single', $tblName, $whereCon,$shortField);
+
+
+            // echo "<pre>";
+            // print_r();
+            // die();
+
+            if(!in_array($ProductDetails['title'],array_column($productData, 'title'))):
+                $productData[$key]['title']             = $ProductDetails['title'];
+                $productData[$key]['price']             = $price;
+                $productData[$key]['draw_date']         = $ProductDetails['draw_date'];
+                $productData[$key]['draw_time']         = $ProductDetails['draw_time'];
+                $productData[$key]['prize_title']		= $PrizeData['title'];
+               foreach($orderDetails as $ORD_details):
+                    if($ProductDetails['products_id'] == $ORD_details['product_id']):
+                         $productData[$key]['quantity'] = $ORD_details['quantity'];
+                    endif;
+                endforeach;
+
+
+                foreach($couponlist as $couponKey => $coupon):
+                    if($ProductDetails['products_id'] == $coupon['product_id']):
+                         $productData[$key]['coupon'][]         = $coupon['coupon_code'];
+                    endif;
+                endforeach;
+                $key++;
+            endif;
+        endforeach;
+
+        
+
+        $totalQTY = 0;
+        foreach ($orderDetails as $key => $ORD_Details):
+        	$totalQTY +=$ORD_Details['quantity'];
+        endforeach;
+        	
+
+
+		$data['orderData'] 		= $orderData;
+		$data['productData'] 	= $productData;
+		$data['totalQTY'] 		= $totalQTY;
+		$data['name'] 	   		= $userData['users_name'].' '.$userData['last_name'];
+		$data['mobile']    		= $userData['country_code'] .' '.$userData['users_mobile'];
+
+		// echo "<pre>"; print_r($data); die();
+
 		// $this->load->view('web_api/order_pdf_template', $data);
-		$this->load->view('web_api/order_pdf_template_table', $data);
+		// $this->load->view('web_api/order_pdf_template_table', $data);
+		$this->load->view('web_api/pos_order_template', $data);
 
-		$this->DownlodeOrderPDF($oid.'.pdf');
+		
+
+		// $this->DownlodeOrderPDF($oid.'.pdf');
 		return;
 	}
 

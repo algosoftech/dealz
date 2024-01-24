@@ -110,7 +110,7 @@ $route['order-success/(any)'] 					= 	'order/success/$1';
 $route['order-success'] 						= 	'order/success';
 
 
-$route['order-details/download-invoice/(:any)'] = 	'order/download_invoice/$1';
+$route['order-details/download-invoice/(:any)'] = 	'order/download_invoice/$1'; 
 $route['order/download-invoice/(:any)'] = 	'order/download_invoice/$1';
 
 

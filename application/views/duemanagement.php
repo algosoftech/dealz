@@ -232,7 +232,7 @@
                   <form method="post">
                                 <div class="row">
                       <div class="col-sm-12 col-md-5">
-                        <div>
+                        <!-- <div>
                           <label class="label">Total Recharge : </label>
                           <img src="<?=base_url('/assets/AP-GREEN.png');?>" width="25px" alt="appgreen">
                           <span class="ared" style="font-weight: bold;"> : <?=number_format($TotalRecharge , 2);?></span><br>
@@ -241,7 +241,7 @@
                           <label class="label">Today's Total Recharge : </label>
                           <img src="<?=base_url('/assets/AP-GREEN.png');?>" width="25px" alt="appgreen">
                           <span class="ared" style="font-weight: bold;"> : <?=number_format($todayTotalRecharge , 2);?></span><br>
-                        </div>
+                        </div> -->
 
                          <div>
                           <label class="label">Today's Total Sales : </label>
@@ -382,9 +382,13 @@
                       <tr>
                       <td><?php echo $key+1;  ?> </td>
                       <td>
+                       <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
                         <?= 'Name : ' .$item['users_name'].' ' .$item['last_name'] . "<br>";  ?> 
-                        <?= 'mobile : ' .$item['country_code'].' ' .$item['users_mobile'] . "<br>";  ?> 
-                        <?= 'Email : ' .$item['users_email'] . "<br>" ;  ?> 
+                      <?php else: ?>
+                        <?= 'Name : ' .$item['users_name'].' ' .$item['last_name'] . "<br>";  ?> 
+                        <!-- <?= 'mobile : ' .$item['country_code'].' ' .$item['users_mobile'] . "<br>";  ?> 
+                        <?= 'Email : ' .$item['users_email'] . "<br>" ;  ?>  -->
+                      <?php endif; ?>
                       </td>
                       <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
                           <td><?= $item['todaySales'];  ?> </td>
