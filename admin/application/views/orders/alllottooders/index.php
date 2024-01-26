@@ -59,17 +59,20 @@ $(function(){
                               <div class="col-sm-3 col-md-3">
                                   <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
                                     <option value="">Select Field</option>
-                                    <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Order ID</option>
-                                    <option value="order_first_name" <?php if($searchField == 'order_first_name')echo 'selected="selected"'; ?>>First Name</option>
+                                    <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Ticket ID</option>
+                                    
+                                    <option value="ticket" <?php if($searchField == 'ticket')echo 'selected="selected"'; ?>>Coupon Search</option>
+                                    
+                                    <!-- <option value="order_first_name" <?php if($searchField == 'order_first_name')echo 'selected="selected"'; ?>>First Name</option>
                                     <option value="order_last_name" <?php if($searchField == 'order_last_name')echo 'selected="selected"'; ?>>Last Name</option>
-                                    <option value="order_users_email" <?php if($searchField == 'order_users_email')echo 'selected="selected"'; ?>>User Email</option>
-                                    <option value="order_users_mobile" <?php if($searchField == 'order_users_mobile')echo 'selected="selected"'; ?>>User Phone</option>
+                                    <option value="order_users_email" <?php if($searchField == 'order_users_email')echo 'selected="selected"'; ?>>User Email</option> -->
+                                    <option value="user_phone" <?php if($searchField == 'user_phone')echo 'selected="selected"'; ?>>User Phone</option>
                                     <option value="created_at" <?php if($searchField == 'created_at')echo 'selected="selected"'; ?>>Purchase Date</option>
                                     <option value="product_id" <?php if($searchField == 'product_id')echo 'selected="selected"'; ?>>Campaign ID </option>
                                     <option value="product_title" <?php if($searchField == 'product_title')echo 'selected="selected"'; ?>>Campaign Name </option>
                                     <option value="user_email" <?php if($searchField == 'user_email')echo 'selected="selected"'; ?>>Seller Email</option>
-                                    <option value="users_mobile" <?php if($searchField == 'users_mobile')echo 'selected="selected"'; ?>>Seller Mobile</option>
-                                    <option value="product_is_donate" <?php if($searchField == 'product_is_donate')echo 'selected="selected"'; ?>>Product Donate (Y/N)</option>
+                                    <option value="user_phone" <?php if($searchField == 'user_phone')echo 'selected="selected"'; ?>>Seller Mobile</option>
+                                    <!-- <option value="product_is_donate" <?php if($searchField == 'product_is_donate')echo 'selected="selected"'; ?>>Product Donate (Y/N)</option> -->
                                     <option value="status" <?php if($searchField == 'status')echo 'selected="selected"'; ?>>Order Status (CL) </option>
                                   </select>
                               </div>
@@ -104,7 +107,7 @@ $(function(){
                                 <th width="10%">User Details</th>
                                 <th width="10%">Seller Details</th>
                                 <th width="10%">Bind With</th>
-                                <th width="20%">Donated</th>
+                                <!-- <th width="20%">Donated</th> -->
                                 <th width="10%">Purchase Date</th>
                                 <th width="10%">Total Amount</th>
                                 <th width="10%">Available ArabianPoints</th>
@@ -129,7 +132,7 @@ $(function(){
                                   <td>
                                     <?php if(!empty($ALLDATAINFO['order_first_name'])  && !empty($ALLDATAINFO['order_first_name'])): ?>
                                       Name : <?=stripslashes($ALLDATAINFO['order_first_name'].' '.$ALLDATAINFO['order_last_name'])?><br>
-                                      Mobile : <?=stripslashes($ALLDATAINFO['order_users_mobile'])?><br>
+                                      Mobile : <?=stripslashes($ALLDATAINFO['user_phone'])?><br>
                                       <?php if($ALLDATAINFO['order_users_email']): ?>
                                         Email : <?=stripslashes($ALLDATAINFO['order_users_email'])?>
                                       <?php endif ?>
@@ -182,7 +185,7 @@ $(function(){
                                    
  
                                  
-                                  <td><?php echo $ALLDATAINFO['product_is_donate']=='Y'?'Yes':'No'; ?></td>
+                                  <!-- <td><?php echo $ALLDATAINFO['product_is_donate']=='Y'?'Yes':'No'; ?></td> -->
                                   <td><?=date('d M Y h:i:s A', strtotime($ALLDATAINFO['created_at']))?></td>
                                   <td>AED <?=number_format($ALLDATAINFO['total_price'],2)?></td>
                                   
@@ -272,7 +275,7 @@ $(function(){
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="<?=base_url('orders/allquickorders/exportexcel')?>" method="post" autocomplete="off">
+      <form action="<?=base_url('orders/alllottooders/exportexcel')?>" method="post" autocomplete="off">
       <div class="modal-body">
           <div class="row">
             <div class="col-sm-12 col-md-6">
@@ -292,20 +295,18 @@ $(function(){
 
            <div class="row mt-2"  style="margin:0px;">
               <div class="col-sm-12 col-md-6">
-               <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
-                <option value="">Select Field</option>
-                <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Order ID</option>
-                <option value="order_first_name" <?php if($searchField == 'order_first_name')echo 'selected="selected"'; ?>>First Name</option>
-                <option value="order_last_name" <?php if($searchField == 'order_last_name')echo 'selected="selected"'; ?>>Last Name</option>
-                <option value="order_users_email" <?php if($searchField == 'order_users_email')echo 'selected="selected"'; ?>>User Email</option>
-                <option value="order_users_mobile" <?php if($searchField == 'order_users_mobile')echo 'selected="selected"'; ?>>User Phone</option>
-                <option value="users_email" <?php if($searchField == 'user_email')echo 'selected="selected"'; ?>>Seller Email</option>
-                <option value="users_mobile" <?php if($searchField == 'users_mobile')echo 'selected="selected"'; ?>>Seller Mobile</option>
-                <option value="product_id" <?php if($searchField == 'product_id')echo 'selected="selected"'; ?>>Campaign ID </option>
-                <option value="product_title" <?php if($searchField == 'product_title')echo 'selected="selected"'; ?>>Campaign Name </option>
-                <option value="product_is_donate" <?php if($searchField == 'product_is_donate')echo 'selected="selected"'; ?>>Product Donate (Y/N)</option>
-                <option value="status" <?php if($searchField == 'status')echo 'selected="selected"'; ?>>Order Status (CL) </option>
-              </select>
+                <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
+                  <option value="">Select Field</option>
+                  <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Ticket ID</option>
+                  <option value="ticket" <?php if($searchField == 'ticket')echo 'selected="selected"'; ?>>Coupon Search</option>
+                  <option value="user_phone" <?php if($searchField == 'user_phone')echo 'selected="selected"'; ?>>User Phone</option>
+                  <option value="created_at" <?php if($searchField == 'created_at')echo 'selected="selected"'; ?>>Purchase Date</option>
+                  <option value="product_id" <?php if($searchField == 'product_id')echo 'selected="selected"'; ?>>Campaign ID </option>
+                  <option value="product_title" <?php if($searchField == 'product_title')echo 'selected="selected"'; ?>>Campaign Name </option>
+                  <option value="user_email" <?php if($searchField == 'user_email')echo 'selected="selected"'; ?>>Seller Email</option>
+                  <option value="user_phone" <?php if($searchField == 'user_phone')echo 'selected="selected"'; ?>>Seller Mobile</option>
+                  <option value="status" <?php if($searchField == 'status')echo 'selected="selected"'; ?>>Order Status (CL) </option>
+                </select>
               </div>
               <div class="col-sm-12 col-md-6">
                 <input type="text" name="searchValue" id="searchValue" value="<?php echo $searchValue; ?>" class="form-control form-control-sm" placeholder="Enter Search Text">

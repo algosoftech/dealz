@@ -108,6 +108,85 @@ class Geneal_model extends CI_Model
 		endif;
 	}	// END OF FUNCTION
 
+	/***********************************************************************
+	** Function name: getOrderData
+	** Developed By: Dilip Halder
+	** Purpose: This function used for get Property Data
+	** Date : 25 January 2024
+	************************************************************************/
+	public function getlottoOrderData($action='',$tbl_name='',$where_condition='',$short_field='',$page='',$per_page='')
+	{  
+		$filterArray 				=	array();
+
+		if($where_condition['search']):
+			array_push($filterArray,array($where_condition['search'][0]=>new MongoDB\BSON\Regex ($where_condition['search'][1],'i')));
+		endif;
+		if($where_condition['where']):
+			foreach($where_condition['where'] as $where_key=>$where_value):
+				array_push($filterArray,array($where_key=>$where_value));
+			endforeach;
+		endif;
+
+		$selectFields 			=  	array(
+							'$project' => array(
+								'_id'=>0,
+								'order_details_id'=>1,
+								'order_id'=>1,
+								'product_id'=>1,
+								'users_id'=>1,
+								'quantity'=>1,
+								'subtotal'=>1,
+								'quantity'=>1,
+								'price'=>1,
+								'is_donated'=>1,
+								'created_at'=>1,
+
+								'payment_mode'=>'$from_order.payment_mode',
+								'order_status'=>'$from_order.order_status',
+
+								'users_name'=>'$from_users.users_name',
+								'users_email'=>'$from_users.users_email',
+								'users_mobile'=>'$from_users.users_mobile',
+								'product_name'=>'$from_product.title',
+								'stock'=>'$from_product.stock'
+
+								));
+
+		$whereCondition					=	array();
+
+		if($filterArray):
+			foreach($filterArray as $filterInfo):
+				array_push($whereCondition,$filterInfo);
+			endforeach;
+		endif;
+
+		$currentQuery					=	array(array('$lookup'=>array('from'=>'da_users','localField'=>'user_id','foreignField'=>'users_id','as'=>'from_users')),
+												  array('$lookup'=>array('from'=>'da_products','localField'=>'product_id','foreignField'=>'products_id','as'=>'from_product')),
+
+												  array('$lookup'=>array('from'=>'da_lotto_orders','localField'=>'order_id','foreignField'=>'order_id','as'=>'from_order')),
+
+												  $selectFields,
+												  array('$match'=>array('$and'=>$whereCondition)),
+												  array('$sort'=>$short_field));//echo '<pre>';print_r($currentQuery);die;
+
+		if($action == 'count'):
+			$totalDataCount				=	$this->getDataByMultipleAndCondition($tbl_name,$currentQuery);
+			if($totalDataCount):
+				return count($totalDataCount);
+			endif;
+		elseif($action == 'single'):
+			$currentData				=	$this->getDataByMultipleAndCondition($tbl_name,$currentQuery);
+			return $currentData[0];
+		elseif($action == 'multiple'):	
+			if($per_page):
+				array_push($currentQuery,array('$skip'=>(int)$page));
+				array_push($currentQuery,array('$limit'=>(int)$per_page));
+			endif;
+			$currentData				=	$this->getDataByMultipleAndCondition($tbl_name,$currentQuery);
+			return $currentData;
+		endif;
+	}	// END OF FUNCTION
+
 
 	/***********************************************************************
 	** Function name: getApointmentData

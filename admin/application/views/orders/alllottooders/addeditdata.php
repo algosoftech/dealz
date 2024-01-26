@@ -249,24 +249,23 @@ table td {
                                     <table style="width: 100%">
                                         <thead>
                                             <tr>
-                                                <td class="text-left" colspan="5"><span class="order-deatils">Order Id:</span> #<?php echo $orderData['order_id']; ?></td>
+                                                <td class="text-left" colspan="7"><span class="order-deatils">Order Id:</span> #<?php echo $orderData['order_id']; ?></td>
                                             </tr>
                                             <tr>
-                                                <td class="text-left" colspan="5"><span class="order-deatils">Date Added :</span> <?=date('d M Y', strtotime($orderData['created_at']))?></td>
+                                                <td class="text-left" colspan="7"><span class="order-deatils">Date Added :</span> <?=date('d M Y', strtotime($orderData['created_at']))?></td>
                                             </tr>
                                             <tr>
-                                                <td class="text-left" colspan="5"><span class="order-deatils">Payment Method :</span> <?php echo $orderData['payment_mode']; ?></td>
+                                                <td class="text-left" colspan="7"><span class="order-deatils">Payment Method :</span> <?php echo $orderData['payment_mode']; ?></td>
                                             </tr>
                                             <tr>
-                                                <td class="text-left" colspan="5"><span class="order-deatils">Retailer Email :</span> <?php echo $orderData['user_email']; ?></td>
-                                                <td class="text-left" colspan="5"><span class="order-deatils">Customer Phone :</span> <?php echo $orderData['order_users_email']; ?></td>
+                                                <td class="text-left" colspan="7"><span class="order-deatils">Retailer Email :</span> <?php echo $orderData['user_email']; ?></td>
+                                                
                                             </tr>
                                             <tr>
-                                                <td class="text-left" colspan="5"><span class="order-deatils">Retailer Phone :</span> <?php echo $orderData['user_phone']; ?></td>
-                                                <td class="text-left" colspan="5"><span class="order-deatils">Customer Phone :</span> <?php echo $orderData['order_users_mobile']; ?></td>
+                                                <td class="text-left" colspan="7"><span class="order-deatils">Retailer Phone :</span> <?php echo $orderData['user_phone']; ?></td>
                                             </tr>
                                             <tr>
-                                                <td class="text-left" colspan="5"><span class="order-deatils">Coupons :</span>
+                                                <td class="text-left" colspan="7"><span class="order-deatils">Coupons :</span>
                                                     <?php $ticket = json_decode($orderData['ticket']); ?>
                                                     <?php foreach ($ticket as $key => $couponList) : ?>
                                                         <br>
@@ -283,7 +282,7 @@ table td {
                                         <tbody>    
                                             <tr>
                                                 <th style="text-align:center;">Product Name </th>
-                                                <th style="text-align:center;">Donated </th>
+                                                <!-- <th style="text-align:center;">Donated </th> -->
                                                 <th style="text-align:center;">Draw Date </th>
                                                 <th style="text-align:center;">Quantity</th>
                                                 <th style="text-align:center;">Straight Price</th>
@@ -299,7 +298,7 @@ table td {
                                                     $productDetails = $this->common_model->getParticularFieldByMultipleCondition($serchfields,$tblName ,$wcon);
                                                 ?>
                                                 <td width="20%"><?php echo $productDetails['title']; ?></td>
-                                                <td width="5%"><?php echo $orderData['product_is_donate']=='Y'?'Yes':'No'; ?></td>
+                                                <!-- <td width="5%"><?php echo $orderData['product_is_donate']=='Y'?'Yes':'No'; ?></td> -->
                                                 <td width="10%"><?php echo $productDetails['draw_date'].' '.$productDetails['draw_time'];; ?></td>
                                                 <td width="5%"><?php echo $orderData['product_qty']; ?></td>
                                                 <td width="15%"><?php echo $orderData['straight_add_on_amount']; ?></td>

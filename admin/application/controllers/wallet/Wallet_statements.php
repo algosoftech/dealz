@@ -110,16 +110,41 @@ class Wallet_statements extends CI_Controller {
 					// QuickWallet Condtion 2 Start 
 					if($users_type == "Users"):
 
-						$QuickWallet_whereCon['where']  =   array('$or' => array(
-											 			array('order_users_mobile' => $DZL_USERMOBILE),
-											 			array('order_users_email' => $DZL_USEREMAIL)),
-											 			'status' => null );
+						// $QuickWallet_whereCon['where']  =   array('$or' => array(
+						// 					 			array('order_users_mobile' => $DZL_USERMOBILE),
+						// 					 			array('order_users_email' => $DZL_USEREMAIL)),
+						// 					 			'status' => array('$ne' => 'CL'));
+
+						if($DZL_USERMOBILE):
+							$QuickWallet_whereCon['where'] = array(
+																'order_users_mobile' => (string)$DZL_USERMOBILE,
+																'status' => array('$ne' => 'CL')
+															);
+						elseif($DZL_USEREMAIL):
+							$QuickWallet_whereCon['where'] = array(
+																'order_users_email' => (string)$DZL_USEREMAIL,
+																'status' => array('$ne' => 'CL')
+															);
+														 
+						endif;
 
 					else:
-						$QuickWallet_whereCon['where']  =   array('$or' => array(
-											 			array('user_phone' => (int)$DZL_USERMOBILE),
-											 			array('user_email' => $DZL_USEREMAIL)),
-											 			'status' => null );
+						// $QuickWallet_whereCon['where']  =   array('$or' => array(
+						// 					 			array('user_phone' => (int)$DZL_USERMOBILE),
+						// 					 			array('user_email' => $DZL_USEREMAIL)),
+						// 					 			'status' => null );
+						if($DZL_USERMOBILE):
+							$QuickWallet_whereCon['where'] = array(
+																'user_phone' => (string)$DZL_USERMOBILE,
+																'status' => array('$ne' => 'CL')
+															);
+						elseif($DZL_USEREMAIL):
+							$QuickWallet_whereCon['where'] = array(
+																'user_email' => (string)$DZL_USEREMAIL,
+																'status' => array('$ne' => 'CL')
+															);
+						endif;
+							
 					endif;
 
 
@@ -274,7 +299,6 @@ class Wallet_statements extends CI_Controller {
 				    $QuickWalletstatement 		=	$this->common_model->getData('multiple' , $tblName, $QuickWallet_whereCon, $shortField);
 					// QuickWallet end
 				    
-				    
 					// QuickVoucher start
 	                $tblName                    =   'da_ticket_coupons';
 	                $shortField                 =   array('coupon_id'=> -1 );
@@ -394,8 +418,7 @@ class Wallet_statements extends CI_Controller {
 
 			if($QuickVoucherstatement):
 				foreach ($QuickVoucherstatement as $key => $item):
-
-					if(in_array($item['ticket_order_id'], $QuickOrder['order_id'])):
+					if(!empty($QuickOrder) && in_array($item['ticket_order_id'], $QuickOrder['order_id'])):
 						// If coupon is used than added redeemed_date as created_at insted of created_at. of filtering the data 
 						if(!empty($item['redeemed_date'])):
 
@@ -535,7 +558,7 @@ class Wallet_statements extends CI_Controller {
 
 			$data['ALLDATA']      = $Walletstatement;
 			$data['users_type']   = $userdetails['users_type'];
-
+		
 		// wallet code end.
 		$this->layouts->set_title('Wallet Statements | Dealz Arabia');
 		$this->layouts->admin_view('wallet/index',array(),$data);

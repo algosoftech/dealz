@@ -73,14 +73,20 @@ class Alllottooders extends CI_Controller {
 
 		// Where conditions section.
 		if($this->input->get('searchField') && $this->input->get('searchValue')):
-			
 			$sField							=	$this->input->get('searchField');
 			$sValue							=	$this->input->get('searchValue');
 			$data['searchField'] 			= 	$sField;
 			$data['searchValue'] 			= 	$sValue;
 
-			$whereCon['where']		 		= 	array($sField=> $sValue );	
-
+			if($sField == 'ticket'):
+				$whereCon['where']		 			= 	array($sField=> "[[".$sValue."]]" );	
+			else:
+				if(is_numeric($sValue)):
+					$whereCon['where']		 		= 	array($sField=> (int)$sValue );	
+				else:
+					$whereCon['where']		 		= 	array($sField=> $sValue );	
+				endif;
+			endif;
 		else:
 			$whereCon['like']		 		= 	"";
 			$data['searchField'] 			= 	'';
@@ -465,258 +471,103 @@ class Alllottooders extends CI_Controller {
 	** Function name 	: exportexcel
 	** Developed By 	: Dilip halder
 	** Purpose  		: This function used for export order data
-	** Date 			: 07 July 2023
-	** Updated Date 	:  
-	** Updated By   	:  
+	** Date 			: 26 January 2024
 	************************************************************************/
-		function exportexcel()
+	function exportexcel()
 	{	
 		$this->admin_model->authCheck();
 
 		if($this->input->post('searchField') == 'status'):
-
-				if($this->input->post('fromDate')):
-					$data['fromDate'] 				=   date('Y-m-d 00:00 ', strtotime($this->input->post('fromDate')));  //2023-03-16 15:13
-					$whereCon['where_gte'] 			= 	array(array("update_date",strtotime($data['fromDate'])));
-				endif;
-
-				if($this->input->post('toDate')):
-					$data['toDate'] 				=   date('Y-m-d 23:59 ', strtotime($this->input->post('toDate')));  //2023-03-16 15:13
-					$whereCon['where_lte'] 			= 	array(array("update_date",strtotime($data['toDate'])));
-				endif;
-		else:
-
-				if($this->input->post('fromDate')):
-					$data['fromDate'] 				=   date('Y-m-d 00:00 ', strtotime($this->input->post('fromDate')));  //2023-03-16 15:13
-					$whereCon['where_gte'] 			= 	array(array("created_at",$data['fromDate']));
-				endif;
-
-				if($this->input->post('toDate')):
-					$data['toDate'] 				=   date('Y-m-d 23:59 ', strtotime($this->input->post('toDate')));  //2023-03-16 15:13
-					$whereCon['where_lte'] 			= 	array(array("created_at",$data['toDate']));
-				endif;
-
-		endif;
-
-		
-		if($this->input->post('searchField') && $this->input->post('searchValue')):
-			// Checking search result as per date
-			if($this->input->post('searchField') == "created_at"):
-
-				$sField							=	$this->input->post('searchField');
-				$sValue							=	date('Y-m-d 00:00 ', strtotime($this->input->post('searchValue')));  //2023-03-16 15:13
-				$data['searchField'] 			= 	$sField;
-				$data['searchValue'] 			= 	$this->input->post('searchValue');
-
-				if($this->input->post('searchField') == 'created_at'):
-
-					$data['fromDate'] 				=   date('Y-m-d 00:00 ', strtotime($this->input->post('searchValue')));  //2023-03-16 15:13
-					$whereCon['where_gte'] 			= 	array(array("created_at",$data['fromDate']));
-				endif;
-			// Checking result as per product name	
-			elseif($this->input->post('searchField') == 'product_name'   || $this->input->post('searchField') == 'product_id' ):
-				
-				$sField							=	$this->input->post('searchField');
-				if($sField  == 'product_id'):
-					$sValue							=	(int)$this->input->post('searchValue');
-				else:
-					$sValue							=	$this->input->post('searchValue');
-				endif;
-				$data['searchField'] 			= 	$sField;
-				$data['searchValue'] 			= 	$sValue;
-				
-				$whereCon1['where']			 	= 	array($sField => $sValue);
-				// $whereCon['where'] = array('order_sequence_id' => $ALLDATAINFO['sequence_id']);
-             	$OrderDetails =  $this->common_model->getData('multiple','da_orders_details',$whereCon1  );
-				
-				if($OrderDetails):
-					foreach($OrderDetails as $items):
-							$OD_ORDERID[] =$items['order_id'];
-					endforeach;
-					
-					$whereCon['where_in']		 			= 	array('0' => 'order_id'  ,'1'=> $OD_ORDERID);	
-					
-				else:
-					$whereCon['where']		 			= 	array('product_name' => array('$eq'=> ''));		
-				endif;
-			// Checking result as per user name	
-			elseif($this->input->post('searchField') == 'users_name'):
-				
-				$sField							=	$this->input->post('searchField');
-				$sValue							=	$this->input->post('searchValue');
-				$data['searchField'] 			= 	$sField;
-				$data['searchValue'] 			= 	$sValue;
-				
-				$whereCon1['where']			 	= 	array($sField => $sValue);
-				// $whereCon['where'] = array('order_sequence_id' => $ALLDATAINFO['sequence_id']);
-             	$userDetails =  $this->common_model->getData('multiple','da_users',$whereCon1  );
-				// echo '<pre>';print_r($userDetails);die();
-				$odr_user_id = [];
-				if($userDetails):
-					foreach($userDetails as $items):
-							array_push($odr_user_id,$items['users_id']);
-					endforeach;
-					
-					$whereCon['where_in']		 			= 	array('user_id',$odr_user_id);	
-				else:
-					$whereCon['where']		 			= 	array('product_name' => array('$eq'=> ''));		
-				endif;
-			// Checking result as per user last name	
-			elseif($this->input->post('searchField') == 'last_name'):
-				
-				$sField							=	$this->input->post('searchField');
-				$sValue							=	$this->input->post('searchValue');
-				$data['searchField'] 			= 	$sField;
-				$data['searchValue'] 			= 	$sValue;
-				
-				$whereCon1['where']			 	= 	array($sField => $sValue);
-             	$userDetails =  $this->common_model->getData('multiple','da_users',$whereCon1  );
-				$odr_user_id = [];
-				if($userDetails):
-					foreach($userDetails as $items):
-							array_push($odr_user_id,$items['users_id']);
-					endforeach;
-					
-					$whereCon['where_in']		 			= 	array('user_id',$odr_user_id);	
-				else:
-					$whereCon['where']		 			= 	array('product_name' => array('$eq'=> '')  );		
-				endif;
-			// Checking result as per user phone	
-			elseif($this->input->post('searchField') == 'user_phone'):
-				
-				$sField							=	$this->input->post('searchField');
-				$sValue							=	$this->input->post('searchValue');
-				$data['searchField'] 			= 	$sField;
-				$data['searchValue'] 			= 	$sValue;
-				
-				// $whereCon['where']			 	= 	array($sField => (int)$sValue);
-
-				$whereCon['where']				=	array('$or' => array( 
-													array( $sField => (int)$sValue ), 
-													array(	$sField => $sValue) 
-												));
-			else:
-				
-				$sField							=	$this->input->post('searchField');
-				$sValue							=	$this->input->post('searchValue');
-				$whereCon['like']			 	= 	array('0'=>trim($sField),'1'=>trim($sValue));
-				$data['searchField'] 			= 	$sField;
-				$data['searchValue'] 			= 	$sValue;
+			if($this->input->post('fromDate')):
+				$data['fromDate'] 				=   date('Y-m-d 00:00 ', strtotime($this->input->post('fromDate')));  //2023-03-16 15:13
+				$whereCon['where_gte'] 			= 	array(array("update_date",strtotime($data['fromDate'])));
 			endif;
 
+			if($this->input->post('toDate')):
+				$data['toDate'] 				=   date('Y-m-d 23:59 ', strtotime($this->input->post('toDate')));  //2023-03-16 15:13
+				$whereCon['where_lte'] 			= 	array(array("update_date",strtotime($data['toDate'])));
+			endif;
+		else:
+			if($this->input->post('fromDate')):
+				$data['fromDate'] 				=   date('Y-m-d 00:00 ', strtotime($this->input->post('fromDate')));  //2023-03-16 15:13
+				$whereCon['where_gte'] 			= 	array(array("created_at",$data['fromDate']));
+			endif;
+
+			if($this->input->post('toDate')):
+				$data['toDate'] 				=   date('Y-m-d 23:59 ', strtotime($this->input->post('toDate')));  //2023-03-16 15:13
+				$whereCon['where_lte'] 			= 	array(array("created_at",$data['toDate']));
+			endif;
+		endif;
+
+		// Where conditions section.
+		if($this->input->post('searchField') && $this->input->post('searchValue')):
+			
+			$sField							=	$this->input->post('searchField');
+			$sValue							=	$this->input->post('searchValue');
+			$data['searchField'] 			= 	$sField;
+			$data['searchValue'] 			= 	$sValue;
+
+			if($sField == 'ticket'):
+				$whereCon['where']		 			= 	array($sField=> "[[".$sValue."]]" );	
+			else:
+				if(is_numeric($sValue)):
+					$whereCon['where']		 		= 	array($sField=> (int)$sValue );	
+				else:
+					$whereCon['where']		 		= 	array($sField=> $sValue );	
+				endif;
+			endif;
 		else:
 			$whereCon['like']		 		= 	"";
 			$data['searchField'] 			= 	'';
 			$data['searchValue'] 			= 	'';
-
+			$whereCon['where']		 		= 	array('order_status'=> array('$ne' => 'Initialize'));	
 		endif;
-		 
-		$tblName 							= 	'da_orders';
-		$shortField 						= 	array('created_at'=>-1);
-		 
-		$order  = $this->common_model->getData('multiple',$tblName,$whereCon,$shortField);
-		
+		$tblName 							= 	'da_lotto_orders';
+		$shortField 						= 	array('sequence_id'=> -1);
+		$ALLDATA	   						=	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField);
+		// echo '<pre>';print_r($ALLDATA);die();
+
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
 		$sheet->setCellValue('A1', 'Sl.No');
-		$sheet->setCellValue('B1', 'Order No');
+		$sheet->setCellValue('B1', 'ORDER ID');
 		$sheet->setCellValue('C1', 'Product Name');
 		$sheet->setCellValue('D1', 'Quantity');
-		$sheet->setCellValue('E1', 'User Id');
-		$sheet->setCellValue('F1', 'First Name');
-		$sheet->setCellValue('G1', 'Last Name');
-		$sheet->setCellValue('H1', 'User Mobile');
-		$sheet->setCellValue('I1', 'User Type');
-		$sheet->setCellValue('J1', 'Area Name');
-		$sheet->setCellValue('K1', 'Collection Point');
-		$sheet->setCellValue('L1', 'Donated');
-		$sheet->setCellValue('M1', 'Web/APP');
-		$sheet->setCellValue('N1', 'Purchase Date');
-		$sheet->setCellValue('O1', 'Purchase Time');
-		$sheet->setCellValue('P1', 'Payment Mode');
-		$sheet->setCellValue('Q1', 'Payment Status');
-		$sheet->setCellValue('R1', 'Total Amount');
-		$sheet->setCellValue('S1', 'Coupons');
-		$sheet->setCellValue('T1', 'Status');
-
-
+		$sheet->setCellValue('E1', 'SELLER Name');
+		$sheet->setCellValue('F1', 'SELLER Mobile');
+		$sheet->setCellValue('G1', 'SELLER Email');
+		$sheet->setCellValue('H1', 'PURCHASE DATE');
+		$sheet->setCellValue('I1', 'TOTAL AMOUNT');
+		$sheet->setCellValue('J1', 'AVAILABLE ARABIANPOINTS');
+		$sheet->setCellValue('K1', 'END BALANCE');
+		$sheet->setCellValue('L1', 'PAYMENT MODE');
+		$sheet->setCellValue('M1', 'PAYMENT STATUS');
+		$sheet->setCellValue('N1', 'STATUS');
+		
 		$slno = 1;
 		$start = 2;
-		foreach($order as $d){
-
-
-			$tableCoupon  = 'da_coupons';
-			$whereCoupons['where'] =  array('order_id' => $d['order_id']);
-			$CouponList   = $this->common_model->getData( 'multiple',$tableCoupon, $whereCoupons);
-
-			if($CouponList):
-				$coupons = [];
-				foreach($CouponList as $co):
-				 $coupons[] =  $co['coupon_code'];
-				endforeach;
-				$commaSeparatedCoupon = implode(', ', $coupons);
-			else:
-				$commaSeparatedCoupon = '';	 
-			endif;
-
-			// $field = array('users_name ,last_name');
-			$field =  array('last_name' , 'users_name');
-			$tbl_name = 'da_users';
-			
-			if($d['remark'] == 'Quick mobile Web' && $d['user_id'] == 0 || $d['user_id'] == 0): 
-				
-				$quickUserWhere['where'] = array('country_code'=> $d['country_code'] , 'users_mobile'=> (int)$d['user_phone'] );
-                $UserDetails = $this->common_model->getData('single','da_quick_users',$quickUserWhere);
-                $users_name  =  $UserDetails['first_name'];
-                $last_name   =  $UserDetails['last_name'];
-                
-			else:
-				$users_name  = $this->common_model->getPaticularFieldByFields( 'users_name',$tbl_name,'users_id' ,(int)$d['user_id'] );
-				$last_name   = $this->common_model->getPaticularFieldByFields( 'last_name',$tbl_name,'users_id' ,(int)$d['user_id'] );
-
-			endif;
-
-			// $product_name  = $this->common_model->getPaticularFieldByFields( 'product_name','da_orders_details','order_id' ,$d['order_id'] );
-			$ww['where'] = array('order_id' => $d['order_id']);
-			$ProductList  = $this->common_model->getData( 'multiple','da_orders_details',$ww );
-			
-			$sheet->setCellValue('A'.$start, $slno);
-			$sheet->setCellValue('B'.$start, $d['order_id']);
+		foreach($ALLDATA as $ALLDATAINFO):
+          	$wcon['where']  = array('users_id'=> $ALLDATAINFO['user_id'] );
+          	$sellersDetails = $this->common_model->getData('single','da_users',$wcon);
+    	    $PurchaseDate   = date('d M Y h:i:s A', strtotime($ALLDATAINFO['created_at']));
 			 
-			$sheet->setCellValue('E'.$start, $d['user_id']);
-			$sheet->setCellValue('F'.$start, $users_name);
-			$sheet->setCellValue('G'.$start, $last_name);
-			$sheet->setCellValue('H'.$start, $d['user_phone']);
-			$sheet->setCellValue('I'.$start, $d['user_type']);
-			$sheet->setCellValue('J'.$start, $d['area_name']);
-			$sheet->getStyle('J'.$start)->getAlignment()->setWrapText(true);
-			$sheet->setCellValue('K'.$start, $d['collection_point_name']);
-			$sheet->setCellValue('L'.$start, $d['product_is_donate']);
-			$sheet->setCellValue('M'.$start, $d['payment_from']);
-			$sheet->setCellValue('N'.$start, date('d-F-Y',strtotime($d['created_at'])));
-			$sheet->setCellValue('O'.$start, date('h:i A',strtotime($d['created_at'])));
-			$sheet->setCellValue('P'.$start, $d['payment_mode']);
-			$sheet->setCellValue('Q'.$start, $d['order_status']);
-			$sheet->setCellValue('R'.$start, $d['total_price']);
-
-			$sheet->setCellValue('S'.$start, $commaSeparatedCoupon);
-			if($d['status']):
-				$sheet->setCellValue('T'.$start, 'Cenceled');
-			else:
-				$sheet->setCellValue('T'.$start, $d['collection_status']);
-			endif;
-			
-			foreach ($ProductList as $key => $productdetail) {
-				$sheet->setCellValue('C'.$start, $productdetail['product_name']);
-				$sheet->setCellValue('D'.$start, $productdetail['quantity']);
-				// $productName .=  stripslashes($productdetail['product_name']).PHP_EOL;
-				// $productQuantity .=  $productdetail['quantity'].PHP_EOL;
-				$start = $start+1;
-			}
+			$sheet->setCellValue('A'.$start, $slno);
+			$sheet->setCellValue('B'.$start, $ALLDATAINFO['order_id']);
+			$sheet->setCellValue('C'.$start, $ALLDATAINFO['product_title']);
+			$sheet->setCellValue('D'.$start, $ALLDATAINFO['product_qty']);
+			$sheet->setCellValue('E'.$start, $sellersDetails['users_name']);
+			$sheet->setCellValue('F'.$start, $sellersDetails['users_mobile']);
+			$sheet->setCellValue('G'.$start, $sellersDetails['users_email']);
+			$sheet->setCellValue('H'.$start, $PurchaseDate);
+			$sheet->setCellValue('I'.$start, number_format($ALLDATAINFO['total_price'],2));
+			$sheet->setCellValue('J'.$start, $ALLDATAINFO['availableArabianPoints']);
+			$sheet->setCellValue('K'.$start, $ALLDATAINFO['end_balance']);
+			$sheet->setCellValue('L'.$start, $ALLDATAINFO['payment_mode']);
+			$sheet->setCellValue('M'.$start, $ALLDATAINFO['order_status']);
+			$sheet->setCellValue('N'.$start, $ALLDATAINFO['status']);
 			$slno = $slno+1;
-			
-			}
-
+			$start = $start+1;
+		endforeach;
 
 		$styleThinBlackBorderOutline = [
 					'borders' => [
@@ -727,8 +578,8 @@ class Alllottooders extends CI_Controller {
 					],
 				];
 		//Font BOLD
-		$sheet->getStyle('A1:S1')->getFont()->setBold(true);		
-		$sheet->getStyle('A1:S1')->applyFromArray($styleThinBlackBorderOutline);
+		$sheet->getStyle('A1:N1')->getFont()->setBold(true);		
+		$sheet->getStyle('A1:N1')->applyFromArray($styleThinBlackBorderOutline);
 		//Alignment
 		//fONT SIZE
 		//$sheet->getStyle('A1:D10')->getFont()->setSize(12);
@@ -747,299 +598,18 @@ class Alllottooders extends CI_Controller {
 		$sheet->getColumnDimension('J')->setWidth(15);
 		$sheet->getColumnDimension('K')->setWidth(30);
 		$sheet->getColumnDimension('L')->setWidth(30);
-		$sheet->getColumnDimension('M')->setWidth(15);
-		$sheet->getColumnDimension('N')->setWidth(20);
-		$sheet->getColumnDimension('O')->setWidth(20);
-		$sheet->getColumnDimension('P')->setWidth(20);
-		$sheet->getColumnDimension('Q')->setWidth(20);
-		$sheet->getColumnDimension('R')->setWidth(20);
+		$sheet->getColumnDimension('M')->setWidth(30);
+		$sheet->getColumnDimension('N')->setWidth(30);
 
 		$curdate = date('d-m-Y H:i:s');
 		$writer = new Xlsx($spreadsheet);
-		$filename = 'Order Details'.$curdate;
+		$filename = 'U-WIN-Data-'.$curdate;
 		ob_end_clean();
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
 		header('Cache-Control: max-age=0');
 		$writer->save('php://output');
 	}	// END OF FUNCTION
-
-
-	// function exportexcel()
-	// {	
-	// 	$this->admin_model->authCheck();
-
-	// 	if($this->input->post('searchField') == 'status'):
-
-	// 			if($this->input->post('fromDate')):
-	// 				$data['fromDate'] 				=   date('Y-m-d 00:00 ', strtotime($this->input->post('fromDate')));  //2023-03-16 15:13
-	// 				$whereCon['where_gte'] 			= 	array(array("update_date",strtotime($data['fromDate'])));
-	// 			endif;
-
-	// 			if($this->input->post('toDate')):
-	// 				$data['toDate'] 				=   date('Y-m-d 23:59 ', strtotime($this->input->post('toDate')));  //2023-03-16 15:13
-	// 				$whereCon['where_lte'] 			= 	array(array("update_date",strtotime($data['toDate'])));
-	// 			endif;
-	// 	else:
-
-	// 			if($this->input->post('fromDate')):
-	// 				$data['fromDate'] 				=   date('Y-m-d 00:00 ', strtotime($this->input->post('fromDate')));  //2023-03-16 15:13
-	// 				$whereCon['where_gte'] 			= 	array(array("created_at",$data['fromDate']));
-	// 			endif;
-
-	// 			if($this->input->post('toDate')):
-	// 				$data['toDate'] 				=   date('Y-m-d 23:59 ', strtotime($this->input->post('toDate')));  //2023-03-16 15:13
-	// 				$whereCon['where_lte'] 			= 	array(array("created_at",$data['toDate']));
-	// 			endif;
-
-	// 	endif;
-
-		
-	// 	if($this->input->post('searchField') && $this->input->post('searchValue')):
-	// 		// Checking search result as per date
-	// 		if($this->input->post('searchField') == "created_at"):
-
-	// 			$sField							=	$this->input->post('searchField');
-	// 			$sValue							=	date('Y-m-d 00:00 ', strtotime($this->input->post('searchValue')));  //2023-03-16 15:13
-	// 			$data['searchField'] 			= 	$sField;
-	// 			$data['searchValue'] 			= 	$this->input->post('searchValue');
-
-	// 			if($this->input->post('searchField') == 'created_at'):
-
-	// 				$data['fromDate'] 				=   date('Y-m-d 00:00 ', strtotime($this->input->post('searchValue')));  //2023-03-16 15:13
-	// 				$whereCon['where_gte'] 			= 	array(array("created_at",$data['fromDate']));
-	// 			endif;
-	// 		// Checking result as per product name	
-	// 		elseif($this->input->post('searchField') == 'product_name'):
-				
-	// 			$sField							=	$this->input->post('searchField');
-	// 			$sValue							=	$this->input->post('searchValue');
-	// 			$data['searchField'] 			= 	$sField;
-	// 			$data['searchValue'] 			= 	$sValue;
-				
-	// 			$whereCon1['where']			 	= 	array($sField => $sValue);
-	// 			// $whereCon['where'] = array('order_sequence_id' => $ALLDATAINFO['sequence_id']);
-    //          	$OrderDetails =  $this->common_model->getData('multiple','da_orders_details',$whereCon1  );
-				
-	// 			if($OrderDetails):
-	// 				foreach($OrderDetails as $items):
-	// 						$OD_ORDERID[] =$items['order_id'];
-	// 				endforeach;
-					
-	// 				$whereCon['where_in']		 			= 	array('0' => 'order_id'  ,'1'=> $OD_ORDERID);	
-					
-	// 			else:
-	// 				$whereCon['where']		 			= 	array('product_name' => array('$eq'=> ''));		
-	// 			endif;
-	// 		// Checking result as per user name	
-	// 		elseif($this->input->post('searchField') == 'users_name'):
-				
-	// 			$sField							=	$this->input->post('searchField');
-	// 			$sValue							=	$this->input->post('searchValue');
-	// 			$data['searchField'] 			= 	$sField;
-	// 			$data['searchValue'] 			= 	$sValue;
-				
-	// 			$whereCon1['where']			 	= 	array($sField => $sValue);
-	// 			// $whereCon['where'] = array('order_sequence_id' => $ALLDATAINFO['sequence_id']);
-    //          	$userDetails =  $this->common_model->getData('multiple','da_users',$whereCon1  );
-	// 			// echo '<pre>';print_r($userDetails);die();
-	// 			$odr_user_id = [];
-	// 			if($userDetails):
-	// 				foreach($userDetails as $items):
-	// 						array_push($odr_user_id,$items['users_id']);
-	// 				endforeach;
-					
-	// 				$whereCon['where_in']		 			= 	array('user_id',$odr_user_id);	
-	// 			else:
-	// 				$whereCon['where']		 			= 	array('product_name' => array('$eq'=> ''));		
-	// 			endif;
-	// 		// Checking result as per user last name	
-	// 		elseif($this->input->post('searchField') == 'last_name'):
-				
-	// 			$sField							=	$this->input->post('searchField');
-	// 			$sValue							=	$this->input->post('searchValue');
-	// 			$data['searchField'] 			= 	$sField;
-	// 			$data['searchValue'] 			= 	$sValue;
-				
-	// 			$whereCon1['where']			 	= 	array($sField => $sValue);
-    //          	$userDetails =  $this->common_model->getData('multiple','da_users',$whereCon1  );
-	// 			$odr_user_id = [];
-	// 			if($userDetails):
-	// 				foreach($userDetails as $items):
-	// 						array_push($odr_user_id,$items['users_id']);
-	// 				endforeach;
-					
-	// 				$whereCon['where_in']		 			= 	array('user_id',$odr_user_id);	
-	// 			else:
-	// 				$whereCon['where']		 			= 	array('product_name' => array('$eq'=> '')  );		
-	// 			endif;
-	// 		// Checking result as per user phone	
-	// 		elseif($this->input->post('searchField') == 'user_phone'):
-				
-	// 			$sField							=	$this->input->post('searchField');
-	// 			$sValue							=	$this->input->post('searchValue');
-	// 			$data['searchField'] 			= 	$sField;
-	// 			$data['searchValue'] 			= 	$sValue;
-				
-	// 			$whereCon['where']			 	= 	array($sField => (int)$sValue);
-	// 		else:
-				
-	// 			$sField							=	$this->input->post('searchField');
-	// 			$sValue							=	$this->input->post('searchValue');
-	// 			$whereCon['like']			 	= 	array('0'=>trim($sField),'1'=>trim($sValue));
-	// 			$data['searchField'] 			= 	$sField;
-	// 			$data['searchValue'] 			= 	$sValue;
-	// 		endif;
-
-	// 	else:
-	// 		$whereCon['like']		 		= 	"";
-	// 		$data['searchField'] 			= 	'';
-	// 		$data['searchValue'] 			= 	'';
-
-	// 	endif;
-		 
-	// 	$tblName 							= 	'da_orders';
-	// 	$shortField 						= 	array('created_at'=>-1);
-		 
-	// 	$order  = $this->common_model->getData('multiple',$tblName,$whereCon,$shortField);
-		
-	// 	$spreadsheet = new Spreadsheet();
-	// 	$sheet = $spreadsheet->getActiveSheet();
-	// 	$sheet->setCellValue('A1', 'Sl.No');
-	// 	$sheet->setCellValue('B1', 'Order No');
-	// 	$sheet->setCellValue('C1', 'Product Name');
-	// 	$sheet->setCellValue('D1', 'Quantity');
-	// 	$sheet->setCellValue('E1', 'First Name');
-	// 	$sheet->setCellValue('F1', 'Last Name');
-	// 	$sheet->setCellValue('G1', 'User Mobile');
-	// 	$sheet->setCellValue('H1', 'User Type');
-	// 	$sheet->setCellValue('I1', 'Area Name');
-	// 	$sheet->setCellValue('J1', 'Collection Point');
-	// 	$sheet->setCellValue('K1', 'Donated');
-	// 	$sheet->setCellValue('L1', 'Web/APP');
-	// 	$sheet->setCellValue('M1', 'Purchase Date');
-	// 	$sheet->setCellValue('N1', 'Purchase Time');
-	// 	$sheet->setCellValue('O1', 'Payment Mode');
-	// 	$sheet->setCellValue('P1', 'Payment Status');
-	// 	$sheet->setCellValue('Q1', 'Total Amount');
-	// 	$sheet->setCellValue('R1', 'Coupons');
-	// 	$sheet->setCellValue('S1', 'Status');
-
-
-	// 	$slno = 1;
-	// 	$start = 2;
-	// 	foreach($order as $d){
-
-
-	// 		$tableCoupon  = 'da_coupons';
-	// 		$whereCoupons['where'] =  array('order_id' => $d['order_id']);
-	// 		$CouponList   = $this->common_model->getData( 'multiple',$tableCoupon, $whereCoupons);
-
-	// 		if($CouponList):
-	// 			$coupons = [];
-	// 			foreach($CouponList as $co):
-	// 			 $coupons[] =  $co['coupon_code'];
-	// 			endforeach;
-	// 			$commaSeparatedCoupon = implode(', ', $coupons);
-	// 		else:
-	// 			$commaSeparatedCoupon = '';	 
-	// 		endif;
-
-	// 		// $field = array('users_name ,last_name');
-	// 		$field =  array('last_name' , 'users_name');
-	// 		$tbl_name = 'da_users';
-			
-	// 		$users_name  = $this->common_model->getPaticularFieldByFields( 'users_name',$tbl_name,'users_id' ,(int)$d['user_id'] );
-	// 		$last_name   = $this->common_model->getPaticularFieldByFields( 'last_name',$tbl_name,'users_id' ,(int)$d['user_id'] );
-
-	// 		// $product_name  = $this->common_model->getPaticularFieldByFields( 'product_name','da_orders_details','order_id' ,$d['order_id'] );
-	// 		$ww['where'] = array('order_id' => $d['order_id']);
-	// 		$ProductList  = $this->common_model->getData( 'multiple','da_orders_details',$ww );
-			
-	// 		$sheet->setCellValue('A'.$start, $slno);
-	// 		$sheet->setCellValue('B'.$start, $d['order_id']);
-			 
-	// 		$sheet->setCellValue('E'.$start, $users_name);
-	// 		$sheet->setCellValue('F'.$start, $last_name);
-	// 		$sheet->setCellValue('G'.$start, $d['user_phone']);
-	// 		$sheet->setCellValue('H'.$start, $d['user_type']);
-	// 		$sheet->setCellValue('I'.$start, $d['area_name']);
-	// 		$sheet->getStyle('I'.$start)->getAlignment()->setWrapText(true);
-	// 		$sheet->setCellValue('J'.$start, $d['collection_point_name']);
-	// 		$sheet->setCellValue('K'.$start, $d['product_is_donate']);
-	// 		$sheet->setCellValue('L'.$start, $d['payment_from']);
-	// 		$sheet->setCellValue('M'.$start, date('d-F-Y',strtotime($d['created_at'])));
-	// 		$sheet->setCellValue('N'.$start, date('h:i A',strtotime($d['created_at'])));
-	// 		$sheet->setCellValue('O'.$start, $d['payment_mode']);
-	// 		$sheet->setCellValue('P'.$start, $d['order_status']);
-	// 		$sheet->setCellValue('Q'.$start, $d['total_price']);
-
-	// 		$sheet->setCellValue('R'.$start, $commaSeparatedCoupon);
-	// 		if($d['status']):
-	// 			$sheet->setCellValue('S'.$start, 'Cenceled');
-	// 		else:
-	// 			$sheet->setCellValue('S'.$start, $d['collection_status']);
-	// 		endif;
-			
-	// 		foreach ($ProductList as $key => $productdetail) {
-	// 			$sheet->setCellValue('C'.$start, $productdetail['product_name']);
-	// 			$sheet->setCellValue('D'.$start, $productdetail['quantity']);
-	// 			// $productName .=  stripslashes($productdetail['product_name']).PHP_EOL;
-	// 			// $productQuantity .=  $productdetail['quantity'].PHP_EOL;
-	// 			$start = $start+1;
-	// 		}
-	// 		$slno = $slno+1;
-			
-	// 		}
-
-
-	// 	$styleThinBlackBorderOutline = [
-	// 				'borders' => [
-	// 					'allBorders' => [
-	// 						'borderStyle' => Border::BORDER_THIN,
-	// 						'color' => ['argb' => 'FF000000'],
-	// 					],
-	// 				],
-	// 			];
-	// 	//Font BOLD
-	// 	$sheet->getStyle('A1:S1')->getFont()->setBold(true);		
-	// 	$sheet->getStyle('A1:S1')->applyFromArray($styleThinBlackBorderOutline);
-	// 	//Alignment
-	// 	//fONT SIZE
-	// 	//$sheet->getStyle('A1:D10')->getFont()->setSize(12);
-	// 	//$sheet->getStyle('A1:D2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-	// 	//$sheet->getStyle('A2:D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-	// 	//Custom width for Individual Columns
-	// 	$sheet->getColumnDimension('A')->setWidth(5);
-	// 	$sheet->getColumnDimension('B')->setWidth(20);
-	// 	$sheet->getColumnDimension('C')->setWidth(30);
-	// 	$sheet->getColumnDimension('D')->setWidth(30);
-	// 	$sheet->getColumnDimension('E')->setWidth(30);
-	// 	$sheet->getColumnDimension('F')->setWidth(15);
-	// 	$sheet->getColumnDimension('G')->setWidth(30);
-	// 	$sheet->getColumnDimension('H')->setWidth(30);
-	// 	$sheet->getColumnDimension('I')->setWidth(15);
-	// 	$sheet->getColumnDimension('J')->setWidth(15);
-	// 	$sheet->getColumnDimension('K')->setWidth(30);
-	// 	$sheet->getColumnDimension('L')->setWidth(30);
-	// 	$sheet->getColumnDimension('M')->setWidth(15);
-	// 	$sheet->getColumnDimension('N')->setWidth(20);
-	// 	$sheet->getColumnDimension('O')->setWidth(20);
-	// 	$sheet->getColumnDimension('P')->setWidth(20);
-	// 	$sheet->getColumnDimension('Q')->setWidth(20);
-	// 	$sheet->getColumnDimension('R')->setWidth(20);
-
-	// 	$curdate = date('d-m-Y H:i:s');
-	// 	$writer = new Xlsx($spreadsheet);
-	// 	$filename = 'Order Details'.$curdate;
-	// 	ob_end_clean();
-	// 	header('Content-Type: application/vnd.ms-excel');
-	// 	header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
-	// 	header('Cache-Control: max-age=0');
-	// 	$writer->save('php://output');
-	// }	// END OF FUNCTION
-
-
 
 	/***********************************************************************
 	** Function name 	: generatecoupons
