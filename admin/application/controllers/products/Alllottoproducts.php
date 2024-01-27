@@ -1119,69 +1119,51 @@ class Alllottoproducts extends CI_Controller {
 	 + + Date 		   : 27 January 2024
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-	public function settings( )
-	{		
+	 public function settings()
+	 {		
 		$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'products';
 		$data['activeSubMenu'] 				= 	'alllottoproducts';
 		
-
-
-		// $data['EDITDATA']	=	$this->common_model->getData('da_lotto_products_setting','products_id',(int)$editId);
-
-		// if($editId):
-		// 	$this->admin_model->authCheck('edit_data');
-		// else:
-		// 	$this->admin_model->authCheck('add_data');
-		// endif;
-
+		$this->admin_model->authCheck();
+		$tblName  			= 'da_lotto_settings';
+		$where['where']  	=  array('status' => 'A');
+		$data['EDITDATA']	=	$this->common_model->getData('single',$tblName,$where);
 		if($this->input->post('SaveChanges')):
 			$error					=	'NO';
-			$TotalDataCount			=	$this->input->post('TotalDataCount');
-
-			// $this->form_validation->set_rules('category_id', 'Category', 'trim|required');
-			// $this->form_validation->set_rules('sub_category_id', 'Sub Category', 'trim|required');
-			// $this->form_validation->set_rules('lotto_range', 'Number Range', 'trim|required');
-			// $this->form_validation->set_rules('SaveChanges', 'SaveChanges', 'trim|required');
-
+			$this->form_validation->set_rules('lotto_settings_id', 'lotto_settings_id', 'trim');
+			$this->form_validation->set_rules('straight_settings', 'straight amount', 'trim|required');
+			$this->form_validation->set_rules('rumble_settings', 'Rumble amount', 'trim|required');
+			$this->form_validation->set_rules('reverse_settings', 'Reverse Amount', 'trim|required');
+			$this->form_validation->set_rules('SaveChanges', 'SaveChanges', 'trim|required');
 
 			if($this->form_validation->run() && $error == 'NO'):
-
-				$param['draw_time']					= 	addslashes($this->input->post('draw_time'));
-				$param['sponsored_coupon']			=	(int)$this->input->post('sponsored_coupon');
-				$param['seq_order']					=	$this->input->post('seq_order');
-				$param['share_limit']				= 	(int)addslashes($this->input->post('share_limit'));
-				$param['share_percentage_first']	= 	(float)addslashes($this->input->post('share_percentage_first'));
-				$param['share_percentage_second']	= 	(float)addslashes($this->input->post('share_percentage_second'));
-				$param['color_size_details']		=	$color_size_details;
-				$param['remarks']					= 	'lotto-products';
-
+				$param['straight_settings']	 = $this->input->post('straight_settings');
+				$param['rumble_settings']	 	 = $this->input->post('rumble_settings');
+				$param['reverse_settings']	     = $this->input->post('reverse_settings');
 				if($this->input->post('CurrentDataID') ==''):
+					$param['lotto_settings_id'] =	(int)$this->common_model->getNextSequence('lotto_settings_id');
 					$param['status']			=	'A';
-					$param['products_id']		=	(int)$this->common_model->getNextSequence('da_lotto_products');
-					$param['product_seq_id']	=	$this->common_model->getNextIdSequence('product_seq_id','lotto_products');
 					$param['creation_ip']		=	currentIp();
 					$param['creation_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
 					$param['created_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
-					$alastInsertId				=	$this->common_model->addData('da_lotto_products',$param);
+					$alastInsertId				=	$this->common_model->addData('da_lotto_settings',$param);
 					$this->session->set_flashdata('alert_success',lang('addsuccess'));
 				else:
-
 					$categoryId					=	$this->input->post('CurrentDataID');
-					$param['target_stock']		= 	(int)addslashes($this->input->post('target_stock'));
 					$param['update_ip']			=	currentIp();
 					$param['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
 					$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
-					$this->common_model->editData('da_lotto_products',$param,'products_id',(int)$categoryId);
+					$this->common_model->editData('da_lotto_settings',$param,'lotto_settings_id',(int)$categoryId);
 					$this->session->set_flashdata('alert_success',lang('updatesuccess'));
 				endif;
-
-				redirect(correctLink('MASTERDATAPRODUCTTYPE',getCurrentControllerPath('index')));
+				redirect(correctLink('ALLLOTOPRODUCTSDATA',getCurrentControllerPath('settings')));
 			endif;
 		endif;
 		
 		$this->layouts->set_title('Add/Edit Products');
 		$this->layouts->admin_view('products/alllottoproducts/settings',array(),$data);
-	}	// END OF FUNCTION		
+	 }
+	 // END OF FUNCTION		
 
 }
