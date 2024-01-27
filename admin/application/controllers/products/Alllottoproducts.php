@@ -1119,19 +1119,26 @@ class Alllottoproducts extends CI_Controller {
 	 + + Date 		   : 27 January 2024
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-	 public function settings()
+	 public function settings($pid='')
 	 {		
 		$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'products';
 		$data['activeSubMenu'] 				= 	'alllottoproducts';
 		
 		$this->admin_model->authCheck();
-		$tblName  			= 'da_lotto_settings';
-		$where['where']  	=  array('status' => 'A');
-		$data['EDITDATA']	=	$this->common_model->getData('single',$tblName,$where);
+		if($pid):
+			$tblName  			= 'da_lotto_products';
+			$where['where']  	=  array('status' => 'A');
+			$data['EDITDATA']	=	$this->common_model->getData('single',$tblName,$where);
+		else:
+			$tblName  			= 'da_lotto_settings';
+			$where['where']  	=  array('status' => 'A');
+			$data['EDITDATA']	=	$this->common_model->getData('single',$tblName,$where);
+		endif;
+
 		if($this->input->post('SaveChanges')):
 			$error					=	'NO';
-			$this->form_validation->set_rules('lotto_settings_id', 'lotto_settings_id', 'trim');
+			// $this->form_validation->set_rules('lotto_settings_id', 'lotto_settings_id', 'trim');
 			$this->form_validation->set_rules('straight_settings', 'straight amount', 'trim|required');
 			$this->form_validation->set_rules('rumble_settings', 'Rumble amount', 'trim|required');
 			$this->form_validation->set_rules('reverse_settings', 'Reverse Amount', 'trim|required');
@@ -1154,7 +1161,11 @@ class Alllottoproducts extends CI_Controller {
 					$param['update_ip']			=	currentIp();
 					$param['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
 					$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
-					$this->common_model->editData('da_lotto_settings',$param,'lotto_settings_id',(int)$categoryId);
+					if($pid):
+					 $this->common_model->editData('da_lotto_products',$param,'products_id',(int)$categoryId);
+					else:
+					 $this->common_model->editData('da_lotto_settings',$param,'lotto_settings_id',(int)$categoryId);
+					endif;
 					$this->session->set_flashdata('alert_success',lang('updatesuccess'));
 				endif;
 				redirect(correctLink('ALLLOTOPRODUCTSDATA',getCurrentControllerPath('settings')));

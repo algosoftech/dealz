@@ -132,7 +132,8 @@
                         <?php endif; ?>
 
 												  <!-- <li><a href="<?php echo getCurrentControllerPath('deletedata/'.$ALLDATAINFO['products_id'])?>" onClick="return confirm('Want to delete!');"><i class="fas fa-trash"></i> Delete</a></li> -->
-                          
+                          <li><a href="<?php echo getCurrentControllerPath('settings/'.$ALLDATAINFO['products_id'])?>"><i class="fas fa-cog"></i> Settings</a></li>
+
 											   </ul>
 											</div>
 										  </td>

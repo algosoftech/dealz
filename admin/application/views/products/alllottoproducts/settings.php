@@ -30,9 +30,9 @@
                     </div>
                     <div class="card-body">
                             <form id="currentPageForm" name="currentPageForm" class="form-auth-small" method="post" action="" enctype="multipart/form-data">
-                                <input type="hidden" name="CurrentFieldForUnique" id="CurrentFieldForUnique" value="lotto_settings_id"/>
-                                <input type="hidden" name="CurrentIdForUnique" id="CurrentIdForUnique" value="<?=$EDITDATA['lotto_settings_id']?>"/>
-                                <input type="hidden" name="CurrentDataID" id="CurrentDataID" value="<?=$EDITDATA['lotto_settings_id']?>"/>
+                                <input type="hidden" name="CurrentFieldForUnique" id="CurrentFieldForUnique" value="<?=$EDITDATA['lotto_settings_id']?'lotto_settings_id':'products_id'; ?> "/>
+                                <input type="hidden" name="CurrentIdForUnique" id="CurrentIdForUnique" value="<?=$EDITDATA['lotto_settings_id']?$EDITDATA['lotto_settings_id']:$EDITDATA['products_id']; ?>"/>
+                                <input type="hidden" name="CurrentDataID" id="CurrentDataID" value="<?=$EDITDATA['lotto_settings_id']?$EDITDATA['lotto_settings_id']:$EDITDATA['products_id']; ?>"/>
                                 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
                               
                             <div class="row">
@@ -43,8 +43,8 @@
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 <?php if(form_error('straight_settings')): ?>error<?php endif; ?>">
                                                 <label> Straight (iPoints) <span class="required">*</span></label>
                                                 <select name="straight_settings" id="straight_settings" class="form-control required">
-                                                    <option value="Show" <?php if($EDITDATA['straight_settings']== 'Hide' ):echo 'selected'; endif; ?> >Show</option>
-                                                    <option value="Hide" <?php if($EDITDATA['straight_settings']== 'Hide' ):echo 'selected'; endif; ?> >Hide</option>
+                                                    <option value="Enable" <?php if($EDITDATA['straight_settings']== 'Disable' ):echo 'selected'; endif; ?> >Enable</option>
+                                                    <option value="Disable" <?php if($EDITDATA['straight_settings']== 'Disable' ):echo 'selected'; endif; ?> >Disable</option>
                                                 </select>
                                                 <?php if(form_error('straight_settings')): ?>
                                                   <span for="straight_settings" generated="true" class="help-inline"><?php echo form_error('straight_settings'); ?></span>
@@ -54,8 +54,8 @@
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 <?php if(form_error('rumble_settings')): ?>error<?php endif; ?>">
                                                 <label> Rumble Mix (iPoints) <span class="required">*</span></label>
                                                 <select name="rumble_settings" id="rumble_settings" class="form-control required">
-                                                    <option value="Show" <?php if($EDITDATA['rumble_settings']== 'Show' ):echo 'selected'; endif; ?> >Show</option>
-                                                    <option  value="Hide" <?php if($EDITDATA['rumble_settings']== 'Hide' ):echo 'selected'; endif; ?> >Hide</option>
+                                                    <option value="Enable" <?php if($EDITDATA['rumble_settings']== 'Enable' ):echo 'selected'; endif; ?> >Enable</option>
+                                                    <option  value="Disable" <?php if($EDITDATA['rumble_settings']== 'Disable' ):echo 'selected'; endif; ?> >Disable</option>
                                                 </select>
                                                 <?php if(form_error('rumble_settings')): ?>
                                                   <span for="rumble_settings" generated="true" class="help-inline"><?php echo form_error('rumble_settings'); ?></span>
@@ -65,8 +65,8 @@
                                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 <?php if(form_error('reverse_settings')): ?>error<?php endif; ?>">
                                                 <label> Chance ( iPoints ) <span class="required">*</span></label>
                                                 <select name="reverse_settings" id="reverse_settings" class="form-control required">
-                                                    <option <?php if($EDITDATA['reverse_settings']== 'Show' ):echo 'selected'; endif; ?>   value="Show">Show</option>
-                                                    <option <?php if($EDITDATA['reverse_settings']== 'Hide' ):echo 'selected'; endif; ?>  value="Hide">Hide</option>
+                                                    <option <?php if($EDITDATA['reverse_settings']== 'Enable' ):echo 'selected'; endif; ?>   value="Enable">Enable</option>
+                                                    <option <?php if($EDITDATA['reverse_settings']== 'Disable' ):echo 'selected'; endif; ?>  value="Disable">Disable</option>
                                                 </select>
                                                 <?php if(form_error('reverse_settings')): ?>
                                                   <span for="reverse_settings" generated="true" class="help-inline"><?php echo form_error('reverse_settings'); ?></span>
