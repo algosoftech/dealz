@@ -566,7 +566,7 @@ class Alllottoproducts extends CI_Controller {
 			$data['noOfContent']			=	'';
 		endif;
 		
-		$data['ALLDATA'] 					= 	$this->geneal_model->getOrderData('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
+		$data['ALLDATA'] 					= 	$this->geneal_model->getlottoOrderData('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
 
 		$this->layouts->set_title('Campaign orders List | Dealz Arabia');
 		$this->layouts->admin_view('products/alllottoproducts/getallusers',array(),$data);
@@ -1109,5 +1109,79 @@ class Alllottoproducts extends CI_Controller {
 		header('Content-type: application/json');
 		echo json_encode($returnArray); die;
 	}
+
+
+	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 + + Function name : addeditdata
+	 + + Developed By  : Dilip Halder
+	 + + Purpose  	   : This function used for Add Edit settings
+	 + + Date 		   : 27 January 2024
+	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+	public function settings( )
+	{		
+		$data['error'] 						= 	'';
+		$data['activeMenu'] 				= 	'products';
+		$data['activeSubMenu'] 				= 	'alllottoproducts';
+		
+
+
+		// $data['EDITDATA']	=	$this->common_model->getData('da_lotto_products_setting','products_id',(int)$editId);
+
+		// if($editId):
+		// 	$this->admin_model->authCheck('edit_data');
+		// else:
+		// 	$this->admin_model->authCheck('add_data');
+		// endif;
+
+		if($this->input->post('SaveChanges')):
+			$error					=	'NO';
+			$TotalDataCount			=	$this->input->post('TotalDataCount');
+
+			// $this->form_validation->set_rules('category_id', 'Category', 'trim|required');
+			// $this->form_validation->set_rules('sub_category_id', 'Sub Category', 'trim|required');
+			// $this->form_validation->set_rules('lotto_range', 'Number Range', 'trim|required');
+			// $this->form_validation->set_rules('SaveChanges', 'SaveChanges', 'trim|required');
+
+
+			if($this->form_validation->run() && $error == 'NO'):
+
+				$param['draw_time']					= 	addslashes($this->input->post('draw_time'));
+				$param['sponsored_coupon']			=	(int)$this->input->post('sponsored_coupon');
+				$param['seq_order']					=	$this->input->post('seq_order');
+				$param['share_limit']				= 	(int)addslashes($this->input->post('share_limit'));
+				$param['share_percentage_first']	= 	(float)addslashes($this->input->post('share_percentage_first'));
+				$param['share_percentage_second']	= 	(float)addslashes($this->input->post('share_percentage_second'));
+				$param['color_size_details']		=	$color_size_details;
+				$param['remarks']					= 	'lotto-products';
+
+				if($this->input->post('CurrentDataID') ==''):
+					$param['status']			=	'A';
+					$param['products_id']		=	(int)$this->common_model->getNextSequence('da_lotto_products');
+					$param['product_seq_id']	=	$this->common_model->getNextIdSequence('product_seq_id','lotto_products');
+					$param['creation_ip']		=	currentIp();
+					$param['creation_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
+					$param['created_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
+					$alastInsertId				=	$this->common_model->addData('da_lotto_products',$param);
+					$this->session->set_flashdata('alert_success',lang('addsuccess'));
+				else:
+
+					$categoryId					=	$this->input->post('CurrentDataID');
+					$param['target_stock']		= 	(int)addslashes($this->input->post('target_stock'));
+					$param['update_ip']			=	currentIp();
+					$param['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
+					$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
+					$this->common_model->editData('da_lotto_products',$param,'products_id',(int)$categoryId);
+					$this->session->set_flashdata('alert_success',lang('updatesuccess'));
+				endif;
+
+				redirect(correctLink('MASTERDATAPRODUCTTYPE',getCurrentControllerPath('index')));
+			endif;
+		endif;
+		
+		$this->layouts->set_title('Add/Edit Products');
+		$this->layouts->admin_view('products/alllottoproducts/settings',array(),$data);
+	}	// END OF FUNCTION		
 
 }

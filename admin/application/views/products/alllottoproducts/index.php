@@ -23,8 +23,14 @@
             <div class="card">
               <div class="card-header">
                 <h5>Manage Lotto Products</h5>
-                <!-- <a href="<?php echo getCurrentControllerPath('exportexcel'); ?>" class="btn btn-sm btn-primary pull-right" style="margin-left: 5px;">Export excel</a> -->
-                <a href="<?php echo getCurrentControllerPath('addeditdata'); ?>" class="btn btn-sm btn-primary pull-right">Add Lotto Product</a>
+               <!-- Edit lotto Product settings -->
+                <a href="<?php echo getCurrentControllerPath('settings'); ?>" class="btn btn-sm btn-primary pull-right" > Settings</a>
+               <!-- Add U Lotto Product End -->
+
+               <!-- Add U Lotto Product start -->
+                <a href="<?php echo getCurrentControllerPath('addeditdata'); ?>" class="btn btn-sm btn-primary pull-right mr-2">Add Lotto Product</a>
+               <!-- Add U Lotto Product end -->
+
               </div>
               <div class="card-body">
                 <form id="Data_Form" name="Data_Form" method="get" action="<?php echo $forAction; ?>">
