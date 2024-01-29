@@ -18,8 +18,8 @@ class Generaldata extends CI_Controller {
 	 + + Developed By 	: Ashish Umrao
 	 + + Purpose  		: This function used for index
 	 + + Date 			: 31 MARCH 2022
-	 + + Updated Date 	: 
-	 + + Updated By   	: 
+	 + + Updated Date 	: 29 January 2024
+	 + + Updated By   	: Dilip Halder
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function index()
@@ -93,8 +93,8 @@ class Generaldata extends CI_Controller {
 	 + + Developed By  : Ashish Umrao
 	 + + Purpose  	   : This function used for Add Edit data
 	 + + Date 		   : 31 MARCH 2022
-	 + + Updated Date  : 
-	 + + Updated By    : 
+	 + + Updated Date  : 29 January 2024
+	 + + Updated By    : Dilip Halder
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function addeditdata($editId='')
@@ -124,6 +124,7 @@ class Generaldata extends CI_Controller {
 			$this->form_validation->set_rules('you_tube', 'YouTube', 'trim|required');
 			$this->form_validation->set_rules('slider_type', 'Slider Type', 'trim|required');
 			$this->form_validation->set_rules('whatsapp_no', 'Whatsapp Number', 'trim|required');
+			$this->form_validation->set_rules('whatsapp_authorization_key', 'WhatsApp Authorization Key', 'trim|required');
 			$this->form_validation->set_rules('android_version', 'Andooid Version', 'trim|required');
 			$this->form_validation->set_rules('ios_version', 'IOS Version', 'trim|required');
 
@@ -152,6 +153,7 @@ class Generaldata extends CI_Controller {
 				$param['you_tube']		    	= 	stripslashes($this->input->post('you_tube'));
 				$param['slider_type']		    = 	stripslashes($this->input->post('slider_type'));
 				$param['whatsapp_no']		    = 	stripslashes($this->input->post('whatsapp_no'));
+				$param['whatsapp_authorization_key'] = 	stripslashes($this->input->post('whatsapp_authorization_key'));
 				$param['android_version']		= 	stripslashes($this->input->post('android_version'));
 				$param['ios_version']		    = 	stripslashes($this->input->post('ios_version'));
 

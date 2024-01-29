@@ -137,11 +137,19 @@
                             <?php endif; ?>
                           </div>
 
-                           <div class="form-group-inner col-lg-6 col-md-6 col-sm-6 col-xs-12 <?php if(form_error('whatsapp_no')): ?><?php endif; ?>">
+                          <div class="form-group-inner col-lg-6 col-md-6 col-sm-6 col-xs-12 <?php if(form_error('whatsapp_no')): ?><?php endif; ?>">
                             <label>WhatsApp Number<span class="required">*</span></label>
                             <input type="text" name="whatsapp_no" id="whatsapp_no" value="<?php if(set_value('whatsapp_no')): echo set_value('whatsapp_no'); else: echo stripslashes($EDITDATA['whatsapp_no']);endif; ?>" class="form-control valid required" placeholder="WhatsApp Number">
                             <?php if(form_error('whatsapp_no')): ?>
                               <span for="whatsapp_no" generated="true" class="help-inline"><?php echo form_error('whatsapp_no'); ?></span>
+                            <?php endif; ?>
+                          </div>
+
+                          <div class="form-group-inner col-lg-6 col-md-6 col-sm-6 col-xs-12 <?php if(form_error('whatsapp_authorization_key')): ?><?php endif; ?>">
+                            <label>WhatsApp Authorization Key<span class="required">*</span></label>
+                            <input type="text" name="whatsapp_authorization_key" id="whatsapp_authorization_key" value="<?php if(set_value('whatsapp_authorization_key')): echo set_value('whatsapp_authorization_key'); else: echo stripslashes($EDITDATA['whatsapp_authorization_key']);endif; ?>" class="form-control valid required" placeholder="WhatsApp Authorization Key">
+                            <?php if(form_error('whatsapp_authorization_key')): ?>
+                              <span for="whatsapp_authorization_key" generated="true" class="help-inline"><?php echo form_error('whatsapp_authorization_key'); ?></span>
                             <?php endif; ?>
                           </div>
 

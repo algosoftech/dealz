@@ -395,34 +395,27 @@ public function checkDeplicacy(){
 		$tableName3					=  'da_lotto_orders';
 		$ORDwhereCon['where']  		= array("product_id" => (int)$ProcuctID, "status" => "A");
 		$orderDetails 				= $this->common_model->getData('count',$tableName3,$ORDwhereCon);
-		
+
 		if($orderDetails  > 0):
 
-			// $productDetails['lotto_type'] = 6;
 		    // Checking Coupon under rang of this 
-		    if( $productDetails['lotto_type'] == 6 && $productDetails['remarks'] == 'lotto-products' ):
-	            $ticket_range =  39;
+		    if( $productDetails['lotto_type'] == 6):
 	            $numbeUnique  =  'Y';
-	        elseif($productDetails['lotto_type'] == 5 && $productDetails['remarks'] == 'lotto-products'):
-	            $ticket_range =  29;
+	        elseif($productDetails['lotto_type'] == 5):
 	            $numbeUnique  =  'Y';
-	        elseif($productDetails['lotto_type'] == 4 && $productDetails['remarks'] == 'lotto-products'):
-	            $ticket_range =  9;
+	        elseif($productDetails['lotto_type'] == 4):
 	            $numbeUnique  =  'N';
-	        elseif($productDetails['lotto_type'] == 3 && $productDetails['remarks'] == 'lotto-products'):
-	            $ticket_range =  9;
+	        elseif($productDetails['lotto_type'] == 3 ):
 	            $numbeUnique  =  'N';
 	        endif;
+            
+            $ticket_range =  $productDetails['lotto_range'];
 	        $lotto_type   =  $productDetails['lotto_type'];
-
-	        $soldoutNumbers = [];
-	        // foreach ($orderDetails as$key  =>  $item):
-			// 	foreach(json_decode($item['ticket'])  as $item1):
-			// 		$soldoutNumbers[] = $item1 ; 
-			// 	endforeach;
-			//  endforeach;
+	 
+       
 	       
 			$resultNumbers = $this->lottogenerate($lotto_type,$ticket_range ,$numbeUnique);
+
 			// $UniqueCoupons = $this->checkresult($resultNumbers,$soldoutNumbers);
 
 			// echo json_encode(array('UniqueCoupons'=>$UniqueCoupons));
