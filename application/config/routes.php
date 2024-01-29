@@ -390,8 +390,10 @@ $route['api/lotto/paymentCapture'] 								= 	'api/lotto/paymentCapture';
 $route['api/lotto/orderHistory'] 								= 	'api/lotto/orderHistory';
 $route['api/lotto/SummaryReportSearch'] 						= 	'api/lotto/SummaryReportSearch';
 $route['api/lotto/getWinner'] 									= 	'api/lotto/getWinner';
+$route['api/lotto/product-settings'] 							= 	'api/lotto/productSettings';
 
 //lotto web
 $route['lotto/order/(:any)'] 									= 	'order/getlottoOrder/$1';
 
 $route['api/user/addedit_appname'] 							    = 	'api/users/addeditAppname';
+

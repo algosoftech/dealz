@@ -149,7 +149,7 @@ class Allcoupons extends CI_Controller {
 		// echo '<pre>';print_r($data);die();
 		
 		$this->layouts->set_title('U Win | Dealz Arabia');
-		$this->layouts->admin_view('uwin/index',array(),$data);
+		$this->layouts->admin_view('uwin/allcoupons/index',array(),$data);
 	}	// END OF FUNCTION
 
 	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -175,7 +175,7 @@ class Allcoupons extends CI_Controller {
 		endif;
 		
 		$this->layouts->set_title('Orders | Dealz Arabia');
-		$this->layouts->admin_view('orders/alllottooders/addeditdata',array(),$data);
+		$this->layouts->admin_view('uwin/allcoupons/addeditdata',array(),$data);
 	}	// END OF FUNCTION	
 
 	/***********************************************************************

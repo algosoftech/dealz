@@ -299,6 +299,12 @@ class Upload_crop_img
 				//$this->_check_directory($data['thumb']['path']);
 			break;
 
+			case 'uwin-winnerImage':
+				$data['original']	= 	array("path"=>fileFCPATH."./assets/uwin-winnerImage/","allowed_types"=>"gif|jpg|png","max_size"=>"20000","max_width"=>"","max_height"=>"", "thumb"=>TRUE);//Original
+				$data['thumb']		= 	array("path"=>fileFCPATH."./assets/uwin-winnerImage/thumb/","allowed_types"=>"gif|jpg|png","source_path"=>fileFCPATH."./assets/uwin-winnerImage/","max_width"=>"50","max_height"=>"50");//Thumb
+				//$this->_check_directory($data['thumb']['path']);
+			break;
+
 		endswitch;
 		return $data;
 	}
