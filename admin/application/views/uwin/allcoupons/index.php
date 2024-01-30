@@ -1,3 +1,16 @@
+<style>
+/*.coupon-container{
+    display: inline-flex;
+}
+.coupon-code-circle {
+    border: 1px solid #40ABA8;
+    color: #0E4391;
+    border-radius: 50%;
+    padding: 12px;
+    font-weight: 900;
+}*/
+
+</style>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
 <script>
@@ -94,146 +107,46 @@ $(function(){
                           </div>
                       </div>
                     </div>
+
+                    <?php if($result): ?>
+
+                    <?php
+
+                      // echo "<pre>";
+                      // print_r($result['uniqe_coupons']);
+
+
+                    ?>
+
                       <div class="row">
                         <div class="col-sm-12">
                           <div class="table-responsive">
                             <table id="simpletable" class="table table-striped table-bordered nowrap dataTable" role="grid" aria-describedby="simpletable_info">
                               <thead style="text-align: center;">
                                 <tr role="row">
-                                <th width="5%">S.No.</th>
-                                <th width="20%">Order Id.</th>
-                                <th width="20%">Product</th>
-                                <th width="10%">User Details</th>
-                                <th width="10%">Seller Details</th>
-                                <th width="10%">Bind With</th>
-                                <th width="10%">Purchase Date</th>
-                                <th width="10%">Total Amount</th>
-                                <th width="10%">Available ArabianPoints</th>
-                                <th width="10%">End Balance </th>
-                                <th width="10%">Payment Mode</th>
-                                <th width="10%">Payment Status</th>
-                                <th width="10%">Status</th>
-                                <th width="10%">Action</th>
+                                  <th width="5%">S.No.</th>
+                                  <th width="20%">Available Coupons</th>
                                 </tr>
                               </thead>
                               <tbody style="text-align: center;">
-                                <?php if($ALLDATA <> ""): $i=$first; $j=0; foreach($ALLDATA as $ALLDATAINFO): 
+                                <?php if($ALLDATA <> ""): $i=$first; $j=0; foreach($result['uniqe_coupons'] as $couponList): 
                                 if($j%2==0): $rowClass = 'odd'; else: $rowClass = 'even'; endif;
                                 ?>
                                 <tr role="row" class="<?php echo $rowClass; ?>">
                                   <td><?=$i++?></td>
-                                  <td><?=stripslashes($ALLDATAINFO['order_id'])?></td>
                                   <td>
-                                    <?php  echo stripslashes($ALLDATAINFO['product_title']). ' * '.$ALLDATAINFO['product_qty'].'<br>';  ?>
-                                  </td>
-                                  
-                                  <td>
-                                    <?php if(!empty($ALLDATAINFO['order_first_name'])  && !empty($ALLDATAINFO['order_first_name'])): ?>
-                                      Name : <?=stripslashes($ALLDATAINFO['order_first_name'].' '.$ALLDATAINFO['order_last_name'])?><br>
-                                      Mobile : <?=stripslashes($ALLDATAINFO['user_phone'])?><br>
-                                      <?php if($ALLDATAINFO['order_users_email']): ?>
-                                        Email : <?=stripslashes($ALLDATAINFO['order_users_email'])?>
-                                      <?php endif ?>
-                                    <?php else: ?>  -- <?php endif;?>
-                                  </td>
+                                    <?php foreach ($couponList as $cpnkey => $coupons): ?>
+                                    <!--   <div class="coupon-container">
+                                          <span class="coupon-code-circle"><?=$coupons;?></span> 
+                                      </div> -->
+                                      <?=$coupons;?>
+                                    <?php  endforeach; ?>
 
-                                  <td>
-                                    <?php 
-                                      $wcon['where'] = array('users_id'=> $ALLDATAINFO['user_id'] );
-                                      $sellersDetails = $this->common_model->getData('single','da_users',$wcon);
-                                    ?>
-                                      Name : <?=stripslashes($sellersDetails['users_name'])?>
-                                      <br/>Type : <?=stripslashes($sellersDetails['users_type'])?>
-                                     
-                                     <?php if($sellersDetails['users_email']): ?>
-                                        <br/>Email : <?=stripslashes($sellersDetails['users_email'])?>
-                                     <?php endif; ?> 
-
-                                      <?php if($sellersDetails['users_mobile']): ?>
-                                        <br/>Mobile : <?=stripslashes($sellersDetails['users_mobile'])?>
-                                     <?php endif; ?> 
-                                  </td>
-
-                                  <td>
-                                     <?php 
-                                      $wcon['where'] = array('users_id'=> (int)$sellersDetails['bind_person_id'] );
-                                      $bindWITH = $this->common_model->getData('single','da_users',$wcon);
-                                    ?>
-
-                                    <?php if($bindWITH): ?>
-
-                                     Name : <?=stripslashes($bindWITH['users_name'])?>
-                                      <br/>Type : <?=stripslashes($bindWITH['users_type'])?>
-                                     
-                                     <?php if($bindWITH['users_email']): ?>
-                                        <br/>Email : <?=stripslashes($bindWITH['users_email'])?>
-                                     <?php endif; ?> 
-
-                                      <?php if($bindWITH['users_mobile']): ?>
-                                        <br/>Mobile : <?=stripslashes($bindWITH['users_mobile'])?>
-                                     <?php endif; ?> 
-
-                                   <?php else: ?>
-
-                                      --
-                                   <?php endif; ?>
-
-                                  </td>
-
-                                   
- 
-                                 
-                                  <!-- <td><?php echo $ALLDATAINFO['product_is_donate']=='Y'?'Yes':'No'; ?></td> -->
-                                  <td><?=date('d M Y h:i:s A', strtotime($ALLDATAINFO['created_at']))?></td>
-                                  <td>AED <?=number_format($ALLDATAINFO['total_price'],2)?></td>
-                                  
-
-                                  <td> 
-                                  <?php 
-
-                                  if($ALLDATAINFO['availableArabianPoints']):
-                                  echo 'AED ' .number_format($ALLDATAINFO['availableArabianPoints'],2);
-
-                                  else:
-                                   echo  '-';
-                                  endif; ?>
-
-                                 </td>
-
-                                  <td>
-
-                                  <?php 
-
-                                  if($ALLDATAINFO['end_balance']):
-                                  echo 'AED' .number_format($ALLDATAINFO['end_balance'],2);
-
-                                  else:
-                                   echo  '-';
-                                  endif; ?>
-
-                                  </td>
-
-                                  <td>
-                                      <?php  echo $ALLDATAINFO['payment_mode']; ?>
-                                  </td>
-                                   
-                                  <td><?php  echo $ALLDATAINFO['order_status']; ?></td>
-                                  <td style="text-align: right;"><?=showStatus($ALLDATAINFO['status'])?></td>
-                                  <td>
-                                  <div class="btn-group">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-                                    <ul class="dropdown-menu" role="menu">
-                                    <li><a href="<?php echo getCurrentControllerPath('addeditdata/'.$ALLDATAINFO['order_id'])?>"><i class="far fa-eye"></i> View Details</a></li>
-                                    <?php if(empty($ALLDATAINFO['status'])):  ?>
-                                      <li><a href="<?php echo getCurrentControllerPath('cancelationorder/'.$ALLDATAINFO['order_id'])?>" onClick='return confirm("<?=$drawDates;?> Do you want to Cancel!");' ><i class="fa fa-times-circle"></i>Order Cancelation</a></li>
-                                    <?php endif;  ?>
-                                     </ul>
-                                  </div>
                                   </td>
                                 </tr>
                                 <?php $j++; endforeach; else: ?>
                                 <tr>
-                                  <td colspan="6" style="text-align:center;">No Data Available In Table</td>
+                                  <td colspan="2" style="text-align:center;">No Data Available In Table</td>
                                 </tr>
                                 <?php endif; ?>
                               </tbody>
@@ -241,16 +154,168 @@ $(function(){
                           </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col-sm-12 col-md-5">
-                          <div class="dataTables_info" role="status" aria-live="polite"><?php echo $noOfContent; ?></div>
-                        </div>
-                        <div class="col-sm-12 col-md-7">
-                          <div class="dataTables_paginate paging_simple_numbers">
-                            <?php echo $PAGINATION; ?>
+
+                    <?php else: ?>
+                        
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="table-responsive">
+                              <table id="simpletable" class="table table-striped table-bordered nowrap dataTable" role="grid" aria-describedby="simpletable_info">
+                                <thead style="text-align: center;">
+                                  <tr role="row">
+                                  <th width="5%">S.No.</th>
+                                  <th width="20%">Order Id.</th>
+                                  <th width="20%">Product</th>
+                                  <th width="10%">User Details</th>
+                                  <th width="10%">Seller Details</th>
+                                  <th width="10%">Bind With</th>
+                                  <th width="10%">Purchase Date</th>
+                                  <th width="10%">Total Amount</th>
+                                  <th width="10%">Available ArabianPoints</th>
+                                  <th width="10%">End Balance </th>
+                                  <th width="10%">Payment Mode</th>
+                                  <th width="10%">Payment Status</th>
+                                  <th width="10%">Status</th>
+                                  <th width="10%">Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody style="text-align: center;">
+                                  <?php if($ALLDATA <> ""): $i=$first; $j=0; foreach($ALLDATA as $ALLDATAINFO): 
+                                  if($j%2==0): $rowClass = 'odd'; else: $rowClass = 'even'; endif;
+                                  ?>
+                                  <tr role="row" class="<?php echo $rowClass; ?>">
+                                    <td><?=$i++?></td>
+                                    <td><?=stripslashes($ALLDATAINFO['order_id'])?></td>
+                                    <td>
+                                      <?php  echo stripslashes($ALLDATAINFO['product_title']). ' * '.$ALLDATAINFO['product_qty'].'<br>';  ?>
+                                    </td>
+                                    
+                                    <td>
+                                      <?php if(!empty($ALLDATAINFO['order_first_name'])  && !empty($ALLDATAINFO['order_first_name'])): ?>
+                                        Name : <?=stripslashes($ALLDATAINFO['order_first_name'].' '.$ALLDATAINFO['order_last_name'])?><br>
+                                        Mobile : <?=stripslashes($ALLDATAINFO['user_phone'])?><br>
+                                        <?php if($ALLDATAINFO['order_users_email']): ?>
+                                          Email : <?=stripslashes($ALLDATAINFO['order_users_email'])?>
+                                        <?php endif ?>
+                                      <?php else: ?>  -- <?php endif;?>
+                                    </td>
+
+                                    <td>
+                                      <?php 
+                                        $wcon['where'] = array('users_id'=> $ALLDATAINFO['user_id'] );
+                                        $sellersDetails = $this->common_model->getData('single','da_users',$wcon);
+                                      ?>
+                                        Name : <?=stripslashes($sellersDetails['users_name'])?>
+                                        <br/>Type : <?=stripslashes($sellersDetails['users_type'])?>
+                                       
+                                       <?php if($sellersDetails['users_email']): ?>
+                                          <br/>Email : <?=stripslashes($sellersDetails['users_email'])?>
+                                       <?php endif; ?> 
+
+                                        <?php if($sellersDetails['users_mobile']): ?>
+                                          <br/>Mobile : <?=stripslashes($sellersDetails['users_mobile'])?>
+                                       <?php endif; ?> 
+                                    </td>
+
+                                    <td>
+                                       <?php 
+                                        $wcon['where'] = array('users_id'=> (int)$sellersDetails['bind_person_id'] );
+                                        $bindWITH = $this->common_model->getData('single','da_users',$wcon);
+                                      ?>
+
+                                      <?php if($bindWITH): ?>
+
+                                       Name : <?=stripslashes($bindWITH['users_name'])?>
+                                        <br/>Type : <?=stripslashes($bindWITH['users_type'])?>
+                                       
+                                       <?php if($bindWITH['users_email']): ?>
+                                          <br/>Email : <?=stripslashes($bindWITH['users_email'])?>
+                                       <?php endif; ?> 
+
+                                        <?php if($bindWITH['users_mobile']): ?>
+                                          <br/>Mobile : <?=stripslashes($bindWITH['users_mobile'])?>
+                                       <?php endif; ?> 
+
+                                     <?php else: ?>
+
+                                        --
+                                     <?php endif; ?>
+
+                                    </td>
+
+                                     
+   
+                                   
+                                    <!-- <td><?php echo $ALLDATAINFO['product_is_donate']=='Y'?'Yes':'No'; ?></td> -->
+                                    <td><?=date('d M Y h:i:s A', strtotime($ALLDATAINFO['created_at']))?></td>
+                                    <td>AED <?=number_format($ALLDATAINFO['total_price'],2)?></td>
+                                    
+
+                                    <td> 
+                                    <?php 
+
+                                    if($ALLDATAINFO['availableArabianPoints']):
+                                    echo 'AED ' .number_format($ALLDATAINFO['availableArabianPoints'],2);
+
+                                    else:
+                                     echo  '-';
+                                    endif; ?>
+
+                                   </td>
+
+                                    <td>
+
+                                    <?php 
+
+                                    if($ALLDATAINFO['end_balance']):
+                                    echo 'AED' .number_format($ALLDATAINFO['end_balance'],2);
+
+                                    else:
+                                     echo  '-';
+                                    endif; ?>
+
+                                    </td>
+
+                                    <td>
+                                        <?php  echo $ALLDATAINFO['payment_mode']; ?>
+                                    </td>
+                                     
+                                    <td><?php  echo $ALLDATAINFO['order_status']; ?></td>
+                                    <td style="text-align: right;"><?=showStatus($ALLDATAINFO['status'])?></td>
+                                    <td>
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                      <ul class="dropdown-menu" role="menu">
+                                      <li><a href="<?php echo getCurrentControllerPath('addeditdata/'.$ALLDATAINFO['order_id'])?>"><i class="far fa-eye"></i> View Details</a></li>
+                                      <?php if(empty($ALLDATAINFO['status'])):  ?>
+                                        <li><a href="<?php echo getCurrentControllerPath('cancelationorder/'.$ALLDATAINFO['order_id'])?>" onClick='return confirm("<?=$drawDates;?> Do you want to Cancel!");' ><i class="fa fa-times-circle"></i>Order Cancelation</a></li>
+                                      <?php endif;  ?>
+                                       </ul>
+                                    </div>
+                                    </td>
+                                  </tr>
+                                  <?php $j++; endforeach; else: ?>
+                                  <tr>
+                                    <td colspan="6" style="text-align:center;">No Data Available In Table</td>
+                                  </tr>
+                                  <?php endif; ?>
+                                </tbody>
+                                </table>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                        <div class="row">
+                          <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info" role="status" aria-live="polite"><?php echo $noOfContent; ?></div>
+                          </div>
+                          <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_simple_numbers">
+                              <?php echo $PAGINATION; ?>
+                            </div>
+                          </div>
+                        </div>
+                    <?php endif; ?>
+
                     </div>
                   </div>
                 </form>

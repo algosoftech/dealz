@@ -184,7 +184,7 @@ class Allcoupons extends CI_Controller {
 	** Function name 	: changestatus
 	** Developed By 	: Dilip Halder
 	** Purpose  		: This function used for change status
-	** Date 			: 14 JULY 2022
+	** Date 			: 30 January 2024
 	************************************************************************/
 	function changestatus($changeStatusId='',$statusType='')
 	{  
@@ -200,7 +200,7 @@ class Allcoupons extends CI_Controller {
 	** Function name 	: cancelationorder
 	** Developed By 	: Dilip Kumar Halder
 	** Purpose  		: This function used for order cancelation by admin.
-	** Date 			: 05 June 2023
+	** Date 			: 30 January 2024
 	************************************************************************/
 	function cancelationorder($changeStatusId='')
 	{  
@@ -718,7 +718,7 @@ class Allcoupons extends CI_Controller {
 		$lotto_type      = $productDetails['lotto_type'];
 		$lotto_range     = $productDetails['lotto_range'];
 		$numbeUnique     = "Y";
-		$required_ticket = 1000;
+		$required_ticket = 500;
 
 		$resultNumbers = array();
 		for ($i=0; $i <$required_ticket; $i++):
