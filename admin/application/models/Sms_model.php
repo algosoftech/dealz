@@ -264,6 +264,53 @@ class Sms_model extends CI_Model
 	}
 
 	/***********************************************************************
+	** Function name 	: sendLottoTicketDetails
+	** Developed By 	: Dilip Halder
+	** Purpose  		: This is use for send success reset password Sms To User
+	** Date 			: 30 January 2024
+	** Updatead By 		:  
+	** Date 			: 
+	************************************************************************/
+	function sendLottoTicketDetails($oid = ''){
+
+		// Getting order details.
+		$tblName 				= 'da_lotto_orders';
+		$shortField 			= array('_id'=> -1 );
+		$whereCon['where']		= array('order_id'=>$oid);
+		$orderData  			= $this->common_model->getData('single', $tblName, $whereCon,$shortField);
+		$order_id  		  		= $orderData['order_id'];
+		$couponList             = $orderData['ticket'];
+		$total_price     	    = $orderData['total_price'];
+		$UserId 				= $orderData['user_id'];
+		
+		$ticket = json_decode($orderData['ticket']);
+		foreach ($ticket as $key => $item):
+		   $coupon = implode(' ', $item);
+		   $Couponlist[] = $coupon;
+		endforeach;
+		$couponList = implode(', ', $Couponlist);
+			
+		if($order_id ):
+
+			// user id 
+			$tbl 				=	'da_users';
+			$where['where'] 	=	array('users_id' => (int)$UserId);
+			$UserData			=	$this->common_model->getData('single',$tbl, $where,[]);
+			
+			// $country_code =	$UserData['country_code'];
+			// $users_mobile =	$UserData['users_mobile'];
+			$country_code =	"+91";
+			$users_mobile =	"8700144841";
+
+			$message		=	"You canceled your purchase of a $total_price AED ticket with the order ID $oid and the coupon code $couponList .";
+			$senderid		=	"DLZARBA";
+			$mobileNumber   =   $country_code.$users_mobile;
+			$returnMessage	=	$this->sendMessageFunction1($mobileNumber,$message,$senderid);
+			return $returnMessage;
+		endif;
+	}
+
+	/***********************************************************************
 	** Function name 	: sendTicketDetails
 	** Developed By 	: Afsar Ali
 	** Purpose  		: This is use for send success reset password Sms To User

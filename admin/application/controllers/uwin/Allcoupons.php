@@ -282,201 +282,12 @@ class Allcoupons extends CI_Controller {
 		
 		redirect(correctLink('ALLORDERSDATA',getCurrentControllerPath('index')));
 	}
-
-
-	/***********************************************************************
-	** Function name 	: exportexcel
-	** Developed By 	: Afsar Ali
-	** Purpose  		: This function used for export order data
-	** Date 			: 07 JAN 2023
-	** Updated Date 	: 21 February 2022
-	** Updated By   	: Dilip Halder
-	************************************************************************/
-	function exportexcel1($load_balance_id='')
-	{  
-		/* Export excel button code */
-		if($this->input->post('searchField') == 'status'):
-
-			if($this->input->post('fromDate')):
-				$start_date = strtotime($this->input->post('fromDate'));
-				$whereCon['where_gte'] 			= 	array(array("update_date",$start_date));
-			endif;
-
-			if($this->input->post('toDate')):
-				$end_date = strtotime($this->input->post('toDate'));
-				$whereCon['where_lte'] 			= 	array(array("update_date",$end_date));
-			endif;
-		else:
-
-			if($this->input->post('fromDate')):
-				$date1 = strtotime($this->input->post('fromDate'));
-				$start_date = date('Y-m-d 00:00',$date1);
-				$data['fromDate'] 				= 	$start_date;
-				$whereCon['where_gte'] 			= 	array(array("created_at",$data['fromDate']));
-			endif;
-			
-			if($this->input->post('toDate')):
-				$date2 = strtotime($this->input->post('toDate'));
-				$end_date = date('Y-m-d 23:59',$date2);
-				$data['toDate'] 				= 	$end_date;
-				$whereCon['where_lte'] 			= 	array(array("created_at",$data['toDate']));
-			endif;
-
-		endif;
-
-		if($this->input->post('collection_point')){
-			$collection_id = explode('|', $this->input->post('collection_point'));
-			$index = count($collection_id) - 1;
-			$whereCon['where']		=	array(
-											'collection_point_id' => $collection_id[$index]
-											);
-		}
-	   
-		if($this->input->post('searchField') && $this->input->post('searchValue')):
-			
-			    $sField							=	$this->input->post('searchField');
-				$sValue							=	$this->input->post('searchValue');
-				$whereCon['search']			 	= 	array('0'=>trim($sField),'1'=>trim($sValue));
-				$data['searchField'] 			= 	$sField;
-				$data['searchValue'] 			= 	$sValue;
-
-		else:
-			$whereCon['search']		 		= 	"";
-			$data['searchField'] 			= 	'';
-			$data['searchValue'] 			= 	'';
-		endif;
-		
-		if($data['searchField'] == 'searchField' && $data['searchValue'] != 'Initialize'):
-			$whereCon['where']		 			= 	array('order_status'=> array('$ne' => 'Initialize'));
-		endif;		
-		$shortField 						= 	array('_id'=>-1);
-		$tblName 							= 	'da_orders';
-		
-		$order 					= 	$this->order_model->getordersList('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
-		
-        $spreadsheet = new Spreadsheet();
-		$sheet = $spreadsheet->getActiveSheet();
-		$sheet->setCellValue('A1', 'Sl.No');
-		$sheet->setCellValue('B1', 'Order No');
-		$sheet->setCellValue('C1', 'Product Name');
-		$sheet->setCellValue('D1', 'Quantity');
-		$sheet->setCellValue('E1', 'First Name');
-		$sheet->setCellValue('F1', 'Last Name');
-		$sheet->setCellValue('G1', 'User Mobile');
-		$sheet->setCellValue('H1', 'User Type');
-		$sheet->setCellValue('I1', 'Area Name');
-		$sheet->setCellValue('J1', 'Collection Point');
-		$sheet->setCellValue('K1', 'Donated');
-		$sheet->setCellValue('L1', 'Web/APP');
-		$sheet->setCellValue('M1', 'Purchase Date');
-		$sheet->setCellValue('N1', 'Purchase Time');
-		$sheet->setCellValue('O1', 'Payment Mode');
-		$sheet->setCellValue('P1', 'Payment Status');
-		$sheet->setCellValue('Q1', 'Total Amount');
-		$sheet->setCellValue('R1', 'Coupons');
-		$sheet->setCellValue('S1', 'Status');
-	
-		$slno = 1;
-		$start = 2;
-		foreach($order as $d){
-
-			if(count($d['coupons']) > 0){
-				$commaSeparatedCoupon = implode(', ', $d['coupons']);
-			}else{
-				$commaSeparatedCoupon = '';
-			}
-		
-			$sheet->setCellValue('A'.$start, $slno);
-			$sheet->setCellValue('B'.$start, $d['order_id']);
-			$sheet->setCellValue('E'.$start, $d['user_name'][0]);
-			$sheet->setCellValue('F'.$start, $d['last_name'][0]);
-			$sheet->setCellValue('G'.$start, $d['user_phone']);
-			$sheet->setCellValue('H'.$start, $d['user_type']);
-			$sheet->setCellValue('I'.$start, $d['area_name']);
-			$sheet->getStyle('I'.$start)->getAlignment()->setWrapText(true);
-			$sheet->setCellValue('J'.$start, $d['collection_point_name']);
-			$sheet->setCellValue('K'.$start, $d['product_is_donate']);
-			$sheet->setCellValue('L'.$start, $d['payment_from']);
-			$sheet->setCellValue('M'.$start, date('d-F-Y',strtotime($d['created_at'])));
-			$sheet->setCellValue('N'.$start, date('h:i A',strtotime($d['created_at'])));
-			$sheet->setCellValue('O'.$start, $d['payment_mode']);
-			$sheet->setCellValue('P'.$start, $d['order_status']);
-			$sheet->setCellValue('Q'.$start, $d['total_price']);
-
-			$sheet->setCellValue('R'.$start, $commaSeparatedCoupon);
-			if($d['status']):
-				$sheet->setCellValue('S'.$start, 'Cenceled');
-			else:
-				$sheet->setCellValue('S'.$start, $d['collection_status']);
-			endif;
-			
-			foreach ($d['order_details'] as $key => $productdetail) {
-				$sheet->setCellValue('C'.$start, $productdetail['product_name']);
-				$sheet->setCellValue('D'.$start, $productdetail['quantity']);
-				
-				// $productName .=  stripslashes($productdetail['product_name']).PHP_EOL;
-				// $productQuantity .=  $productdetail['quantity'].PHP_EOL;
-				$start = $start+1;
-			}
-			$slno = $slno+1;
-			
-			}
-
-
-		$styleThinBlackBorderOutline = [
-					'borders' => [
-						'allBorders' => [
-							'borderStyle' => Border::BORDER_THIN,
-							'color' => ['argb' => 'FF000000'],
-						],
-					],
-				];
-		//Font BOLD
-		$sheet->getStyle('A1:R1')->getFont()->setBold(true);		
-		$sheet->getStyle('A1:R1')->applyFromArray($styleThinBlackBorderOutline);
-		//Alignment
-		//fONT SIZE
-		//$sheet->getStyle('A1:D10')->getFont()->setSize(12);
-		//$sheet->getStyle('A1:D2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-		//$sheet->getStyle('A2:D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-		//Custom width for Individual Columns
-		$sheet->getColumnDimension('A')->setWidth(5);
-		$sheet->getColumnDimension('B')->setWidth(20);
-		$sheet->getColumnDimension('C')->setWidth(30);
-		$sheet->getColumnDimension('D')->setWidth(30);
-		$sheet->getColumnDimension('E')->setWidth(30);
-		$sheet->getColumnDimension('F')->setWidth(15);
-		$sheet->getColumnDimension('G')->setWidth(30);
-		$sheet->getColumnDimension('H')->setWidth(30);
-		$sheet->getColumnDimension('I')->setWidth(15);
-		$sheet->getColumnDimension('J')->setWidth(15);
-		$sheet->getColumnDimension('K')->setWidth(30);
-		$sheet->getColumnDimension('L')->setWidth(30);
-		$sheet->getColumnDimension('M')->setWidth(15);
-		$sheet->getColumnDimension('N')->setWidth(20);
-		$sheet->getColumnDimension('O')->setWidth(20);
-		$sheet->getColumnDimension('P')->setWidth(20);
-		$sheet->getColumnDimension('Q')->setWidth(20);
-		$sheet->getColumnDimension('R')->setWidth(20);
-
-		$curdate = date('d-m-Y H:i:s');
-		$writer = new Xlsx($spreadsheet);
-		$filename = 'Order Details'.$curdate;
-		ob_end_clean();
-		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
-		header('Cache-Control: max-age=0');
-		$writer->save('php://output');
-		//endif;
-		/* Export excel END */
-		//redirect('orders/allorders/index');
-	}
-
+	 
  	/***********************************************************************
 	** Function name 	: exportexcel
 	** Developed By 	: Dilip halder
 	** Purpose  		: This function used for export order data
-	** Date 			: 26 January 2024
+	** Date 			: 30 January 2024
 	************************************************************************/
 	function exportexcel()
 	{	
@@ -506,7 +317,6 @@ class Allcoupons extends CI_Controller {
 
 		// Where conditions section.
 		if($this->input->post('searchField') && $this->input->post('searchValue')):
-			
 			$sField							=	$this->input->post('searchField');
 			$sValue							=	$this->input->post('searchValue');
 			$data['searchField'] 			= 	$sField;
@@ -514,6 +324,17 @@ class Allcoupons extends CI_Controller {
 
 			if($sField == 'ticket'):
 				$whereCon['where']		 			= 	array($sField=> "[[".$sValue."]]" );	
+
+
+			elseif( $sField == "available_coupon"):
+				// $whereCon['where']		 			= 	array($sField=> "[[".$sValue."]]" );	
+
+				$tblName 	 		=  'da_uwin_available_coupons';
+				$shortField  		=  array('products_id'=> -1);
+				$whereCon['where']  =  array('products_id' => (int)$sValue);
+				$result	 			=  $this->common_model->getData('single',$tblName,$whereCon,$shortField);
+				// echo "<pre>";print_r($result);die();
+
 			else:
 				if(is_numeric($sValue)):
 					$whereCon['where']		 		= 	array($sField=> (int)$sValue );	
@@ -527,89 +348,138 @@ class Allcoupons extends CI_Controller {
 			$data['searchValue'] 			= 	'';
 			$whereCon['where']		 		= 	array('order_status'=> array('$ne' => 'Initialize'));	
 		endif;
-		$tblName 							= 	'da_lotto_orders';
 		$shortField 						= 	array('sequence_id'=> -1);
-		$ALLDATA	   						=	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField);
+
+		if(empty($result)):
+			$tblName  = 'da_lotto_orders'; 
+			$ALLDATA  = $this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
+		endif;
 		// echo '<pre>';print_r($ALLDATA);die();
 
-		$spreadsheet = new Spreadsheet();
-		$sheet = $spreadsheet->getActiveSheet();
-		$sheet->setCellValue('A1', 'Sl.No');
-		$sheet->setCellValue('B1', 'ORDER ID');
-		$sheet->setCellValue('C1', 'Product Name');
-		$sheet->setCellValue('D1', 'Quantity');
-		$sheet->setCellValue('E1', 'SELLER Name');
-		$sheet->setCellValue('F1', 'SELLER Mobile');
-		$sheet->setCellValue('G1', 'SELLER Email');
-		$sheet->setCellValue('H1', 'PURCHASE DATE');
-		$sheet->setCellValue('I1', 'TOTAL AMOUNT');
-		$sheet->setCellValue('J1', 'AVAILABLE ARABIANPOINTS');
-		$sheet->setCellValue('K1', 'END BALANCE');
-		$sheet->setCellValue('L1', 'PAYMENT MODE');
-		$sheet->setCellValue('M1', 'PAYMENT STATUS');
-		$sheet->setCellValue('N1', 'STATUS');
-		
-		$slno = 1;
-		$start = 2;
-		foreach($ALLDATA as $ALLDATAINFO):
-          	$wcon['where']  = array('users_id'=> $ALLDATAINFO['user_id'] );
-          	$sellersDetails = $this->common_model->getData('single','da_users',$wcon);
-    	    $PurchaseDate   = date('d M Y h:i:s A', strtotime($ALLDATAINFO['created_at']));
-			 
-			$sheet->setCellValue('A'.$start, $slno);
-			$sheet->setCellValue('B'.$start, $ALLDATAINFO['order_id']);
-			$sheet->setCellValue('C'.$start, $ALLDATAINFO['product_title']);
-			$sheet->setCellValue('D'.$start, $ALLDATAINFO['product_qty']);
-			$sheet->setCellValue('E'.$start, $sellersDetails['users_name']);
-			$sheet->setCellValue('F'.$start, $sellersDetails['users_mobile']);
-			$sheet->setCellValue('G'.$start, $sellersDetails['users_email']);
-			$sheet->setCellValue('H'.$start, $PurchaseDate);
-			$sheet->setCellValue('I'.$start, number_format($ALLDATAINFO['total_price'],2));
-			$sheet->setCellValue('J'.$start, $ALLDATAINFO['availableArabianPoints']);
-			$sheet->setCellValue('K'.$start, $ALLDATAINFO['end_balance']);
-			$sheet->setCellValue('L'.$start, $ALLDATAINFO['payment_mode']);
-			$sheet->setCellValue('M'.$start, $ALLDATAINFO['order_status']);
-			$sheet->setCellValue('N'.$start, $ALLDATAINFO['status']);
-			$slno = $slno+1;
-			$start = $start+1;
-		endforeach;
+		if($result):
+			
+			$spreadsheet = new Spreadsheet();
+			$sheet = $spreadsheet->getActiveSheet();
+			$sheet->setCellValue('A1', 'Sl.No');
+			$sheet->setCellValue('B1', 'AVAILABLE COUPONS');
 
-		$styleThinBlackBorderOutline = [
-					'borders' => [
-						'allBorders' => [
-							'borderStyle' => Border::BORDER_THIN,
-							'color' => ['argb' => 'FF000000'],
+			$slno = 1;
+			$start = 2;
+			foreach($result['available_coupons'] as $couponArray):
+				$coupon = implode(', ', $couponArray);
+				$sheet->setCellValue('A'.$start, $slno);
+				$sheet->setCellValue('B'.$start, $coupon);
+				$slno = $slno+1;
+				$start = $start+1;
+			endforeach;
+
+			$styleThinBlackBorderOutline = [
+						'borders' => [
+							'allBorders' => [
+								'borderStyle' => Border::BORDER_THIN,
+								'color' => ['argb' => 'FF000000'],
+							],
 						],
-					],
-				];
-		//Font BOLD
-		$sheet->getStyle('A1:N1')->getFont()->setBold(true);		
-		$sheet->getStyle('A1:N1')->applyFromArray($styleThinBlackBorderOutline);
-		//Alignment
-		//fONT SIZE
-		//$sheet->getStyle('A1:D10')->getFont()->setSize(12);
-		//$sheet->getStyle('A1:D2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-		//$sheet->getStyle('A2:D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-		//Custom width for Individual Columns
-		$sheet->getColumnDimension('A')->setWidth(5);
-		$sheet->getColumnDimension('B')->setWidth(20);
-		$sheet->getColumnDimension('C')->setWidth(30);
-		$sheet->getColumnDimension('D')->setWidth(30);
-		$sheet->getColumnDimension('E')->setWidth(30);
-		$sheet->getColumnDimension('F')->setWidth(15);
-		$sheet->getColumnDimension('G')->setWidth(30);
-		$sheet->getColumnDimension('H')->setWidth(30);
-		$sheet->getColumnDimension('I')->setWidth(15);
-		$sheet->getColumnDimension('J')->setWidth(15);
-		$sheet->getColumnDimension('K')->setWidth(30);
-		$sheet->getColumnDimension('L')->setWidth(30);
-		$sheet->getColumnDimension('M')->setWidth(30);
-		$sheet->getColumnDimension('N')->setWidth(30);
+					];
+			//Font BOLD
+			$sheet->getStyle('A1:B1')->getFont()->setBold(true);		
+			$sheet->getStyle('A1:B1')->applyFromArray($styleThinBlackBorderOutline);
+			
+			//Custom width for Individual Columns
+			$sheet->getColumnDimension('A')->setWidth(10);
+			$sheet->getColumnDimension('B')->setWidth(30);
 
-		$curdate = date('d-m-Y H:i:s');
-		$writer = new Xlsx($spreadsheet);
-		$filename = 'U-WIN-Data-'.$curdate;
-		ob_end_clean();
+			$curdate = date('d-m-Y H:i:s');
+			$writer = new Xlsx($spreadsheet);
+			$filename = 'U-WIN-Available-Coupons-'.$result['products_id'].'-'.$curdate;
+			ob_end_clean();
+		else:
+			$spreadsheet = new Spreadsheet();
+			$sheet = $spreadsheet->getActiveSheet();
+			$sheet->setCellValue('A1', 'Sl.No');
+			$sheet->setCellValue('B1', 'ORDER ID');
+			$sheet->setCellValue('C1', 'Product Name');
+			$sheet->setCellValue('D1', 'Quantity');
+			$sheet->setCellValue('E1', 'SELLER Name');
+			$sheet->setCellValue('F1', 'SELLER Mobile');
+			$sheet->setCellValue('G1', 'SELLER Email');
+			$sheet->setCellValue('H1', 'PURCHASE DATE');
+			$sheet->setCellValue('I1', 'TOTAL AMOUNT');
+			$sheet->setCellValue('J1', 'AVAILABLE ARABIANPOINTS');
+			$sheet->setCellValue('K1', 'END BALANCE');
+			$sheet->setCellValue('L1', 'PAYMENT MODE');
+			$sheet->setCellValue('M1', 'PAYMENT STATUS');
+			$sheet->setCellValue('N1', 'STATUS');
+			
+			$slno = 1;
+			$start = 2;
+			foreach($ALLDATA as $ALLDATAINFO):
+	          	$wcon['where']  = array('users_id'=> $ALLDATAINFO['user_id'] );
+	          	$sellersDetails = $this->common_model->getData('single','da_users',$wcon);
+	    	    $PurchaseDate   = date('d M Y h:i:s A', strtotime($ALLDATAINFO['created_at']));
+				 
+				$sheet->setCellValue('A'.$start, $slno);
+				$sheet->setCellValue('B'.$start, $ALLDATAINFO['order_id']);
+				$sheet->setCellValue('C'.$start, $ALLDATAINFO['product_title']);
+				$sheet->setCellValue('D'.$start, $ALLDATAINFO['product_qty']);
+				$sheet->setCellValue('E'.$start, $sellersDetails['users_name']);
+				$sheet->setCellValue('F'.$start, $sellersDetails['users_mobile']);
+				$sheet->setCellValue('G'.$start, $sellersDetails['users_email']);
+				$sheet->setCellValue('H'.$start, $PurchaseDate);
+				$sheet->setCellValue('I'.$start, number_format($ALLDATAINFO['total_price'],2));
+				$sheet->setCellValue('J'.$start, $ALLDATAINFO['availableArabianPoints']);
+				$sheet->setCellValue('K'.$start, $ALLDATAINFO['end_balance']);
+				$sheet->setCellValue('L'.$start, $ALLDATAINFO['payment_mode']);
+				$sheet->setCellValue('M'.$start, $ALLDATAINFO['order_status']);
+				$sheet->setCellValue('N'.$start, $ALLDATAINFO['status']);
+				$slno = $slno+1;
+				$start = $start+1;
+			endforeach;
+
+			$styleThinBlackBorderOutline = [
+						'borders' => [
+							'allBorders' => [
+								'borderStyle' => Border::BORDER_THIN,
+								'color' => ['argb' => 'FF000000'],
+							],
+						],
+					];
+			//Font BOLD
+			$sheet->getStyle('A1:N1')->getFont()->setBold(true);		
+			$sheet->getStyle('A1:N1')->applyFromArray($styleThinBlackBorderOutline);
+			//Alignment
+			//fONT SIZE
+			//$sheet->getStyle('A1:D10')->getFont()->setSize(12);
+			//$sheet->getStyle('A1:D2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+			//$sheet->getStyle('A2:D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+			//Custom width for Individual Columns
+			$sheet->getColumnDimension('A')->setWidth(5);
+			$sheet->getColumnDimension('B')->setWidth(20);
+			$sheet->getColumnDimension('C')->setWidth(30);
+			$sheet->getColumnDimension('D')->setWidth(30);
+			$sheet->getColumnDimension('E')->setWidth(30);
+			$sheet->getColumnDimension('F')->setWidth(15);
+			$sheet->getColumnDimension('G')->setWidth(30);
+			$sheet->getColumnDimension('H')->setWidth(30);
+			$sheet->getColumnDimension('I')->setWidth(15);
+			$sheet->getColumnDimension('J')->setWidth(15);
+			$sheet->getColumnDimension('K')->setWidth(30);
+			$sheet->getColumnDimension('L')->setWidth(30);
+			$sheet->getColumnDimension('M')->setWidth(30);
+			$sheet->getColumnDimension('N')->setWidth(30);
+
+			$curdate = date('d-m-Y H:i:s');
+			$writer = new Xlsx($spreadsheet);
+			$filename = 'U-WIN-Data-'.$curdate;
+			ob_end_clean();
+
+		endif;
+
+
+
+
+		
+
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
 		header('Cache-Control: max-age=0');
@@ -707,6 +577,7 @@ class Allcoupons extends CI_Controller {
 		endforeach;
 
 		$result = $this->AvailableUWinCoupons($soldoutNumber ,$productDetails );
+
 		return $result;
 
 	}
@@ -717,6 +588,8 @@ class Allcoupons extends CI_Controller {
 
 		$lotto_type      = $productDetails['lotto_type'];
 		$lotto_range     = $productDetails['lotto_range'];
+		$products_id 	 = $productDetails['products_id'];
+
 		$numbeUnique     = "Y";
 		$required_ticket = 500;
 
@@ -725,11 +598,37 @@ class Allcoupons extends CI_Controller {
 			$resultNumbers[] = $this->lottogenerate($lotto_type,$lotto_range ,$numbeUnique,$required_ticket);
 		endfor;
 
-
 		$UniqueCoupons = $this->checkresult($resultNumbers,$soldoutNumber);
-		
-		$result['available_coupons'] = 'Y';
-		$result['uniqe_coupons'] = $UniqueCoupons;
+		$result['unique_coupons'] = $UniqueCoupons;
+
+
+		if($UniqueCoupons):
+
+			$tblName 	 		= 	'da_uwin_available_coupons';
+			$shortField  		= 	array('products_id'=> -1);
+			$whereCon['where']  =  array('products_id' => (int)$products_id);
+			$existdata	 		=	$this->common_model->getData('count',$tblName,$whereCon,$shortField);
+
+			$param['products_id']		=	(int)$products_id;
+			$param['available_coupons']	=	$UniqueCoupons;
+			if($existdata):
+				$param['update_ip']		=	currentIp();
+				$param['update_date']	=	(int)$this->timezone->utc_time();//currentDateTime();
+				$param['updated_by']	=	(int)$this->session->userdata('HCAP_ADMIN_ID');
+				$this->common_model->editData('da_uwin_available_coupons',$param,'products_id',(int)$products_id);
+			else:
+				$param['creation_ip']	=	currentIp();
+				$param['creation_date']	=	(int)$this->timezone->utc_time();//currentDateTime();
+				$param['created_by']	=	(int)$this->session->userdata('HCAP_ADMIN_ID');
+				$param['status']		=	'A';
+				$alastInsertId			=	$this->common_model->addData('da_uwin_available_coupons',$param);
+			endif;
+			
+
+		endif;
+
+
+
 		return $result;
 	}
 

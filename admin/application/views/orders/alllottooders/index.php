@@ -226,7 +226,7 @@ $(function(){
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                     <ul class="dropdown-menu" role="menu">
                                     <li><a href="<?php echo getCurrentControllerPath('addeditdata/'.$ALLDATAINFO['order_id'])?>"><i class="far fa-eye"></i> View Details</a></li>
-                                    <?php if(empty($ALLDATAINFO['status'])):  ?>
+                                    <?php if($ALLDATAINFO['status'] != "CL"):  ?>
                                       <li><a href="<?php echo getCurrentControllerPath('cancelationorder/'.$ALLDATAINFO['order_id'])?>" onClick='return confirm("<?=$drawDates;?> Do you want to Cancel!");' ><i class="fa fa-times-circle"></i>Order Cancelation</a></li>
                                     <?php endif;  ?>
                                      </ul>

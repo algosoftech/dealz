@@ -1,5 +1,5 @@
 <style>
-/*.coupon-container{
+.coupon-container{
     display: inline-flex;
 }
 .coupon-code-circle {
@@ -8,7 +8,7 @@
     border-radius: 50%;
     padding: 12px;
     font-weight: 900;
-}*/
+}
 
 </style>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
@@ -109,15 +109,6 @@ $(function(){
                     </div>
 
                     <?php if($result): ?>
-
-                    <?php
-
-                      // echo "<pre>";
-                      // print_r($result['uniqe_coupons']);
-
-
-                    ?>
-
                       <div class="row">
                         <div class="col-sm-12">
                           <div class="table-responsive">
@@ -129,17 +120,17 @@ $(function(){
                                 </tr>
                               </thead>
                               <tbody style="text-align: center;">
-                                <?php if($ALLDATA <> ""): $i=$first; $j=0; foreach($result['uniqe_coupons'] as $couponList): 
+                                <?php if($result['unique_coupons'] <> ""): $i=$first; $j=0; foreach($result['unique_coupons'] as $couponList): 
                                 if($j%2==0): $rowClass = 'odd'; else: $rowClass = 'even'; endif;
                                 ?>
                                 <tr role="row" class="<?php echo $rowClass; ?>">
                                   <td><?=$i++?></td>
                                   <td>
                                     <?php foreach ($couponList as $cpnkey => $coupons): ?>
-                                    <!--   <div class="coupon-container">
+                                      <div class="coupon-container">
                                           <span class="coupon-code-circle"><?=$coupons;?></span> 
-                                      </div> -->
-                                      <?=$coupons;?>
+                                      </div>
+                                      <!-- <?=$coupons;?> -->
                                     <?php  endforeach; ?>
 
                                   </td>
@@ -333,12 +324,12 @@ $(function(){
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Download Order Reports</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Download Reports</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="<?=base_url('orders/alllottooders/exportexcel')?>" method="post" autocomplete="off">
+      <form action="<?=base_url('uwin/allcoupons/exportexcel')?>" method="post" autocomplete="off">
       <div class="modal-body">
           <div class="row">
             <div class="col-sm-12 col-md-6">
@@ -361,13 +352,18 @@ $(function(){
                 <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
                   <option value="">Select Field</option>
                   <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Ticket ID</option>
+                 
                   <option value="ticket" <?php if($searchField == 'ticket')echo 'selected="selected"'; ?>>Coupon Search</option>
+                  <option value="available_coupon" <?php if($searchField == 'available_coupon')echo 'selected="selected"'; ?>>Available Coupon (Search By Product ID ) </option>
+                  <option value="order_last_name" <?php if($searchField == 'order_last_name')echo 'selected="selected"'; ?>>Last Name</option>
+                  <option value="order_users_email" <?php if($searchField == 'order_users_email')echo 'selected="selected"'; ?>>User Email</option> -->
                   <option value="user_phone" <?php if($searchField == 'user_phone')echo 'selected="selected"'; ?>>User Phone</option>
                   <option value="created_at" <?php if($searchField == 'created_at')echo 'selected="selected"'; ?>>Purchase Date</option>
                   <option value="product_id" <?php if($searchField == 'product_id')echo 'selected="selected"'; ?>>Campaign ID </option>
                   <option value="product_title" <?php if($searchField == 'product_title')echo 'selected="selected"'; ?>>Campaign Name </option>
                   <option value="user_email" <?php if($searchField == 'user_email')echo 'selected="selected"'; ?>>Seller Email</option>
                   <option value="user_phone" <?php if($searchField == 'user_phone')echo 'selected="selected"'; ?>>Seller Mobile</option>
+                  <!-- <option value="product_is_donate" <?php if($searchField == 'product_is_donate')echo 'selected="selected"'; ?>>Product Donate (Y/N)</option> -->
                   <option value="status" <?php if($searchField == 'status')echo 'selected="selected"'; ?>>Order Status (CL) </option>
                 </select>
               </div>

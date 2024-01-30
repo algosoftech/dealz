@@ -101,10 +101,10 @@ class Emailsendgrid_model extends CI_Model
 
 
 
-		/***********************************************************************
+	/***********************************************************************
 	** Function name 	: sendOrderMailToUser
 	** Developed By 	: Dilip Halder
-	** Purpose  		: This function used for delete data
+	** Purpose  		: This function used to send email.
 	** Date 			: 14 JUNE 2023
 	************************************************************************/
 
@@ -374,6 +374,166 @@ class Emailsendgrid_model extends CI_Model
 			return true;
 		endif;
 	} // End of function
+
+
+	/***********************************************************************
+	** Function name 	: sendlottoOrderMailToUser
+	** Developed By 	: Dilip Halder
+	** Purpose  		: This function used to send email.
+	** Date 			: 30 January 2024
+	************************************************************************/
+	function sendlottoOrderMailToUser($oid = '') {  
+	  if(!empty($oid)):
+		$tblName 			=	'da_lotto_orders';
+		$shortField 		= 	array('_id'=> -1 );
+		$whereCon['where']	= 	array('order_id'=>$oid);
+		$orderData  		=	$this->common_model->getdata('single', $tblName, $whereCon,$shortField);
+
+		$name   = explode('@',$orderData['user_email']);
+
+		$html  .= '<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<title>Dealzerbia | mailtemplate</title>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<style>
+			 body { background-color:#1e1e1e;color: #010f19 !important;}
+			 a:link, a:active {color: #000 !important;text-decoration: none; }
+			 a{color:#000 !important;}
+			 @media screen and (min-device-width: 360px) and (max-device-width: 600px) {
+				body {background-color: #fff !important;margin: 0px;}
+			 }
+			 .page-container{ width: 533px;margin: auto;background-color: #fff;padding: 19px 15px 19px;}
+			 .text-center{ text-align:center; }
+
+			.my-order-section {width: 85%;
+							    margin: auto;
+							    border: 1px solid #80808038;
+							    border-radius: 6px;
+							    padding: 20px;
+							   }
+			.order-title ,.order-details {
+			        width: 50%;
+			        font-family: sans-serif;
+	    	}
+	    	.order-title{
+	    		text-align : left;
+	    	}
+	    	.order-details{
+	    		text-align : right;
+	    	}
+
+			</style>
+		</head>
+		<body>
+		<div class="page-container">
+			<div class="logo-section">
+				<div class="text-center">
+					<img src="https://dealzarabia.com/assets/img/jpeg_logo.jpg" alt="logo">
+				</div>
+			</div>
+			<div style="margin:39px 0px;text-align:center;">
+				<h1> Refund Invoice </h1>
+				<p> Hello '.$name[0].', Your Order Details</p>
+			</div>
+			<table class="my-order-section">
+	            <tr>
+	                <td class="order-title">Order Id</td>
+	                <td class="order-details">'.$orderData['order_id'].'</td>
+	            </tr> 
+	            <tr>
+	                <td class="order-title">Order Date</td>
+	                <td class="order-details">'.date("d M, Y",strtotime($orderData['created_at'])).'</td>
+	            </tr> 
+	        </table>
+	        <div style="margin:39px 0px;text-align:center;">
+				<h1> Payment Information</h1>
+			</div>
+			<table class="my-order-section">
+	            <tr>
+	                <td class="order-title">Inclusice of VAT</td>
+	                <td class="order-details">' .'AED '.number_format($orderData['total_price'],2).'</td>
+	            </tr> 
+	            <tr>
+	                <td class="order-title">Subtotal</td>
+	                <td class="order-details">' .'AED '.number_format($orderData['total_price'],2).'</td>
+	            </tr> 
+	            <tr>
+	                <td class="order-title">VAT </td>
+	                <td class="order-details"> ' .'AED '.number_format($orderData['total_price'],2).'</td>
+	            </tr> 
+	            <tr>
+	                <td class="order-title">Paid Using Arabian Point </td>
+	                <td class="order-details"> ' .'AED '.number_format($orderData['total_price'],2).'</td>
+	            </tr> 
+	            <tr>
+	                <td class="order-title">Refunded Amount</td>
+	                <td class="order-details"> ' .'AED '.number_format($orderData['total_price'],2).'</td>
+	            </tr> 
+	        </table>
+	        <div class="text-center">
+			<div style="text-aling:center;font-family:sans-serif;font-size: 26px; ">
+				<p style="color: #343333;font-family: "Open Sans", sans-serif;font-size: 26px; font-weight: 600;text-align: center;font-size: 19px;margin:0px;">Customer Support Service</p>
+			</div>
+			<div class="row" style="display:inline-flex;justify-content: space-around;margin: 24px 0px;">
+			<div class="" style="display: flex;flex-direction: row;justify-content: center; align-items: cente;color: #343333;margin-right: 38px;">
+			<img src="'.MAIN_URL.'assets/img/phone-solid.jpg" alt="" style="width: 20px;">
+			<a href="tel:045541927" style=" margin-left: 10px !important;margin:0px;font-family: sans-serif;font-size: 16px;color: #343333 !important;">045541927</a>
+			</div>
+			<div class="" style="display:inline-flex;flex-direction: row;justify-content: center; align-items: center;color: #343333;">
+			<img src="'.MAIN_URL.'assets/img/envelope-solid.jpg" alt="" style="width: 20px;">
+			<a href="mailto:info@dealzarabia.com" style=" margin-left: 10px !important;margin:0px;font-family: sans-serif;font-size: 16px;color: #343333 !important;">info@dealzarabia.com</a>
+			</div>
+			</div>
+			<div class="row" style="display:blockjustify-content:center;margin: 0px 0px;color:#000;">
+			<div class="" style="display:inline-flex;flex-direction: row;justify-content: center; align-items: center;">
+			<img src="'.MAIN_URL.'assets/img/globe-solid.jpg" alt="" style="width: 20px;height: 10%;">
+			<p style="margin:0px;color:#000;!important;line-height: 0px;">  <a href="https://dealzarabia.com/" style=" margin-left: 10px !important;margin:0px;font-family: sans-serif;font-size: 16px;color:#000;">https://dealzarabia.com/</a><p>
+			</div>
+			</div>
+			</div>
+			<div class="row" style="text-align: center;">
+			<div style="background-color: #d82b2b;color: #fff;font-family: "Open Sans", sans-serif;font-size: 16px; font-weight: 400;text-align: center;width:50%;background-color: #d82b2b;
+			color: #fff;
+			">
+			<p style="margin:0px;padding: 12px 76px;background-color: #d12929;
+			color: #fff;">Copyright© '.date('Y').'</p>
+			</div>
+			</div>
+			</body>
+
+			</html>';
+			echo $html;die();
+			if($html <> ""):  
+				#.............................. message section ............................#
+				try {
+
+					if($orderData['user_email']):
+
+						$email = new Mail();
+						$email->setFrom(MAIL_FROM_MAIL, MAIL_SITE_FULL_NAME);
+						$email->setSubject('Your ticket number ( '.$orderData['order_id'].' ) has been cancelled Successfully');
+						$email->addTo($orderData['user_email'], $name[0]);
+						$email->addContent("text/html",$html);
+						
+						$sendgrid = new \SendGrid(SENDGRID_KEY);
+						$response = $sendgrid->send($email);
+						return true;
+
+					// else:
+					// 	throw new Exception('Email id required');
+					endif;
+					
+				} catch (Exception $e) {
+					return false;
+				}
+				
+			endif;
+			return true;
+		endif;
+	} // End of function
+
 
 
 	public function SendUserList($UserListDetails='')

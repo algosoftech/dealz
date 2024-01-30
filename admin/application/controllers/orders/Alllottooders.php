@@ -202,11 +202,10 @@ class Alllottooders extends CI_Controller {
 		
 		$this->admin_model->authCheck('edit_data');
 		// $this->common_model->editData('da_category',$param,'category_id',(int)$changeStatusId);
-		$tblName 				= 'da_orders';
+		$tblName 				= 'da_lotto_orders';
 		$whereCon['where']		=	 array('order_id' => $changeStatusId );
 		$shortField 			= array('sequence_id' => -1);
 		$cancleOrderData 		= 	$this->common_model->getData('single',$tblName,$whereCon,$shortField,'0','0');
-
 
 			//Adding calcelation variable and value.
 			$param1['status']			= 'CL';
@@ -214,17 +213,16 @@ class Alllottooders extends CI_Controller {
 			$param1['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
 			$param1['refund_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
 			$param1['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
-
-
-			$this->common_model->editData('da_orders',$param1,'order_id',$changeStatusId);
-			$this->common_model->editData('da_orders_details',$param1,'order_id',$changeStatusId);		
+			
+			// echo "<pre>";print_r($param1);die();
+			$this->common_model->editData('da_lotto_orders',$param1,'order_id',$changeStatusId);
 
 			// Checking Sender User.
 			$userid = $cancleOrderData['user_id'];
 			
-			$tblName 				=   'da_users';
-			$whereCon['where']		=	array('users_id' => $userid , 'status'=> 'A' );
-			$shortField 			=   array('users_id' => -1);
+			$tblName 			=   'da_users';
+			$whereCon['where']	=	array('users_id' => $userid , 'status'=> 'A' );
+			$shortField 		=   array('users_id' => -1);
 			$UserData 			= 	$this->common_model->getData('single',$tblName,$whereCon,$shortField,'0','0');
 
 			$refund_amount = $cancleOrderData['total_price'];
@@ -254,8 +252,8 @@ class Alllottooders extends CI_Controller {
 			endif;
 
 			// User detail  used for email and sms  
-			$this->emailsendgrid_model->sendOrderMailToUser($refundparam['order_id']);
-			$this->sms_model->sendTicketDetails($refundparam['order_id']);
+			// $this->emailsendgrid_model->sendlottoOrderMailToUser($refundparam['order_id']);
+			// $this->sms_model->sendLottoTicketDetails($refundparam['order_id']);
 
 		$this->session->set_flashdata('alert_success',lang('ordercenclesuccess'));
 		
@@ -345,7 +343,7 @@ class Alllottooders extends CI_Controller {
 			$whereCon['where']		 			= 	array('order_status'=> array('$ne' => 'Initialize'));
 		endif;		
 		$shortField 						= 	array('_id'=>-1);
-		$tblName 							= 	'da_orders';
+		$tblName 							= 	'da_lotto_orders';
 		
 		$order 					= 	$this->order_model->getordersList('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
 		
@@ -625,7 +623,7 @@ class Alllottooders extends CI_Controller {
 		// $oid = "LZIDN3160191";
 		//Get current order of user.
 		$wcon['where']					=	[ 'order_id' => $oid ];
-		$data['orderData'] 				=	$this->common_model->getData('single', 'da_orders', $wcon);
+		$data['orderData'] 				=	$this->common_model->getData('single', 'da_lotto_orders', $wcon);
 		
 		if($data['orderData']['user_id'] === 0):
 			$user_phone  =  $data['orderData']['user_phone'];
