@@ -63,8 +63,6 @@ class Sms_model extends CI_Model
 	}
 
 
-	
-
 	public function sendMessageDigitizebirdFunction($phone='',$message='',$senderid='')
 	{
 		try {

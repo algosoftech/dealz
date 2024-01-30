@@ -35,10 +35,10 @@ class Allcoupons extends CI_Controller {
 	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 + + Function name 	: index
-	 + + Developed By 	: MANOJ KUMAR
+	 + + Developed By 	: Dilip Halder
 	 + + Purpose  		: This function used for index
-	 + + Date 			: 14 JULY 2022
-	 + + Updated Date 	: 15 June 2023
+	 + + Date 			: 30 January 2024
+	 + + Updated Date 	: 
 	 + + Updated By   	:
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -80,6 +80,13 @@ class Allcoupons extends CI_Controller {
 
 			if($sField == 'ticket'):
 				$whereCon['where']		 			= 	array($sField=> "[[".$sValue."]]" );	
+
+
+			elseif( $sField == "available_coupon"):
+				// $whereCon['where']		 			= 	array($sField=> "[[".$sValue."]]" );	
+
+			$data['result'] = $this->CheckAvailableUWinCoupons($sValue);
+
 			else:
 				if(is_numeric($sValue)):
 					$whereCon['where']		 		= 	array($sField=> (int)$sValue );	
@@ -93,9 +100,6 @@ class Allcoupons extends CI_Controller {
 			$data['searchValue'] 			= 	'';
 			$whereCon['where']		 		= 	array('order_status'=> array('$ne' => 'Initialize'));	
 		endif;
-
-
-		
 
 		$shortField 						= 	array('sequence_id'=> -1);
 		$baseUrl 							= 	getCurrentControllerPath('index');
@@ -155,11 +159,9 @@ class Allcoupons extends CI_Controller {
 	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 + + Function name : addeditdata
-	 + + Developed By  : MANOJ KUMAR
+	 + + Developed By  : Dilip Halder
 	 + + Purpose  	   : This function used for Add Edit data
-	 + + Date 		   : 14 JULY 2022
-	 + + Updated Date  : 
-	 + + Updated By    :
+	 + + Date 		   : 30 January 2024
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function addeditdata($editId='')
@@ -174,13 +176,13 @@ class Allcoupons extends CI_Controller {
 			redirect(correctLink('ALLORDERSDATA',getCurrentControllerPath('index')));
 		endif;
 		
-		$this->layouts->set_title('Orders | Dealz Arabia');
+		$this->layouts->set_title('U Win | Dealz Arabia');
 		$this->layouts->admin_view('uwin/allcoupons/addeditdata',array(),$data);
 	}	// END OF FUNCTION	
 
 	/***********************************************************************
 	** Function name 	: changestatus
-	** Developed By 	: MANOJ KUMAR
+	** Developed By 	: Dilip Halder
 	** Purpose  		: This function used for change status
 	** Date 			: 14 JULY 2022
 	************************************************************************/
@@ -267,7 +269,7 @@ class Allcoupons extends CI_Controller {
 
 	/***********************************************************************
 	** Function name 	: deletedata
-	** Developed By 	: MANOJ KUMAR
+	** Developed By 	: Dilip Halder
 	** Purpose  		: This function used for delete data
 	** Date 			: 14 JULY 2022
 	************************************************************************/
@@ -670,6 +672,102 @@ class Allcoupons extends CI_Controller {
 			$this->session->set_flashdata('alert_success',lang('Coupon_Not_Generaion'));
 			redirect(correctLink('ALLORDERSDATA',getCurrentControllerPath('index')));
 		endif;
+	}
+
+
+	/***********************************************************************
+	** Function name 	: CheckAvailableUWinCoupons
+	** Developed By 	: Dilip halder
+	** Purpose  		: This function used for check available coupons.
+	** Date 			: 29 January 2024
+	************************************************************************/
+	public function CheckAvailableUWinCoupons($products_id ='')
+	{
+		// Product Details
+	 	$tblName 	 	   = 'da_lotto_products';
+		$whereCon['where'] = array('products_id' => (int)$products_id ,'status' => 'A' );
+		$productDetails    = $this->common_model->getData('single',$tblName,$whereCon,$shortField);
+
+		
+
+		// lotto Order Details
+		$tblName 	 	   = 'da_lotto_orders';
+		$whereCon['where'] = array('product_id' => (int)$products_id ,'status' => 'A' );
+		$Field 			   = array('ticket','status');
+		$orderDetails      = $this->common_model->getDataByNewQuery($Field,'multiple',$tblName,$whereCon);
+
+		$soldoutNumber = array();
+		foreach($orderDetails as $item):
+			if($item && $item['status'] == 'A'):
+				$tickets = json_decode($item['ticket']);
+				foreach($tickets as $items):
+					$soldoutNumber[] = $items;
+				endforeach;
+			endif;
+		endforeach;
+
+		$result = $this->AvailableUWinCoupons($soldoutNumber ,$productDetails );
+		return $result;
 
 	}
+
+
+	public function AvailableUWinCoupons($soldoutNumber='', $productDetails='')
+	{
+
+		$lotto_type      = $productDetails['lotto_type'];
+		$lotto_range     = $productDetails['lotto_range'];
+		$numbeUnique     = "Y";
+		$required_ticket = 1000;
+
+		$resultNumbers = array();
+		for ($i=0; $i <$required_ticket; $i++):
+			$resultNumbers[] = $this->lottogenerate($lotto_type,$lotto_range ,$numbeUnique,$required_ticket);
+		endfor;
+
+
+		$UniqueCoupons = $this->checkresult($resultNumbers,$soldoutNumber);
+		
+		$result['available_coupons'] = 'Y';
+		$result['uniqe_coupons'] = $UniqueCoupons;
+		return $result;
+	}
+
+
+	public function lottogenerate($lotto_type,$ticket_range ,$numbeUnique)
+	{
+		$uniqueNumbers = [];
+		// Generate 5 unique random numbers and add them to the array
+
+			while (count($uniqueNumbers) < $lotto_type):
+			    $randomNumber = rand(1, $ticket_range); // Change the range as per your requirement
+			    
+			    if($numbeUnique == "Y" && !in_array($randomNumber, $uniqueNumbers) ):
+			        $uniqueNumbers[] = $randomNumber;
+			    endif;
+
+			 	if($numbeUnique == "N"):
+			        $uniqueNumbers[] = $randomNumber;
+			    endif;
+			endwhile;
+			return $uniqueNumbers;
+	}
+
+	public function checkresult($resultNumbers,$soldoutNumbers='')
+	{
+
+	 	foreach ($soldoutNumbers as $key => $soldoutNumber):
+
+	        if (count($soldoutNumber) == count($resultNumbers) && array_search($resultNumbers, $soldoutNumbers) !== false):
+	            return true;
+	        else:
+				return $resultNumbers;
+	        endif;
+
+    	endforeach;
+	}
+
+
+
+
 }

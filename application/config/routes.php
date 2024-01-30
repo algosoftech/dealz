@@ -391,6 +391,7 @@ $route['api/lotto/orderHistory'] 								= 	'api/lotto/orderHistory';
 $route['api/lotto/SummaryReportSearch'] 						= 	'api/lotto/SummaryReportSearch';
 $route['api/lotto/getWinner'] 									= 	'api/lotto/getWinner';
 $route['api/lotto/product-settings'] 							= 	'api/lotto/productSettings';
+$route['api/lotto/winner-testimonial'] 							= 	'api/lotto/winnerTestimonial';
 
 //lotto web
 $route['lotto/order/(:any)'] 									= 	'order/getlottoOrder/$1';

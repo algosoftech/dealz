@@ -58,16 +58,6 @@ $( function() {
 
                                 <div class="col-sm-12 col-md-12">
                                     <section class="deals_homesec">
-                                        <div>
-                                          <label class="label">Total Recharge : </label>
-                                          <img src="<?=base_url('/assets/AP-GREEN.png');?>" width="25px" alt="appgreen">
-                                          <span class="ared" style="font-weight: bold;"> : <?=number_format($TotalRecharge , 2);?></span><br>
-                                        </div>
-                                        <div>
-                                          <label class="label">Today's Total Recharge : </label>
-                                          <img src="<?=base_url('/assets/AP-GREEN.png');?>" width="25px" alt="appgreen">
-                                          <span class="ared" style="font-weight: bold;"> : <?=number_format($todayTotalRecharge , 2);?></span><br>
-                                        </div>
                                          <div>
                                           <label class="label">Today's Total Sales :  </label>
                                           <img src="<?=base_url('/assets/AP-GREEN.png');?>" width="25px" alt="appgreen">
@@ -91,14 +81,6 @@ $( function() {
                                      <li class="red_txt">
                                             <strong>Name</strong>
                                             <span> <?= $item['users_name'].' ' .$item['last_name'];?> </span>
-                                        </li>
-                                        <li>
-                                            <strong>Mobile</strong>
-                                            <span> <?=$item['country_code'].' '.$item['users_mobile'];?></span>
-                                        </li>
-                                        <li>
-                                            <strong>Email</strong>
-                                            <span> <?=$item['users_email'];?></span>
                                         </li>
                                         <li class="">
                                             <strong>Total Sales</strong>

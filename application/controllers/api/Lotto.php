@@ -353,7 +353,6 @@ class Lotto extends CI_Controller {
 			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
 		endif;
 	}
-   
 	
 	/* * *********************************************************************
 	 * * Function name : productSettings
@@ -382,4 +381,35 @@ class Lotto extends CI_Controller {
 			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
 		endif;
 	}
+
+	/* * *********************************************************************
+	 * * Function name : winnerTestimonial
+	 * * Developed By  : Dilip Halder
+	 * * Purpose  	   : This function used to get winner's Testimonial.
+	 * * Date 		   : 29 January 2024
+	 * * **********************************************************************/
+	public function winnerTestimonial()
+	{
+		$apiHeaderData 		=	getApiHeaderData();
+		$this->generatelogs->putLog('APP',logOutPut($_GET));
+		$result 			= 	array();
+
+		if(requestAuthenticate(APIKEY,'GET')):
+			 	$whereCon['where']  = array('status' => 'A');
+			 	$Product_Settings 	= $this->common_model->getData('multiple','da_uwin_testimonials',$whereCon);
+			 	if($Product_Settings):
+			 		$results = $Product_Settings;
+			 	else:
+			 		$results = [];
+			 	endif;
+
+			 	echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_ACTION'),$results);	
+			// endif;
+		else:
+			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
+		endif;
+	}
+
+
+	
 }
