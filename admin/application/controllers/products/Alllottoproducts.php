@@ -1128,7 +1128,7 @@ class Alllottoproducts extends CI_Controller {
 		$this->admin_model->authCheck();
 		if($pid):
 			$tblName  			= 'da_lotto_products';
-			$where['where']  	=  array('status' => 'A');
+			$where['where']  	=  array('status' => 'A','products_id' =>(int)$pid);
 			$data['EDITDATA']	=	$this->common_model->getData('single',$tblName,$where);
 		else:
 			$tblName  			= 'da_lotto_settings';

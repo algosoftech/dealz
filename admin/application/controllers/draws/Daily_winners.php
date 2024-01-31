@@ -34,16 +34,18 @@ class Daily_winners extends CI_Controller {
 	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 + + Function name 	: index
-	 + + Developed By 	:Dilip Halder
+	 + + Developed By 	: Dilip Halder
 	 + + Purpose  		: This function used for index
 	 + + Date 			: 20 December 2023
+	 + + Updated By 	: Dilip Halder
+	 + + Updated Date 	: 31 January 2024
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function index()
 	{	
 		$this->admin_model->authCheck();
 		$data['error'] 						= 	'';
-		$data['activeMenu'] 				= 	'sub_winners';
+		$data['activeMenu'] 				= 	'draws';
 		$data['activeSubMenu'] 				= 	'daily_winners';
 		
 		if($this->input->get('searchField') && $this->input->get('searchValue')):
@@ -64,18 +66,27 @@ class Daily_winners extends CI_Controller {
 				$data['searchValue'] 			= 	$sValue;
 			endif;
 		else:
-			$whereCon['like']		 		= 	"";
-			$data['searchField'] 			= 	'';
-			$data['searchValue'] 			= 	'';
-			$whereCon['where']					=	array('soft_delete'=>array('$ne'=>1));
-		endif;		
+			$whereCon['like']		 			= 	"";
+			$data['searchField'] 				= 	'';
+			$data['searchValue'] 				= 	'';
+			$whereCon['where']					=	array(
+														  "redeem_status"=> "paid",
+														  "redeembycash"=> "Y"
+														 );
+		endif;	
+
+		// echo "<pre>";
+		// print_r($whereCon);
+		// die();
+
+
 		$shortField 						= 	array('_id'=> -1);
 
 		$baseUrl 							= 	getCurrentControllerPath('index');
 		$this->session->set_userdata('ALLSUBWINNERSDATA',currentFullUrl());
 		$qStringdata						=	explode('?',currentFullUrl());
 		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
-		$tblName 							= 	'wn_draw_winners';
+		$tblName 							= 	'wn_daily_winners';
 		$con 								= 	'';
 		$totalRows 							= 	$this->common_model->getDataByNewQuery('*','count',$tblName,$whereCon,$shortField,'0','0');
 		
@@ -115,13 +126,13 @@ class Daily_winners extends CI_Controller {
 		else:
 			$data['first']					=	1;
 			$data['noOfContent']			=	'';
-		endif;
-	
+		endif; 
+
 		$data['ALLDATA'] 					= 	$this->common_model->getDataByNewQuery('*','multiple',$tblName,$whereCon,$shortField,$perPage,$page);
-		// echo '<pre>';
- 		// print_r($data['ALLDATA']);die();
+		// echo '<pre>';print_r($data['ALLDATA']);die();
+		
 		$this->layouts->set_title(' Daily Winners | Dealz Arabia');
-		$this->layouts->admin_view('subwinners/daily_winners/index',array(),$data);
+		$this->layouts->admin_view('draws/daily_winners/index',array(),$data);
 	}	// END OF FUNCTION
 
 	/***********************************************************************

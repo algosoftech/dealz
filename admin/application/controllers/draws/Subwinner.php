@@ -20,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension;
 use PhpOffice\PhpSpreadsheet\Worksheet;
 
-class Voucher extends CI_Controller {
+class Subwinner extends CI_Controller {
 
 	public function  __construct() 
 	{ 
@@ -61,7 +61,7 @@ class Voucher extends CI_Controller {
 
 		            		$Date = date("Y-m-d 00:00:00",strtotime($data[5]));
 
-		            		$param['voucher_id']		=	(int)$this->common_model->getNextSequence('wn_daily_winners');
+		            		$param['voucher_id']		=	(int)$this->common_model->getNextSequence('wn_draw_winners');
 		            		$param['order_id']			=	$data[0]?$data[0]:'N/A';
 		            		$param['first_name']		=	$data[1];
 		            		$param['last_name']			=	$data[2];
@@ -74,7 +74,7 @@ class Voucher extends CI_Controller {
 						    $param["modified_by"] 		=	"";
 		            		$param["creation_ip"] 		=	$this->input->ip_address();
 		            		$param['soft_delete']		=	(int)0;
-		            		$this->common_model->addData('wn_daily_winners', $param);
+		            		$this->common_model->addData('wn_draw_winners', $param);
 		            	endif;
 		                $i++;
 		            }
@@ -124,7 +124,7 @@ class Voucher extends CI_Controller {
 		$this->session->set_userdata('ALLVOUCHERDATA',currentFullUrl());
 		$qStringdata						=	explode('?',currentFullUrl());
 		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
-		$tblName 							= 	'wn_daily_winners';
+		$tblName 							= 	'wn_draw_winners';
 		$con 								= 	'';
 		$totalRows 							= 	$this->common_model->getData('count',$tblName,$whereCon,$shortField,'0','0');
 
@@ -166,13 +166,11 @@ class Voucher extends CI_Controller {
 			$data['noOfContent']			=	'';
 		endif;
 
-
-		
-
 		$data['ALLDATA'] 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
-		$data['selected_module']  			=   "Daily Dealz Plus";
+		$data['selected_module']  			=   "Sub Winners";
+
 		$this->layouts->set_title(' Daily Winners | Dealz Arabia');
-		$this->layouts->admin_view('draws/voucher/index',array(),$data);
+		$this->layouts->admin_view('draws/voucher/index',array(),$data); 
 	}	// END OF FUNCTION
 
 	/***********************************************************************
@@ -343,5 +341,8 @@ class Voucher extends CI_Controller {
 		$this->layouts->set_title(' Daily Winners | Dealz Arabia');
 		$this->layouts->admin_view('draws/voucher/index',array(),$data);
 	}	// END OF FUNCTION
+
+
+	 
 
 }

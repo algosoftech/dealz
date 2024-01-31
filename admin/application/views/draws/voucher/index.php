@@ -136,9 +136,9 @@ $(function(){
                           </div>
                         </div>
                         <div class="col-sm-3 col-md-3">
-                          <select class="custom-select custom-select-sm form-control form-control-sm" aria-label="Default select example">
-                            <option value="1">Daily Dealz Plus</option>
-                            <option value="2">Sub Winners</option>
+                          <select id="select-module" class="custom-select custom-select-sm form-control form-control-sm" name="select-module">
+                            <option <?php if($selected_module == "Daily Dealz Plus"): echo 'selected'; endif; ?> value="Daily Dealz Plus">Daily Dealz Plus</option>
+                            <option <?php if($selected_module == "Sub Winners"): echo 'selected'; endif; ?>  value="Sub Winners">Sub Winners</option>
                           </select>
                         </div>
                         <div class="col-sm-2 col-md-2">
@@ -302,11 +302,18 @@ $(function(){
   });
 
   $('#subwinner').on('change', function(){
-
-
     let file = $(this).val();
-    console.log(file)
     $('#subwinner-upload-btn').attr('disabled' , false);
+  });
+
+  $("#select-module").on('change' ,function(){
+    let selectedModule = $(this).val();
+    if(selectedModule == "Daily Dealz Plus"){
+      window.location.href ="<?=base_url('draws/voucher/index')?>";
+    }else{
+      window.location.href ="<?=base_url('draws/subwinner/index')?>"
+    }
+
   });
 
 </script>

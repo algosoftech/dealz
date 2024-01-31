@@ -73,7 +73,7 @@ else:
 	$fourthlug				=	isset($curUrl[5])?$curUrl[5]:'';
 	$extractData 			=	'/admin/';
 endif;
-$functionArray 				=	array('getsubcategoryData','exportexcel','videoDelete','index','addeditdata','addprize','deletedata','changestatus','imageUpload','imageDelete','deleteContent','memberDelete','viewdata','changedatastatus','getdatabyajax','getCityData','getStatisticsByUserID','registrationListByEmail','getmaratArea','checkRetailer','users_list','exportAllUsers','getTicketData','getCampaignSalesData','getSponsoredData','getRefferalData','getSignupBonusData','getMembershipData','getRechargeData','checkDeplicacy','generatecoupons','userdetails','addOption','upload_subwinners','settings');
+$functionArray 				=	array('getsubcategoryData','exportexcel','videoDelete','index','addeditdata','addprize','deletedata','changestatus','imageUpload','imageDelete','deleteContent','memberDelete','viewdata','changedatastatus','getdatabyajax','getCityData','getStatisticsByUserID','registrationListByEmail','getmaratArea','checkRetailer','users_list','exportAllUsers','getTicketData','getCampaignSalesData','getSponsoredData','getRefferalData','getSignupBonusData','getMembershipData','getRechargeData','checkDeplicacy','generatecoupons','userdetails','addOption','upload_subwinners','settings','subwinner');
 
 if($firstSlug == 'login'):  
 	$route['login'] 											= 	'login/index';
@@ -119,6 +119,8 @@ elseif($secondSlug == 'allsatickets'):
 	$route['index'] 											= 	'tickets/allsatickets/index';
 elseif($firstSlug == 'tickets'):  
 	$route['add-ticket'] 										= 	'tickets/alltickets/addeditdata';
+elseif($secondSlug == 'subwinner'):  
+	$route['subwinner'] 										= 	'draws/subwinner';
 elseif($secondSlug == 'allinventory'):  
 	$route['emirate/allinventory/addeditdata'] 					= 	'emirate/allinventory/addeditdata';
 else: 
