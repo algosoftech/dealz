@@ -409,10 +409,11 @@ class Allcoupons extends CI_Controller {
 			$sheet->setCellValue('K1', 'END BALANCE');
 			$sheet->setCellValue('L1', 'PAYMENT MODE');
 			$sheet->setCellValue('M1', 'PAYMENT STATUS');
-			$sheet->setCellValue('N1', 'STATUS');
+			$sheet->setCellValue('N1', 'Coupons');
 			
-			$slno = 1;
+			$slno  = 1;
 			$start = 2;
+
 			foreach($ALLDATA as $ALLDATAINFO):
 	          	$wcon['where']  = array('users_id'=> $ALLDATAINFO['user_id'] );
 	          	$sellersDetails = $this->common_model->getData('single','da_users',$wcon);
@@ -430,9 +431,25 @@ class Allcoupons extends CI_Controller {
 				$sheet->setCellValue('J'.$start, $ALLDATAINFO['availableArabianPoints']);
 				$sheet->setCellValue('K'.$start, $ALLDATAINFO['end_balance']);
 				$sheet->setCellValue('L'.$start, $ALLDATAINFO['payment_mode']);
-				$sheet->setCellValue('M'.$start, $ALLDATAINFO['order_status']);
-				$sheet->setCellValue('N'.$start, $ALLDATAINFO['status']);
-				$slno = $slno+1;
+
+				
+
+
+				if($ALLDATAINFO['status'] == "CL"):
+					$OrderStatus = "Cancelled";
+				elseif($ALLDATAINFO['order_status']):
+					$OrderStatus = $ALLDATAINFO['order_status'];
+				endif;
+
+
+				$sheet->setCellValue('M'.$start, $OrderStatus);
+
+				$ticket  = json_decode($ALLDATAINFO['ticket']);
+				foreach ($ticket as $key => $item):
+				   $coupon = implode(',', $item);
+			   	   $sheet->setCellValue('N'.$start, $coupon);
+				   $slno = $slno+1;
+				endforeach;
 				$start = $start+1;
 			endforeach;
 
