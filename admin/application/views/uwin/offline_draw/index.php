@@ -4,8 +4,16 @@
 $(function(){
    $("#fromDate").datepicker({dateFormat:'yy-mm-dd',changeMonth: true,changeYear: true,yearRange:"1970:<?php echo date('Y')?>"});
    $("#toDate").datepicker({dateFormat:'yy-mm-dd',changeMonth: true,changeYear: true,yearRange:"1970:<?php echo date('Y')?>"});
+
+   $("#fromDate1").datepicker({dateFormat:'yy-mm-dd',changeMonth: true,changeYear: true,yearRange:"1970:<?php echo date('Y')?>"});
+   $("#toDate1").datepicker({dateFormat:'yy-mm-dd',changeMonth: true,changeYear: true,yearRange:"1970:<?php echo date('Y')?>"});
 });
 </script>
+<style type="text/css">
+  .payment-status-red{
+    color:red;text-transform: capitalize;
+  }
+</style>
 <div class="pcoded-main-container">
     <div class="pcoded-content">
         <!-- [ breadcrumb ] start -->
@@ -39,53 +47,52 @@ $(function(){
                 <form id="Data_Form" name="Data_Form" method="get" action="<?php echo $forAction; ?>">
                   <div class="dt-responsive table-responsive">
                     <div id="simpletable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                     
                       <div class="row">
                         <div class="col-sm-12 col-md-12">
-                          <div class="dataTables_length" id="simpletable_length">
-                            <label>Show 
-                              <select name="showLength" id="showLength" class="custom-select custom-select-sm form-control form-control-sm">
-                                <option value="2" <?php if($perpage == '2')echo 'selected="selected"'; ?>>2</option>
-                                <option value="10" <?php if($perpage == '10')echo 'selected="selected"'; ?>>10</option>
-                                <option value="25" <?php if($perpage == '25')echo 'selected="selected"'; ?>>25</option>
-                                <option value="50" <?php if($perpage == '50')echo 'selected="selected"'; ?>>50</option>
-                                <option value="100" <?php if($perpage == '100')echo 'selected="selected"'; ?>>100</option>
-                                <option value="All" <?php if($perpage == 'All')echo 'selected="selected"'; ?>>All</option>
-                              </select>
-                              entries
-                            </label>
-                          </div>
-                        </div>
-                        
-
-                        <div class="col-sm-3 col-md-3">
-                          <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
-                            <option value="">Select Field</option>
-                            <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Ticket ID </option>
-                            <option value="coupon_code" <?php if($searchField == 'coupon_code')echo 'selected="selected"'; ?>>Coupon Code </option>
-                            <option value="product_name" <?php if($searchField == 'product_name')echo 'selected="selected"'; ?>>Campaign Name </option>
-                            <option value="draw_date" <?php if($searchField == 'draw_date')echo 'selected="selected"'; ?>>Draw Date (YYYY-MM-DD) </option>
-                            <option value="setteld_by_name" <?php if($searchField == 'setteld_by_name')echo 'selected="selected"'; ?>>Setteld Name </option>
-                            <option value="collection_status" <?php if($searchField == 'collection_status')echo 'selected="selected"'; ?>>Collection Status (Zero and 1) </option>
-
-                          </select>
-                        </div>
-                          
-                        <div class="col-sm-3 col-md-3">
-                          <input type="text" name="searchValue" id="searchValue" value="<?php echo $searchValue; ?>" class="form-control form-control-sm" placeholder="Enter Search Text">
-                        </div>
-
-
-                        <div class="col-sm-6 col-md-6">
-                          <div class="row" >
-                            <div class="col-sm-12 col-md-4">
-                              <input type="submit" name="Search" value="Search" class="btn btn-sm btn-primary">
-                            </div>
-                          </div>
-                        </div>
+                                <div class="dataTables_length" id="simpletable_length">
+                                  <label>Show 
+                                    <select name="showLength" id="showLength" class="custom-select custom-select-sm form-control form-control-sm">
+                                      <option value="2" <?php if($perpage == '2')echo 'selected="selected"'; ?>>2</option>
+                                      <option value="10" <?php if($perpage == '10')echo 'selected="selected"'; ?>>10</option>
+                                      <option value="25" <?php if($perpage == '25')echo 'selected="selected"'; ?>>25</option>
+                                      <option value="50" <?php if($perpage == '50')echo 'selected="selected"'; ?>>50</option>
+                                      <option value="100" <?php if($perpage == '100')echo 'selected="selected"'; ?>>100</option>
+                                      <option value="All" <?php if($perpage == 'All')echo 'selected="selected"'; ?>>All</option>
+                                    </select>
+                                    entries
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-sm-3 col-md-3">
+                               <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
+                                  <option value="">Select Field</option>
+                                  <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Ticket ID </option>
+                                  <option value="code" <?php if($searchField == 'code')echo 'selected="selected"'; ?>>Coupon Code </option>
+                                  <option value="amount" <?php if($searchField == 'amount')echo 'selected="selected"'; ?>> Amount </option>
+                                  <option value="redeem_status" <?php if($searchField == 'redeem_status')echo 'selected="selected"'; ?>> Redeem status </option>
+                                  <option value="products_id" <?php if($searchField == 'products_id')echo 'selected="selected"'; ?>> Campaign ID </option>
+                               </select>
+                              </div>
+                              <div class="col-sm-3 col-md-3">
+                                <input type="text" name="searchValue" id="searchValue" value="<?php echo $searchValue; ?>" class="form-control form-control-sm" placeholder="Enter Search Text">
+                              </div>
+                              <div class="col-sm-6 col-md-6">
+                                  <div class="row" >
+                                    <div class="col-sm-12 col-md-4">
+                                      <input type="text" name="fromDate" id="fromDate" autocomplete="off" value="<?php echo $fromDate; ?>" class="form-control form-control-sm" placeholder="From Date">
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                      <input type="text" name="toDate" id="toDate" autocomplete="off" value="<?php echo $toDate; ?>" class="form-control form-control-sm" placeholder="To Date">
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                      <input type="submit" name="Search" value="Search" class="btn btn-sm btn-primary">
+                                    </div>
+                                  </div>
+                              </div>
                       </div>
-                      <div class="row">
-                        <div class="col-sm-12">
+
+          <div class="row">
+            <div class="col-sm-12">
               <div class="table-responsive">
                 <table id="simpletable" class="table table-striped table-bordered nowrap dataTable" role="grid" aria-describedby="simpletable_info">
                   <thead style="text-align: center;">
@@ -93,9 +100,7 @@ $(function(){
                     <th width="5%" style="text-align: center;">S.No.</th>
                     <th width="20%">Ticket ID</th>
                     <th width="20%">Coupon Code</th>
-                    <th width="10%">Campaign Name </th>
-                    <th width="20%">Setteld By</th>
-                    <th width="20%">Setteld Amount</th>
+                    <th width="20%">SETTELD STATUS</th>
                     <th width="20%">Setteld Status</th>
                     <th width="10%">Action</th>
                     </tr>
@@ -107,35 +112,37 @@ $(function(){
                     <tr role="row" class="<?php echo $rowClass; ?>">
                       <td style="text-align: center;"><?=$i++?></td>
                       <td><?=stripslashes($ALLDATAINFO['order_id'])?></td>
-                      <td><?=$ALLDATAINFO['coupon_code']?></td>
+                      <td><?=$ALLDATAINFO['code']?></td>
                       <td>
-                        <?=stripslashes($ALLDATAINFO['product_name'])?>
-                        <br>
-                        Draw Date : <?=date('d-M-Y',strtotime($ALLDATAINFO['draw_date']))?> 
+
+                        <?php 
+                          $tblName     =  "da_users";
+                          $whereCon['where']    =  array('users_id' => $ALLDATAINFO['seller_id'] ,'status' => 'A');
+                          $userDetails =  $this->common_model->getData('single',$tblName,$whereCon,$shortField,$perPage,$page);
+                        ?>
+                        <?= "<b>Settler Name :</b> ".$userDetails['users_name']. ' '.$userDetails['last_name'];?>
+
+                        <?php
+                          if($userDetails['bind_person_name']):
+                            '<br><b>Bind with :</b> '.  $userDetails['bind_person_name']; 
+                          endif;
+                        ?>
+                          <?='<br><b>Settled Amount :</b> '.number_format($ALLDATAINFO['amount'],2)?> 
+                          <?='<br><b>Settled Date :</b> '.date('d-M-Y H:m:A',strtotime($ALLDATAINFO['modified_at']))?> 
                       </td>
-                      <td><?=$ALLDATAINFO['setteld_by_name']?$ALLDATAINFO['setteld_by_name']:'--'?></td>
-                      <td><?=number_format($ALLDATAINFO['amount'],2)?></td>
                       <td>
-                        <?php if($ALLDATAINFO['setteld_status'] == 1): ?>
-                          <span style="color:green">Paid</span>
-                        <?php else: ?>
-                          <span style="color:red">Due</span>
-                        <?php endif; ?>
-                        
+                        <?php if($ALLDATAINFO['redeem_status'] == 'paid'): ?>
+                        <span  style="color:green;"><?=$ALLDATAINFO['redeem_status'];?></span>
+                      <?php elseif($ALLDATAINFO['redeem_status'] == 'reverse'): ?>
+                        <span  style="color:red;text-transform: capitalize;"><?=$ALLDATAINFO['redeem_status'];?></span>
+                       <?php else: ?>
+                        <span  class ="payment-status-red">Due</span>
+                      <?php endif; ?>
                       </td>
-                     
                       <td>
-                      <?php if($ALLDATAINFO['setteld_status'] == 0): ?>
-                          <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['coupon_code'].'/1')?>" onClick="return confirm('Want to mark as paid!');" ><i class="fas fa-thumbs-up"></i> Paid</a>
-                        <?php elseif($ALLDATAINFO['setteld_status'] == '1'): ?>
-                          <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['coupon_code'].'/0')?>" onClick="return confirm('Want to mark as due!');"><i class="fas fa-thumbs-down"></i> Reverse</a>
+                        <?php if($ALLDATAINFO['redeem_status'] == 'paid'): ?>
+                         <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['voucher_id'].'/reverse')?>" onClick="return confirm('DO you want to reverse!');" ><i class="fa fa-undo"></i> Reverse</a>
                         <?php endif; ?>
-                      <!-- <div class="btn-group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-                        <ul class="dropdown-menu" role="menu">
-                        
-                          
-                      </div> -->
                       </td>
                     </tr>
                     <?php $j++; endforeach; else: ?>
@@ -201,9 +208,11 @@ $(function(){
               <div class="col-sm-12 col-md-6">
                 <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
                   <option value="">Select Field</option>
-                  <option value="record_type" <?php if($searchField == 'record_type')echo 'selected="selected"'; ?>>Record Type (Credit / Debit) </option>
-                  <option value="recharge_by" <?php if($searchField == 'recharge_by')echo 'selected="selected"'; ?>>Recharge By (Email) </option>
-                  <option value="recharge_to" <?php if($searchField == 'recharge_to')echo 'selected="selected"'; ?>>Recharge To ( Email/Number ) </option>
+                  <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Ticket ID </option>
+                  <option value="code" <?php if($searchField == 'code')echo 'selected="selected"'; ?>>Coupon Code </option>
+                  <option value="amount" <?php if($searchField == 'amount')echo 'selected="selected"'; ?>> Amount </option>
+                  <option value="redeem_status" <?php if($searchField == 'redeem_status')echo 'selected="selected"'; ?>> Redeem status </option>
+                  <option value="products_id" <?php if($searchField == 'products_id')echo 'selected="selected"'; ?>> Campaign ID </option>
                 </select>
               </div>
               <div class="col-sm-12 col-md-6">

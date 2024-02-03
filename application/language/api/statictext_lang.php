@@ -221,10 +221,16 @@ $lang['EMPTY_TICKET']									=	'Ticket is required';
 $lang['EMPTY_IS_DONATE']								=	'is donate is required';
 $lang['EMPTY_APPNAME']									=	'App name is required';
 
+$lang['EMPTY_VOUCHER']									=	'Voucher is required';
 $lang['EMPTY_REDEEMSTATUS']								=	'Redeem status is required';
-$lang['EMPTY_RedeemByArabianPoint']						=	'Redeem By Arabian Point is required';
+$lang['EMPTY_RedeemByArabianPoint']						=	'Redeem by Arabian Point is required';
+$lang['EMPTY_RedeemByMode']								=	'Redeem by mode is required';
+$lang['ALREADY_REDEEM']									=	'Prize is already redeemed';
+$lang['COUPON_REDEEMED_SUCCESFULLY']					=	'Prize redeemed successfully';
+
 
 $lang['ALREADY_SENT_TO_ADMIN']							=	'Already sent to Admin';
 $lang['ORDER_ERROR']									=   "This order can't be proceed.";
 
 $lang['ALREADY_SENT']									=	'Already sent';
+$lang['NOT_WINNER']										=	'You are not a winner';

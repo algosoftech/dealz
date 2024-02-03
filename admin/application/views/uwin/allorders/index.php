@@ -329,7 +329,7 @@ $(function(){
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="<?=base_url('uwin/allcoupons/exportexcel')?>" method="post" autocomplete="off">
+      <form action="<?=base_url('uwin/allorders/exportexcel')?>" method="post" autocomplete="off">
       <div class="modal-body">
           <div class="row">
             <div class="col-sm-12 col-md-6">

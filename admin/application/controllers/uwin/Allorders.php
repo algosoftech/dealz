@@ -21,7 +21,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension;
 use PhpOffice\PhpSpreadsheet\Worksheet;
 
 
-class Allcoupons extends CI_Controller {
+class Allorders extends CI_Controller {
 
 	public function  __construct() 
 	{ 
@@ -153,7 +153,7 @@ class Allcoupons extends CI_Controller {
 		// echo '<pre>';print_r($data);die();
 		
 		$this->layouts->set_title('U Win | Dealz Arabia');
-		$this->layouts->admin_view('uwin/allcoupons/index',array(),$data);
+		$this->layouts->admin_view('uwin/allorders/index',array(),$data);
 	}	// END OF FUNCTION
 
 	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -177,7 +177,7 @@ class Allcoupons extends CI_Controller {
 		endif;
 		
 		$this->layouts->set_title('U Win | Dealz Arabia');
-		$this->layouts->admin_view('uwin/allcoupons/addeditdata',array(),$data);
+		$this->layouts->admin_view('uwin/allorders/addeditdata',array(),$data);
 	}	// END OF FUNCTION	
 
 	/***********************************************************************
@@ -288,7 +288,9 @@ class Allcoupons extends CI_Controller {
 	** Developed By 	: Dilip halder
 	** Purpose  		: This function used for export order data
 	** Date 			: 30 January 2024
-	************************************************************************/
+	** Updated By 		: Dilip Halder
+	** Updated Date 	: 1 February 2024
+	*************************************************************************/
 	function exportexcel()
 	{	
 		$this->admin_model->authCheck();
@@ -448,9 +450,9 @@ class Allcoupons extends CI_Controller {
 				foreach ($ticket as $key => $item):
 				   $coupon = implode(',', $item);
 			   	   $sheet->setCellValue('N'.$start, $coupon);
-				   $slno = $slno+1;
-				endforeach;
 				$start = $start+1;
+				endforeach;
+				   $slno = $slno+1;
 			endforeach;
 
 			$styleThinBlackBorderOutline = [
@@ -584,15 +586,17 @@ class Allcoupons extends CI_Controller {
 		$orderDetails      = $this->common_model->getDataByNewQuery($Field,'multiple',$tblName,$whereCon);
 
 		$soldoutNumber = array();
-		foreach($orderDetails as $item):
-			if($item && $item['status'] == 'A'):
-				$tickets = json_decode($item['ticket']);
-				foreach($tickets as $items):
-					$soldoutNumber[] = $items;
-				endforeach;
-			endif;
-		endforeach;
 
+		if($orderDetails):
+			foreach($orderDetails as $item):
+				if($item && $item['status'] == 'A'):
+					$tickets = json_decode($item['ticket']);
+					foreach($tickets as $items):
+						$soldoutNumber[] = $items;
+					endforeach;
+				endif;
+			endforeach;
+		endif;
 		$result = $this->AvailableUWinCoupons($soldoutNumber ,$productDetails );
 
 		return $result;

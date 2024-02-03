@@ -393,8 +393,13 @@ $route['api/lotto/getWinner'] 									= 	'api/lotto/getWinner';
 $route['api/lotto/product-settings'] 							= 	'api/lotto/productSettings';
 $route['api/lotto/winner-testimonial'] 							= 	'api/lotto/winnerTestimonial';
 
+$route['api/lotto/check-winner'] 								= 	'api/lotto/checkWinner';
+$route['api/lotto/redeem-by-mode'] 								= 	'api/lotto/redeemByMode';
+$route['api/lotto/uwin-allowed-user']							= 	'api/lotto/uwinAllowedUser';
+
 //lotto web
 $route['lotto/order/(:any)'] 									= 	'order/getlottoOrder/$1';
+// $route['uwin-download-invoice/(:any)'] 							= 	'order/download_invoice/$1';
+$route['uwin-download-invoice/(:any)'] 							= 	'order/download_uwin_invoice/$1';
 
 $route['api/user/addedit_appname'] 							    = 	'api/users/addeditAppname';
-

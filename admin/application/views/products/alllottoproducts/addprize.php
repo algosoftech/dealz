@@ -105,9 +105,9 @@
                                                         <?php endif; ?>
                                                     </div>
                                                     <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                      <label> Select Fixed Prize List</label>
+                                                      <label> Select Shared Prize List</label>
                                                       <select name="stright_prize_type[]" class="form-control stright_prize_type " multiple>
-                                                        <?php for ($i=1; $i <$lotto_type ; $i++): ?>    
+                                                        <?php for ($i=1; $i <=$lotto_type ; $i++): ?>    
                                                           <option value="<?='Prize'.$i;?>"  <?php if($EDITDATA['stright_prize_type']):  echo (in_array('Prize'.$i,$EDITDATA['stright_prize_type']) == 1 ) ? 'selected' : ''; endif; ?>><?='Prize'.$i;?></option>
                                                         <?php endfor; ?>
                                                       </select>
@@ -140,9 +140,9 @@
                                                         <?php endif; ?>
                                                     </div>
                                                     <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                      <label> Select Fixed Prize List</label>
+                                                      <label> Select Shared Prize List</label>
                                                       <select name="rumble_mix_prize_type[]" class="form-control rumble_mix_prize_type " multiple>
-                                                        <?php for ($i=1; $i <$lotto_type ; $i++): ?>    
+                                                        <?php for ($i=1; $i <=$lotto_type ; $i++): ?>    
                                                           <option value="<?='Prize'.$i;?>"  <?php if($EDITDATA['rumble_mix_prize_type']):  echo (in_array('Prize'.$i,$EDITDATA['rumble_mix_prize_type']) == 1 ) ? 'selected' : ''; endif; ?>><?='Prize'.$i;?></option>
                                                         <?php endfor; ?>
                                                       </select>
@@ -178,9 +178,9 @@
                                                         <?php endif; ?>
                                                     </div>
                                                     <div class="form-group-inner col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                      <label> Select Fixed Prize List</label>
+                                                      <label> Select Shared Prize List</label>
                                                       <select name="reverse_prize_type[]" class="form-control reverse_prize_type " multiple>
-                                                        <?php for ($i=1; $i <$lotto_type ; $i++): ?>    
+                                                        <?php for ($i=1; $i <=$lotto_type ; $i++): ?>    
                                                           <option value="<?='Prize'.$i;?>"  <?php if($EDITDATA['reverse_prize_type']):  echo (in_array('Prize'.$i,$EDITDATA['reverse_prize_type']) == 1 ) ? 'selected' : ''; endif; ?>><?='Prize'.$i;?></option>
                                                         <?php endfor; ?>
  

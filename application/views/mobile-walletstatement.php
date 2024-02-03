@@ -200,7 +200,7 @@
                                     </div>
                                     <div class="balance-section">
                                       <div class="balance">
-                                        <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
+                                        <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
                                       </div>
                                       <div class="balance">
                                         <label>Ending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['end_balance'] ? $ALLDATAINFO['end_balance'] : '--' ; ?>  </label>
@@ -261,7 +261,7 @@
 
                                     <div class="balance-section">
                                       <div class="balance">
-                                        <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
+                                        <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
                                       </div>
                                       <div class="balance">
                                         <label>Ending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['end_balance'] ? $ALLDATAINFO['end_balance'] : '--' ; ?> </label>
@@ -308,7 +308,7 @@
 
                                     <div class="balance-section">
                                       <div class="balance">
-                                        <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen">
+                                        <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen">
                                           <?php if($users_type == 'Users'): ?>
                                              -- 
                                           <?php else: ?>
@@ -360,7 +360,7 @@
 
                                     <div class="balance-section">
                                       <div class="balance">
-                                        <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
+                                        <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
                                       </div>
                                       <div class="balance">
                                         <label>Ending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['end_balance'] ? $ALLDATAINFO['end_balance'] : '--' ; ?> </label>
@@ -389,7 +389,7 @@
                                       </div>
                                       <div class="balance-section">
                                         <div class="balance">
-                                          <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
+                                          <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
                                         </div>
                                         <div class="balance">
                                           <label>Ending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['end_balance'] ? $ALLDATAINFO['end_balance'] : '--' ; ?> </label>
@@ -420,7 +420,7 @@
                                       </div>
                                       <div class="balance-section">
                                         <div class="balance">
-                                          <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
+                                          <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
                                         </div>
                                         <div class="balance">
                                           <label>Ending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['end_balance'] ? $ALLDATAINFO['end_balance'] : '--' ; ?> </label>
@@ -452,7 +452,7 @@
                                       </div>
                                       <div class="balance-section">
                                         <div class="balance">
-                                          <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
+                                          <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
                                         </div>
                                         <div class="balance">
                                           <label>Ending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['end_balance'] ? $ALLDATAINFO['end_balance'] : '--' ; ?> </label>
@@ -484,7 +484,7 @@
                                       </div>
                                       <div class="balance-section">
                                         <div class="balance">
-                                          <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
+                                          <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
                                         </div>
                                         <div class="balance">
                                           <label>Ending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['end_balance'] ? $ALLDATAINFO['end_balance'] : '--' ; ?> </label>
@@ -525,7 +525,7 @@
                                     </div>
                                     <div class="balance-section">
                                       <div class="balance">
-                                        <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen">  <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
+                                        <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen">  <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '--' ; ?> </label>
                                       </div>
                                       <div class="balance">
                                         <label>Ending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['end_balance'] ? $ALLDATAINFO['end_balance'] : '--' ; ?> </label>
@@ -559,7 +559,7 @@
                                     </div>
                                     <div class="balance-section">
                                       <div class="balance">
-                                        <label>Opending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '0' ; ?> </label>
+                                        <label>Opening bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['availableArabianPoints'] ? $ALLDATAINFO['availableArabianPoints'] : '0' ; ?> </label>
                                       </div>
                                       <div class="balance">
                                         <label>Ending bal. : <img src="<?=base_url('assets/AP-GREEN.png');?>" width="20px" alt="appgreen"> <?=$ALLDATAINFO['end_balance'] ? $ALLDATAINFO['end_balance'] : $ALLDATAINFO['cashback_amount'] ; ?>  </label>

@@ -1,7 +1,7 @@
 <?php 
 
 // 
-$logo = base_url('assets/img/dealzlogo.png');
+$logo = base_url('assets/img/u-winn.png');
 $html = ' 
 <!DOCTYPE html>
 <html lang="en">
@@ -100,6 +100,7 @@ $html = '
 
     .logo{
         min-width: 160px;
+        max-width: 220px;
     }
     
     .promotional-section ,.border-top-bottom{
@@ -137,8 +138,9 @@ $html = '
             </div>
         </div>
         <div class="company-heading-section">
-            <h3 class="ticket-heading"> DEALZARABIA TRADING L.L.C </h3>
-            <div>Tel: 04 355 8533</div>
+            <h3 class="ticket-heading"> U WINN L.L.C </h3>
+            <div>Tel: +971 55 469 1351</div>
+
         </div>
         <table class="my-order-section">
             <tr>
@@ -147,6 +149,10 @@ $html = '
             </tr> 
         </table>
         <table>
+            <tr>
+                <td class="order-title"> POS </td>
+                <td class="order-details">'.$name. '   </td>
+            </tr>
             <tr>
                 <td class="order-title"> Purchased On  </td>
                 <td class="order-details">'.date('d M, Y H:i A ', strtotime($orderData['created_at'])).'</td>
@@ -159,36 +165,16 @@ $html = '
             </tr>
         </table>
 
-        <table class="border-bottom">';
-            foreach ($productData as $key => $items):
-        $html .='<tr>
-                    <td class="order-title">'.$items['title']. ' x '.$items['quantity']. '</td>
-                    <td class="order-details">'.$items['price'].' AED</td>
-                </tr>
-                <tr>
-                    <td class="order-title">Promotional Campaign Value</td>
-                    <td class="order-details">'.$items['prize_title'].'</td>
-                </tr>
-                <tr>
-                    <td class="order-title">Promotional Campaign Validity</td>
-                    <td class="order-details">'.date('d.m.Y',strtotime($items['draw_date'])).'</td>
-                </tr>
-                <tr>
-                    <td class="order-title coupon-heading"> Coupon Code</td>
-                    <td class="order-details"> ';
-                    foreach($items['coupon'] as $coupon_code):
-                        $html .=$coupon_code.'<br>';
-                    endforeach;
-                    '</td>
-                </tr>
-
-               ';
-            endforeach;
-       $html .=' </table>
+        <table class="border-bottom">
+            <tr>
+                <td class="order-title">'.$orderData['product_title'].'</td>
+                <td class="order-details">'.$orderData['total_price'].' AED</td>
+            </tr>
+        </table>
         <table class="border-bottom"> 
             <tr>
                 <td class="order-title"> Total Qty.</td>
-                <td class="order-details">'.$totalQTY.'</td>
+                <td class="order-details">'.$orderData['product_qty'].'</td>
             </tr>
             <tr>
                 <td class="order-title">NetAmount <br> <span>(inclusive Vat)</span></td>
@@ -219,10 +205,10 @@ $html = '
                 <h1>For more details</h1>
             </div>
             <div>
-                <p class="information-section"> visit <a href='.$base_url.'> www.dealzarabia.com </a> <br>
-                    call us @ <a href="tel:043558533">04 355 8533</a> 
+                <p class="information-section"> visit <a href='.$base_url.'> info@u-winn.com</a> <br>
+                    call us @ <a href="tel:+971554691351">+971 55 469 1351</a> 
                 </p>
-                <p> Email: info@dealzarabia.com</p>
+                <p> Email: info@u-winn.com</p>
             </div>
 
         </div>
@@ -233,7 +219,7 @@ $html = '
             </div>
         </div>';
 
-        // echo $html; die();
+        echo $html; die();
 
   $headerpdf='';
   $footerpdf='';

@@ -117,7 +117,7 @@ class Lotto extends CI_Controller {
 				$sellerDetails  = $this->geneal_model->getOnlyOneData($tbl_name, $whereCon);
 
 				$ORparam["sequence_id"]		    		=	(int)$this->geneal_model->getNextSequence('da_lotto_orders');
-		        $ORparam["order_id"]		        	=	$this->geneal_model->getNextOrderId();
+		        $ORparam["order_id"]		        	=	$this->geneal_model->getNextUWINOrderId();
 		        $ORparam["user_id"] 					=	(int)$this->input->get('users_id');
 		        $ORparam["user_type"] 					=	$sellerDetails['users_type']; 
 	        	$ORparam["user_email"] 					=   $sellerDetails['users_email'];	
@@ -410,6 +410,122 @@ class Lotto extends CI_Controller {
 		endif;
 	}
 
+	/* * *********************************************************************
+	 * * Function name : checkWinner
+	 * * Developed By  : Dilip Halder
+	 * * Purpose  	   : This function used to check winner.
+	 * * Date 		   : 02 February 2024
+	 * * **********************************************************************/
+	public function checkWinner()
+	{
+		$apiHeaderData 		=	getApiHeaderData();
+		$this->generatelogs->putLog('APP',logOutPut($_POST));
+		$result 			= 	array();
 
+		if(requestAuthenticate(APIKEY,'POST')):
+				$users_id 	=  $this->input->get('users_id');
+				$tickect_id =  $this->input->post('tickect_id');
+
+				if(empty($users_id)):
+					echo outPut(0,lang('SUCCESS_CODE'),lang('USER_ID_EMPTY'),$result);die();
+				elseif(empty($tickect_id)):
+					echo outPut(0,lang('SUCCESS_CODE'),lang('EMPTY_TICKET'),$result);die();
+				else:
+					$tableName 			= "da_uwin_winner";
+					$whereCon['where']  = array('order_id' => $tickect_id);
+				 	$WinnerList 	    = $this->common_model->getData('multiple',$tableName,$whereCon);
+
+				 	if($WinnerList):
+				 		$results = $WinnerList;
+				 	else:
+				 		$result  = [];
+				 		echo outPut(1,lang('SUCCESS_CODE'),lang('NOT_WINNER'),$result);die();
+				 	endif;
+				endif;
+			 	echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_ACTION'),$results);	
+		else:
+			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
+		endif;
+	}
+
+	/* * *********************************************************************
+	 * * Function name : redeemByCash
+	 * * Developed By  : Dilip Halder
+	 * * Purpose  	   : This function used to Redeem Coupons.
+	 * * Date 		   : 02 February 2024
+	 * * **********************************************************************/
+	public function redeemByMode()
+	{
+		$apiHeaderData 		=	getApiHeaderData();
+		$this->generatelogs->putLog('APP',logOutPut($_POST));
+		$result 			= 	array();
+
+		if(requestAuthenticate(APIKEY,'POST')):
+				$users_id 			=  $this->input->post('users_id');
+				$voucher_id 		=  $this->input->post('voucher_id');
+				$tickect_id 		=  $this->input->post('tickect_id');
+				$redeem_status 		=  $this->input->post('redeem_status');
+				$redeem_by_mode 	=  $this->input->post('redeem_by_mode');
+
+				if(empty($users_id)):
+					echo outPut(0,lang('SUCCESS_CODE'),lang('USER_ID_EMPTY'),$result);die();
+				elseif(empty($tickect_id)):
+					echo outPut(0,lang('SUCCESS_CODE'),lang('EMPTY_TICKET'),$result);die();
+				elseif(empty($voucher_id)):
+					echo outPut(0,lang('SUCCESS_CODE'),lang('EMPTY_VOUCHER'),$result);die();
+				elseif(empty($redeem_status)):
+					echo outPut(0,lang('SUCCESS_CODE'),lang('EMPTY_REDEEMSTATUS'),$result);die();
+				elseif(empty($redeem_by_mode)):
+					echo outPut(0,lang('SUCCESS_CODE'),lang('EMPTY_RedeemByMode'),$result);die();
+				else:
+					// Checking coupon in collection.
+					$tableName 			= "da_uwin_winner";
+					$whereCon['where']  = array('order_id' => $tickect_id ,'voucher_id' => (int)$voucher_id );
+				 	$WinnerList 	    = $this->common_model->getData('single',$tableName,$whereCon);
+
+					if(!empty($WinnerList['redeem_status']) && $WinnerList['redeem_status'] == 'paid'):
+				 		echo outPut(0,lang('SUCCESS_CODE'),lang('ALREADY_REDEEM'),$result);die();
+					else:
+
+				 	  $updateParams['redeem_status'] 	= $redeem_status;
+					  $updateParams['redeem_by_mode'] = $redeem_by_mode;
+					  $updateParams['seller_id'] 		= (int)$users_id;
+					  $this->common_model->editData('da_uwin_winner', $updateParams, 'voucher_id', (int)$voucher_id);
+					  echo outPut(0,lang('SUCCESS_CODE'),lang('COUPON_REDEEMED_SUCCESFULLY'),$result);die();
+				 	endif;
+				endif;
+			 	// echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_ACTION'),$results);	
+		else:
+			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
+		endif;
+	}
+
+	/* * *********************************************************************
+	 * * Function name : uwinAllowedUser
+	 * * Developed By  : Dilip Halder
+	 * * Purpose  	   : This function used to check permission.
+	 * * Date 		   : 02 February 2024
+	 * * **********************************************************************/
+	public function uwinAllowedUser()
+	{
+		$apiHeaderData 		=	getApiHeaderData();
+		$this->generatelogs->putLog('APP',logOutPut($_GET));
+		$result 			= 	array();
+
+		if(requestAuthenticate(APIKEY,'GET')):
+			 	$whereCon['where']  = array('status' => 'A');
+			 	$UwinPermission 	= $this->common_model->getData('multiple','da_uwin_allowed_user',$whereCon);
+			 	if($UwinPermission):
+			 		$results = $UwinPermission;
+			 	else:
+			 		$results = [];
+			 	endif;
+
+			 	echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_ACTION'),$results);	
+			// endif;
+		else:
+			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
+		endif;
+	}
 	
 }

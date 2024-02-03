@@ -45,7 +45,7 @@ public function index()
 			$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|max_length[64]');
 		endif;
 
-		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[8]|max_length[25]');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[25]');
 		
 		$this->form_validation->set_error_delimiters("<div class='text-danger'>","</div>");
 

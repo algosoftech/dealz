@@ -158,6 +158,27 @@ public function getNextOrderId($tableName='')
 	endif;
 }	// END OF FUNCTION
 
+
+/***********************************************************************
+** Function name 	: getNextUWINOrderId
+** Developed By 	: Dilip Halder
+** Purpose  		: This function used for get Next OrderI d
+** Date 			: 03 February 2024
+************************************************************************/
+public function getNextUWINOrderId($tableName='')
+{
+	A:
+	$ord_id = 'UWINN'.rand(1000000,9999999);
+	$this->mongo_db->select(array('order_id'));
+	$this->mongo_db->where(array('order_id'=>$ord_id));	
+	$result = $this->mongo_db->find_one('da_lotto_orders');
+	if($result):
+		goto A;
+	else:
+		return $ord_id;
+	endif;
+}	// END OF FUNCTION
+
 /***********************************************************************
 ** Function name 	: getNextOrderId
 ** Developed By 	: MANOJ KUMAR

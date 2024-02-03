@@ -2822,6 +2822,37 @@ public function  __construct()
 
 	                        return $address;
 	}
+
+
+	/* * *********************************************************************
+	 * * Function name 	: download_invoice
+	 * * Developed By 	: Dilip
+	 * * Purpose  		: This function used for download invoice
+	 * * Date 			: 01 FEB 2023
+	 * * Updated BY 	: Dilip Halder
+	 * * Updated Date 	: 03 February 2024
+	 * * **********************************************************************/
+	public function download_uwin_invoice($oid ='')
+	{
+		$this->load->library('Mpdf');
+		
+		$tblName 				=	'da_lotto_orders';
+		$shortField 			= 	array('_id'=> -1 );
+		$whereCon['where']		= 	array('order_id'=>$oid);
+		$orderData     			=	$this->geneal_model->getData2('single', $tblName, $whereCon,$shortField);
+
+		// User details fetching
+		$where2 			    =	array('users_id' => (int)$orderData['user_id']);
+		$userData				=	$this->geneal_model->getOnlyOneData('da_users', $where2);
+		// echo "<pre>"; print_r($userData); die();
+
+		$data['orderData'] 		= $orderData;
+		$data['name'] 	   		= $userData['users_name'].' '.$userData['last_name'];
+		$data['mobile']    		= $userData['country_code'] .' '.$userData['users_mobile'];
+
+		$this->load->view('web_api/pos_order_template', $data);
+		// return;
+	}
 	
 	// END OF FUNCTION
 }
