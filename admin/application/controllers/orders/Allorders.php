@@ -1235,4 +1235,37 @@ class Allorders extends CI_Controller {
 		endif;
 
 	}
+
+
+	/***********************************************************************
+	** Function name 	: changestatus
+	** Developed By 	: MANOJ KUMAR
+	** Purpose  		: This function used for change status
+	** Date 			: 14 JULY 2022
+	************************************************************************/
+	function updatecollection($orderID='')
+	{  
+
+		$this->admin_model->authCheck('edit_data');
+
+		// $tblName   		   = 'da_orders';
+		// $whereCon['where'] = array('order_id' => $orderID);
+		// $OrderData 		   = $this->common_model->getData('single',$tblName, $whereCon);
+
+		// if($OrderData['collection_code']):
+		// 	$param['collection_code']    = '';
+		// 	$param['collection_status']  = 'Product Collected';
+		// 	$param['collection_date']    =  date('Y-m-d h:i:s');
+		// endif;
+
+		$param['collection_code']    = '';
+		$param['collection_status']  = 'Product Collected';
+		$param['collection_date']    =  date('Y-m-d h:i:s');
+		$this->common_model->editData('da_orders',$param,'order_id',$orderID);
+		$this->session->set_flashdata('alert_success',lang('PRODUCT_COLLECTED'));
+		
+		redirect(correctLink('ALLORDERSDATA',getCurrentControllerPath('index')));
+	}
+
+
 }

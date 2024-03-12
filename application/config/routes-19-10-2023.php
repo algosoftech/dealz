@@ -254,10 +254,6 @@ $route['api/getProductListPageData'] 							= 	'api/products/getProductListPageD
 $route['api/getProductListPageData_two'] 							= 	'api/products/getProductListPageData_two';
 $route['api/getProductDetails'] 								= 	'api/products/getProductDetails';
 
-/////////////////////////////		Lotto PRODUCT /////////////////////////////////////
-$route['api/getLottoProductListPageData'] 						= 	'api/products/getLottoProductListPageData';
-
-
 $route['api/getWinnerList'] 									= 	'api/products/getWinnerList';
 $route['api/searchProduct'] 									= 	'api/products/searchProduct';
 
@@ -291,12 +287,6 @@ $route['download-invoice/(:any)'] 							    = 	'api/common/download_invoice/$1'
 $route['api/get-sub-winner-list'] 							    = 	'api/common/getSubWinnerist';
 $route['api/get-daily-sub-winner-list'] 						= 	'api/common/getDailySubWinnerist';
 
-
-$route['api/sub-winner/draw-winner'] 							= 	'api/common/draw_winner';
-$route['api/sub-winner/cancel-draw-winner'] 					= 	'api/common/cancel_draw_winner';
-
-
-$route['api/sub-winner/redeem-by-cash-draw'] 					= 	'api/common/redeem_by_cash_draw';
 //echo '<pre>';  print_r($route); die;
 
 /////////////////////////////		POS DATA 			/////////////////////////////////////
@@ -306,7 +296,6 @@ $route['api/GetQuickUser'] 										= 	'api/pos/GetQuickUser';
 $route['api/GetQuickTicketHistory'] 							= 	'api/pos/GetQuickTicketHistory';
 $route['downloadQuickInvoice/(:any)'] 							= 	'api/pos/download_quick_invoice/$1';
 $route['api/SummaryReportSearch'] 								= 	'api/pos/SummaryReportSearch';
-$route['api/newSummaryReportSearch'] 							= 	'api/pos/newSummaryReportSearch';
 
 $route['api/getAvailableTickets'] 								= 	'api/pos/getAvailableTickets';
 $route['api/getSelectedField'] 									= 	'api/pos/getSelectedField';
@@ -318,22 +307,14 @@ $route['api/newduemanagement'] 									= 	'api/DueManagement/newDueManagement';
 
 $route['api/collectduecash'] 									= 	'api/DueManagement/CollectDueCash';
 
-// Telr payment gateway.
 $route['telrpayment'] 											= 	'order/telrpayment';
-$route['telr-fail/(:any)'] 									    = 	'home/telr_payment_fail/$1';
-$route['telr-cancel/(:any)'] 									= 	'home/telr_payment_cancel/$1';
-$route['telr-success/(:any)'] 									= 	'home/telr_payment_success/$1';
-$route['check-telr-payment-status']      						=   'order/check_telr_payment_status';
 $route['api/telrGenerateOrderId'] 								= 	'api/telr/generateOrderId';
 $route['api/telrOrderSuccess'] 									= 	'api/telr/telrOrderSuccess';
 $route['api/telrOrderFailed'] 									= 	'api/telr/telrOrderFailed';
 
-
 $route['api/selectaddress'] 									= 	'api/telr/selectaddress';
 
 $route['noonpayment'] 											= 	'order/noonpayment';
-$route['ngenius'] 												= 	'order/ngenius';
-$route['ngenius-order-status'] 									= 	'ngenius/ngenius_order_status';
 $route['order-status'] 											= 	'order/orderStatus';
 
 $route['api/enablepayment'] 									= 	'api/telr/enablepayment';
@@ -359,47 +340,13 @@ $route['api/posQuickBuy'] 										= 	'api/pos/posQuickBuy';
 $route['api/show-default-company'] 								= 	'api/common/showDefaltCompany';
 $route['api/pos-cancelled-orders'] 								= 	'api/pos/posCancelledOrders';
 
-
-// quick buy web routes start
-$route['quick-buy'] 											= 	'quickbuy/quickcampaign';
-$route['quick-orders'] 											= 	'quickbuy/quickorders';
-$route['quick-orders/(:any)'] 									= 	'quickbuy/quickorders/$1';
-$route['quick/resend-sms/(:any)'] 								= 	'quickbuy/quicksms/$1';
-$route['quick/download-invoice/(:any)'] 						= 	'quickbuy/download_invoice/$1';
-$route['quick-summery-report'] 									= 	'quickbuy/quicksummeryreport';
-// quick buy web routes end
-
-$route['quick-buy/verifyUser'] 									= 	'quickbuy/verifyUser';
-$route['quick-buy/verifyUserOTP'] 								= 	'quickbuy/verifyUserOTP';
-$route['quick-buy/checkout'] 									= 	'quickbuy/checkout';
-$route['quick-buy/purchase'] 									= 	'quickbuy/purchase';
-$route['quick-buy-ticket'] 										= 	'quickbuy/quickbuyticket';
-$route['quick-buy/(:any)'] 										= 	'quickbuy/checkValiduser/$1';
+// test api 
+$route['api/testapi'] 											= 	'api/test/testapi';
 
 
 // Quick Buy
 $route['api/quickbuy/verifyUser'] 								= 	'api/pos/verifyUser';
 $route['api/quickbuy/verifyUserOTP'] 							= 	'api/pos/verifyUserOTP';
 $route['api/quickbuy/resendUserOTP'] 							= 	'api/pos/resendUserOTP';
-
 $route['api/quickbuy/generateOrderId'] 							= 	'api/pos/generateOrderId';
 $route['api/quickbuy/paymentCapture'] 							= 	'api/pos/paymentCapture';
-
-//lotto api
-$route['api/lotto/paymentCapture'] 								= 	'api/lotto/paymentCapture';
-$route['api/lotto/orderHistory'] 								= 	'api/lotto/orderHistory';
-$route['api/lotto/SummaryReportSearch'] 						= 	'api/lotto/SummaryReportSearch';
-$route['api/lotto/getWinner'] 									= 	'api/lotto/getWinner';
-$route['api/lotto/product-settings'] 							= 	'api/lotto/productSettings';
-$route['api/lotto/winner-testimonial'] 							= 	'api/lotto/winnerTestimonial';
-$route['api/lotto/check-winner'] 								= 	'api/lotto/checkWinner';
-$route['api/lotto/redeem-by-mode'] 								= 	'api/lotto/redeemByMode';
-$route['api/lotto/uwin-allowed-user']							= 	'api/lotto/uwinAllowedUser';
-
-//lotto web
-$route['lotto/order/(:any)'] 									= 	'order/download_uwin_invoice/$1';
-$route['uwin-download-invoice/(:any)'] 							= 	'order/download_uwin_invoice/$1';
-
-$route['api/user/addedit_appname'] 							    = 	'api/users/addeditAppname';
-
-$route['api/testnewduemanagement'] 							    = 	'api/test/newDueManagement';

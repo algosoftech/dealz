@@ -212,7 +212,7 @@ class Telr extends CI_Controller {
                                 $ORparam["subtotal"]                =   (float)$this->input->post('subtotal');
                                 $ORparam["vat_amount"]              =   (float)$this->input->post('vat_amount');
                                 $ORparam["total_price"]             =   (float)$ORparam["inclusice_of_vat"];
-                                $ORparam["payment_mode"]            =   'Telr';
+                                $ORparam["payment_mode"]            =   'Ngenius';
                                 $ORparam["payment_from"]            =   'App';
                                 $ORparam["device_type"]             =   $this->input->post('device_type');
                                 $ORparam["app_version"]             =   $this->input->post('app_version');

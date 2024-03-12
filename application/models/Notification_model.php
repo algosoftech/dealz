@@ -47,7 +47,7 @@ class Notification_model extends CI_Model
 	public function sendNotificationToMultipleUserFunction($registrationIds='',$message='',$data=array(),$deviceType='') {
 		if(!empty($registrationIds) && !empty($message) && !empty($data) && !empty($deviceType)):
 			$fields 		= 	array('registration_ids'=>$registrationIds,'notification'=>$message,'data'=>$data);
-			$legency_key = 'AAAA8ZhMvTA:APA91bEpo8br1w4lkZ_ND-DyVVfz40wwYBUJKEXydUF4W6FS4nHKCxIJ2JR6gN3UeEEYp7oEYwYUJF6gTNNqeruW9ujIXeBHxmaqz5jgflAfWWMDH2TwXuV_QI2t2iNkfrfwmock5jQL';
+			$legency_key = 'AAAAdIFBqHc:APA91bEvSlUhFNCWCn6M40D_SX8HFFw3WkzvOk_CHw_OFXuE_UuqmODNXvDsDf1arDfkHKoYPBDaZXhlIH6iibb2-qRpylKj-f_TXY-xAmXL5iKvepJ92w8KCSW2TBO-xeArjK_A1Rdd';
 			$headers = array('Authorization: key='.$legency_key,'Content-Type: application/json');
 
 			#Send Reponse To FireBase Server 	
@@ -134,19 +134,19 @@ class Notification_model extends CI_Model
 			//END
 			$device_id = array($device_id);
 
-			$legency_key 			= 	'AAAA8ZhMvTA:APA91bEpo8br1w4lkZ_ND-DyVVfz40wwYBUJKEXydUF4W6FS4nHKCxIJ2JR6gN3UeEEYp7oEYwYUJF6gTNNqeruW9ujIXeBHxmaqz5jgflAfWWMDH2TwXuV_QI2t2iNkfrfwmock5jQL';
+			$legency_key 			= 	'AAAAdIFBqHc:APA91bEvSlUhFNCWCn6M40D_SX8HFFw3WkzvOk_CHw_OFXuE_UuqmODNXvDsDf1arDfkHKoYPBDaZXhlIH6iibb2-qRpylKj-f_TXY-xAmXL5iKvepJ92w8KCSW2TBO-xeArjK_A1Rdd';
 			$deviceType 			= 	'Andriod';
 
 			$message 		= 	array('body'=>$message,
 										'title'=>$title,
 										'icon'=>'myIcon',
 										'sound'=>'coin_sound',
-										'android_channel_id' => 'Dealz_admin_channel',
+										'android_channel_id' => 'ArabianPlus_admin_channel',
 										'badge'=>$badge
 										); 
 
 
-			$data			=	array('notification'=>$title,'message'=>$message,'android_channel_id'=>'Dealz_admin_channel');
+			$data			=	array('notification'=>$title,'message'=>$message,'android_channel_id'=>'ArabianPlus_admin_channel');
 
 			$response   			=  $this->notification_model->sendNotificationToMultipleUserFunction($device_id,$message,$data,$deviceType); 
 		endif;
@@ -164,8 +164,8 @@ class Notification_model extends CI_Model
 			$name 		= ucwords(strtolower($data['name']));
 			$user_id	= $data['user_id'];
 			$device_id	= $data['device_id'];
-			$title = "DealzArabia Debit Notification.";
-			$message = "You have transferred ".$point." Arabian Points to ".$name." on ".date('Y-m-d H:i').".";
+			$title 		= "ArabianPlus Debit Notification.";
+			$message    = "You have transferred ".$point." Arabian Points to ".$name." on ".date('Y-m-d H:i').".";
 
 			//Save in notificaton table
 			$Nparams['notification_id']		=	(int)$this->geneal_model->getNextSequence('da_notifications');
@@ -201,18 +201,18 @@ class Notification_model extends CI_Model
 			//END
 			$device_id = array($device_id);
 
-			$legency_key 			= 	'AAAA8ZhMvTA:APA91bEpo8br1w4lkZ_ND-DyVVfz40wwYBUJKEXydUF4W6FS4nHKCxIJ2JR6gN3UeEEYp7oEYwYUJF6gTNNqeruW9ujIXeBHxmaqz5jgflAfWWMDH2TwXuV_QI2t2iNkfrfwmock5jQL';
+			$legency_key 			= 	'AAAAdIFBqHc:APA91bEvSlUhFNCWCn6M40D_SX8HFFw3WkzvOk_CHw_OFXuE_UuqmODNXvDsDf1arDfkHKoYPBDaZXhlIH6iibb2-qRpylKj-f_TXY-xAmXL5iKvepJ92w8KCSW2TBO-xeArjK_A1Rdd';
 			$deviceType 			= 	'Andriod';
 
 			$message 		= 	array('body'=>$message,
 										'title'=>$title,
 										'icon'=>'myIcon',
 										'sound'=>'coin_sound',
-										'android_channel_id' => 'Dealz_admin_channel',
+										'android_channel_id' => 'ArabianPlus_admin_channel',
 										'badge'=>$badge
 										); 
 
-			$data			=	array('notification'=>$title,'message'=>$message,'android_channel_id'=>'Dealz_admin_channel');
+			$data			=	array('notification'=>$title,'message'=>$message,'android_channel_id'=>'ArabianPlus_admin_channel');
 
 			$response   			=  $this->notification_model->sendNotificationToMultipleUserFunction($device_id,$message,$data,$deviceType); 
 		endif;
@@ -266,18 +266,18 @@ class Notification_model extends CI_Model
 			//END
 			$device_id = array($device_id);
 
-			$legency_key 			= 	'AAAA8ZhMvTA:APA91bEpo8br1w4lkZ_ND-DyVVfz40wwYBUJKEXydUF4W6FS4nHKCxIJ2JR6gN3UeEEYp7oEYwYUJF6gTNNqeruW9ujIXeBHxmaqz5jgflAfWWMDH2TwXuV_QI2t2iNkfrfwmock5jQL';
+			$legency_key 			= 	'AAAAdIFBqHc:APA91bEvSlUhFNCWCn6M40D_SX8HFFw3WkzvOk_CHw_OFXuE_UuqmODNXvDsDf1arDfkHKoYPBDaZXhlIH6iibb2-qRpylKj-f_TXY-xAmXL5iKvepJ92w8KCSW2TBO-xeArjK_A1Rdd';
 			$deviceType 			= 	'Andriod';
 
 			$message 		= 	array(	'body'=>$message,
 										'title'=>$title,
 										'image'=>'https://dealzarabia.com//assets/AP-GREEN.png',
 										'sound'=>'coin_sound',
-										'android_channel_id' => 'Dealz_admin_channel',
+										'android_channel_id' => 'ArabianPlus_admin_channel',
 										'badge'=>$badge
 										); 
 
-			$data			=	array('notification'=>$title,'message'=>$message,'android_channel_id'=>'Dealz_admin_channel');
+			$data			=	array('notification'=>$title,'message'=>$message,'android_channel_id'=>'ArabianPlus_admin_channel');
 
 			$response   			=  $this->notification_model->sendNotificationToMultipleUserFunction($device_id,$message,$data,$deviceType); 
 		endif;

@@ -185,13 +185,7 @@ $html = '
                 <td class="order-details">'.$orderData['total_price'].' AED</td>
             </tr>
         </table>
-        <table class="border-bottom">
-            <tr>
-                <td class="order-title"> Purchased By </td>
-                <td class="order-details">'.$name.' <br> '.$mobile.' </td>
-            </tr>
-        </table>
-
+        
         <div class="footer-container">
             <div class="heading-section">
                 <h1>Thank you for Shopping</h1>
@@ -219,7 +213,7 @@ $html = '
             </div>
         </div>';
 
-        echo $html; die();
+        // echo $html; die();
 
   $headerpdf='';
   $footerpdf='';

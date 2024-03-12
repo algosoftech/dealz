@@ -31,7 +31,7 @@ class Products extends CI_Controller {
 	 * * Purpose      : This function used for get Home Page Data
 	 * * Date         : 27 JUNE 2022
 	 * * Updated By   : Dilip Halder
-	 * * Updated Date : 22 January 2024
+	 * * Updated Date : 18 January 2024
 	 * * **********************************************************************/
 	public function getHomePageData()
 	{	
@@ -278,6 +278,7 @@ class Products extends CI_Controller {
 			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
 		endif;
 	}
+	 
 	 
 
 	/* * *********************************************************************

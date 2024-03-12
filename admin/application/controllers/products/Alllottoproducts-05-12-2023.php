@@ -20,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\ColumnDimension;
 use PhpOffice\PhpSpreadsheet\Worksheet;
 
-class Allproducts extends CI_Controller {
+class Alllottoproducts extends CI_Controller {
 
 	public function  __construct() 
 	{ 
@@ -34,9 +34,9 @@ class Allproducts extends CI_Controller {
 	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 + + Function name 	: index
-	 + + Developed By 	: AFSAR ALI
+	 + + Developed By 	: Dilip Halder
 	 + + Purpose  		: This function used for index
-	 + + Date 			: 05 APRIL 2022
+	 + + Date 			: 23 October 2023
 	 + + Updated Date 	: 
 	 + + Updated By   	:
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -46,7 +46,7 @@ class Allproducts extends CI_Controller {
 		$this->admin_model->authCheck();
 		$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'producrs';
-		$data['activeSubMenu'] 				= 	'allproducts';
+		$data['activeSubMenu'] 				= 	'alllottoproducts';
 		
 		if($this->input->get('searchField') && $this->input->get('searchValue')):
 			$sField							=	$this->input->get('searchField');
@@ -60,11 +60,11 @@ class Allproducts extends CI_Controller {
 			$data['searchValue'] 			= 	'';
 		endif;
 				
-		$whereCon['where']		 			= 	array('remarks' => array('$ne' => 'lotto-products'));
+		$whereCon['where']		 			= 	array('remarks' => 'lotto-products');		
 		$shortField 						= 	array('creation_date'=>-1);
 		
 		$baseUrl 							= 	getCurrentControllerPath('index');
-		$this->session->set_userdata('ALLPRODUCTSDATA',currentFullUrl());
+		$this->session->set_userdata('ALLLOTOPRODUCTSDATA',currentFullUrl());
 		$qStringdata						=	explode('?',currentFullUrl());
 		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
 		$tblName 							= 	'da_products';
@@ -112,15 +112,15 @@ class Allproducts extends CI_Controller {
 		$data['ALLDATA'] 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
 
 		$this->layouts->set_title('All Products | Products | Dealz Arabia');
-		$this->layouts->admin_view('products/allproducts/index',array(),$data);
+		$this->layouts->admin_view('products/alllottoproducts/index',array(),$data);
 	}	// END OF FUNCTION
 
 	/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 + + Function name : addeditdata
-	 + + Developed By  : AFSAR ALI
+	 + + Developed By  : Dilip Halder
 	 + + Purpose  	   : This function used for Add Edit data
-	 + + Date 		   : 05 APRIL 2022
+	 + + Date 		   : 23 October 2023
 	 + + Updated Date  : 
 	 + + Updated By    :
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -128,8 +128,8 @@ class Allproducts extends CI_Controller {
 	public function addeditdata($editId='')
 	{		
 		$data['error'] 						= 	'';
-		$data['activeMenu'] 				= 	'producrs';
-		$data['activeSubMenu'] 				= 	'allproducts';
+		$data['activeMenu'] 				= 	'products';
+		$data['activeSubMenu'] 				= 	'alllottoproducts';
 		
 		if($editId):
 			$this->admin_model->authCheck('edit_data');
@@ -137,7 +137,7 @@ class Allproducts extends CI_Controller {
 		else:
 			$this->admin_model->authCheck('add_data');
 		endif;
-		
+
 		if($this->input->post('SaveChanges')):
 			$error					=	'NO';
 			$TotalDataCount			=	$this->input->post('TotalDataCount');
@@ -189,6 +189,11 @@ class Allproducts extends CI_Controller {
 			$this->form_validation->set_rules('sale_percentage_final', 'Sale Percentage', 'trim');
 			$this->form_validation->set_rules('countdown_status', 'Countdown', 'trim');
 			$this->form_validation->set_rules('sponsored_coupon', 'Sponsored coupon', 'trim');
+			$this->form_validation->set_rules('lotto_type', 'Lotto Type', 'trim|required');
+			$this->form_validation->set_rules('rumble_add_on_amount', 'Rumble Mix ADE Points', 'trim|required');
+			$this->form_validation->set_rules('reverse_add_on_amount', 'Reverse ADE Points', 'trim|required');
+
+
 
 			if($this->form_validation->run() && $error == 'NO'):
 				
@@ -268,7 +273,6 @@ class Allproducts extends CI_Controller {
 				endif;
 				$param['product_image_alt']			= 	addslashes($this->input->post('product_image_alt'));
 				
-				$param['adepoints']					= 	addslashes($this->input->post('adepoints'));
 				$param['draw_date']					= 	addslashes($this->input->post('draw_date'));
 				$param['draw_time']					= 	addslashes($this->input->post('draw_time'));
 				$param['commingSoon']				= 	addslashes($this->input->post('commingSoon'));
@@ -286,8 +290,13 @@ class Allproducts extends CI_Controller {
 				$param['sale_percentage_final']		=	$this->input->post('sale_percentage_final');
 				$param['countdown_status']			=	$this->input->post('countdown_status');
 				$param['sponsored_coupon']			=	(int)$this->input->post('sponsored_coupon');
+				$param['lotto_type']				=	(int)$this->input->post('lotto_type');
+				$param['adepoints']					= 	(float)$this->input->post('adepoints');
+				$param['rumble_add_on_amount']		=	(float)$this->input->post('rumble_add_on_amount');
+				$param['reverse_add_on_amount']		=	(float)$this->input->post('reverse_add_on_amount');
 				
 				if($this->input->post('CurrentDataID') ==''):
+					$param['remarks']			= 	'lotto-products';
 					$param['totalStock']		= 	(int)addslashes($this->input->post('stock'));
 					$param['stock']				= 	(int)addslashes($this->input->post('stock'));
 					$param['target_stock']		= 	(int)addslashes($this->input->post('target_stock'));
@@ -316,7 +325,7 @@ class Allproducts extends CI_Controller {
 		endif;
 		
 		$this->layouts->set_title('Add/Edit Products');
-		$this->layouts->admin_view('products/allproducts/addeditdata',array(),$data);
+		$this->layouts->admin_view('products/alllottoproducts/addeditdata',array(),$data);
 	}	// END OF FUNCTION		
 
 	/***********************************************************************
@@ -332,7 +341,7 @@ class Allproducts extends CI_Controller {
 		$this->common_model->editData('da_products',$param,'products_id',(int)$changeStatusId);
 		$this->session->set_flashdata('alert_success',lang('statussuccess'));
 		
-		redirect(correctLink('ALLPRODUCTSDATA',getCurrentControllerPath('index')));
+		redirect(correctLink('ALLLOTOPRODUCTSDATA',getCurrentControllerPath('index')));
 	}
 
 	/***********************************************************************
@@ -347,12 +356,12 @@ class Allproducts extends CI_Controller {
 		$this->common_model->deleteData('da_products','products_id',(int)$deleteId);
 		$this->session->set_flashdata('alert_success',lang('deletesuccess'));
 		
-		redirect(correctLink('ALLPRODUCTSDATA',getCurrentControllerPath('index')));
+		redirect(correctLink('ALLLOTOPRODUCTSDATA',getCurrentControllerPath('index')));
 	}
 
 	/***********************************************************************
 	** Function name 	: getsub_categoryData
-	** Developed By 	: AFSAR ALI
+	** Developed By 	: Dilip Halder
 	** Purpose  		: This function used for delete data
 	** Date 			: 05 APRIL 2022
 	************************************************************************/
@@ -467,7 +476,7 @@ class Allproducts extends CI_Controller {
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 + + Function name 	: index
-	 + + Developed By 	: AFSAR ALI
+	 + + Developed By 	: Dilip Halder
 	 + + Purpose  		: This function used for index
 	 + + Date 			: 05 APRIL 2022
 	 + + Updated Date 	: 
@@ -479,7 +488,7 @@ class Allproducts extends CI_Controller {
 		$this->admin_model->authCheck();
 		$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'producrs';
-		$data['activeSubMenu'] 				= 	'allproducts';
+		$data['activeSubMenu'] 				= 	'alllottoproducts';
 		
 		if($this->input->get('searchField') && $this->input->get('searchValue')):
 			$sField							=	$this->input->get('searchField');
@@ -497,7 +506,7 @@ class Allproducts extends CI_Controller {
 		$shortField 						= 	array('user_id'=>-1);
 		
 		$baseUrl 							= 	getCurrentControllerPath('getAllusers/'.$id);
-		$this->session->set_userdata('ALLPRODUCTSDATA',currentFullUrl());
+		$this->session->set_userdata('ALLLOTOPRODUCTSDATA',currentFullUrl());
 		$qStringdata						=	explode('?',currentFullUrl());
 		$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
 		$tblName 							= 	'da_orders_details';
@@ -545,13 +554,13 @@ class Allproducts extends CI_Controller {
 		$data['ALLDATA'] 					= 	$this->geneal_model->getOrderData('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
 
 		$this->layouts->set_title('All Products | Products | Dealz Arabia');
-		$this->layouts->admin_view('products/allproducts/getallusers',array(),$data);
+		$this->layouts->admin_view('products/alllottoproducts/getallusers',array(),$data);
 	}	// END OF FUNCTION
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  + + Function name 	: getCoupon
- + + Developed By 	: AFSAR ALI
+ + + Developed By 	: Dilip Halder
  + + Purpose  		: This function used for get all coupon
  + + Date 			: 06 APRIL 2022
  + + Updated Date 	: 
@@ -582,7 +591,7 @@ public function getCoupon($id='')
 	$shortField 						= 	array('user_id'=>-1);
 	
 	$baseUrl 							= 	getCurrentControllerPath('getCoupon/'.$id);
-	$this->session->set_userdata('ALLPRODUCTSDATA',currentFullUrl());
+	$this->session->set_userdata('ALLLOTOPRODUCTSDATA',currentFullUrl());
 	$qStringdata						=	explode('?',currentFullUrl());
 	$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
 	$tblName 							= 	'da_coupons';
@@ -630,14 +639,14 @@ public function getCoupon($id='')
 	$data['ALLDATA'] 					= 	$this->geneal_model->getCouponData('multiple',$tblName,$whereCon,$shortField,$page,$perPage);
 
 	$this->layouts->set_title('All Coupons | Coupons | Dealz Arabia');
-	$this->layouts->admin_view('products/allproducts/allcoupons',array(),$data);
+	$this->layouts->admin_view('products/alllottoproducts/allcoupons',array(),$data);
 }	// END OF FUNCTION
 
 /***********************************************************************
 ** Function name 	: couponExportExcel
-** Developed By 	: Afsar Ali
+** Developed By 	: Dilip Halder
 ** Purpose  		: This function used for export deleted users data
-** Date 			: 06 MAY 2022
+** Date 			: 23 October 2023
 ** Updated Date 	: 
 ** Updated By   	: 
 ************************************************************************/
@@ -727,9 +736,9 @@ function couponExportExcel($pid='')
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  + + Function name 	: index
- + + Developed By 	: AFSAR ALI
+ + + Developed By 	: Dilip Halder
  + + Purpose  		: This function used for index
- + + Date 			: 09 MAY 2022
+ + + Date 			: 23 October 2023
  + + Updated Date 	: 
  + + Updated By   	:
  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -739,8 +748,8 @@ public function prizeList($pid='')
 
 	$this->admin_model->authCheck();
 	$data['error'] 						= 	'';
-	$data['activeMenu'] 				= 	'prize';
-	$data['activeSubMenu'] 				= 	'allprize';
+	$data['activeMenu'] 				= 	'products';
+	$data['activeSubMenu'] 				= 	'alllottoproducts';
 	$data['productID'] 					= 	base64_decode($pid);
 	
 	if($this->input->get('searchField') && $this->input->get('searchValue')):
@@ -759,7 +768,7 @@ public function prizeList($pid='')
 	$shortField 						= 	array('title'=>'ASC');
 	
 	$baseUrl 							= 	getCurrentControllerPath('prizeList/'.$pid);
-	$this->session->set_userdata('ALLPRIZEDATA',currentFullUrl());
+	$this->session->set_userdata('ALLLOTTOPRIZEDATA',currentFullUrl('addprize'));
 	$qStringdata						=	explode('?',currentFullUrl());
 	$suffix								= 	$qStringdata[1]?'?'.$qStringdata[1]:'';
 	$tblName 							= 	'da_prize';
@@ -807,15 +816,15 @@ public function prizeList($pid='')
 	$data['ALLDATA'] 					= 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
 
 	$this->layouts->set_title('All Prize | Prize | Dealz Arabia');
-	$this->layouts->admin_view('products/allproducts/allprize',array(),$data);
+	$this->layouts->admin_view('products/alllottoproducts/allprize',array(),$data);
 }	// END OF FUNCTION
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  + + Function name : addprize
- + + Developed By  : AFSAR ALI
+ + + Developed By  : Dilip Halder
  + + Purpose  	   : This function used for Add Edit data
- + + Date 		   : 09 MAY 2022
+ + + Date 		   : 23 October 2023
  + + Updated Date  : 
  + + Updated By    :
  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -824,14 +833,14 @@ public function addprize($editId='')
 {		
     
 	$data['error'] 						= 	'';
-	$data['activeMenu'] 				= 	'prize';
-	$data['activeSubMenu'] 				= 	'allprize';
+	$data['activeMenu'] 				= 	'products';
+	$data['activeSubMenu'] 				= 	'alllottoproducts';
 
 	
 	if($editId):
 		$this->admin_model->authCheck('edit_data');
 		$data['EDITDATA']				=	$this->common_model->getDataByParticularField('da_prize','prize_id',(int)$editId);
-		//echo '<pre>';print_r($data['EDITDATA']);die;
+		// echo '<pre>';print_r($data['EDITDATA']);die;
 	else:
 		$this->admin_model->authCheck('add_data');
 	endif;
@@ -839,40 +848,130 @@ public function addprize($editId='')
 	if($this->input->post('SaveChanges')):
 		$error					=	'NO';
 
-
 		$this->form_validation->set_rules('title', 'Title', 'trim');
 		$this->form_validation->set_rules('description', 'Description', 'trim');
 		//$this->form_validation->set_rules('image', 'Image', 'trim');
-		$this->form_validation->set_rules('prize_type', 'Prize Type', 'trim');
-		$this->form_validation->set_rules('product_id', 'Product', 'trim');
+		$this->form_validation->set_rules('productID', 'Product', 'trim|required');
 
+		// lotto_type to validate all prize stage.
+		$lotto_type = $this->input->post('lotto_type');
+		
+		// Stright Prize Validation.. 
+		$this->form_validation->set_rules('stright_prize_heading', 'Stright Prize Heading', 'trim|required');
+		$this->form_validation->set_rules('stright_prize_type[]', 'Stright Prize Type', 'trim|required');
+		if($lotto_type >= 3):
+			$this->form_validation->set_rules('stright_prize1', 'Stright Prize 1', 'trim|required');
+			$this->form_validation->set_rules('stright_prize2', 'Stright Prize 2', 'trim|required');
+		endif;
+		if($lotto_type >= 4):
+			$this->form_validation->set_rules('stright_prize3', 'Stright Prize 3', 'trim|required');
+		endif;
+		if($lotto_type >= 5):
+			$this->form_validation->set_rules('stright_prize4', 'Stright Prize 4', 'trim|required');
+		endif;
+		if($lotto_type >= 6):
+			$this->form_validation->set_rules('stright_prize5', 'Stright Prize 5', 'trim|required');
+		endif;
+			$this->form_validation->set_rules('stright_prize'.$lotto_type, 'Stright Prize '.$lotto_type, 'trim|required');
 
+		// Rumble Mix Prize Validation.. 
+		$this->form_validation->set_rules('rumble_mix_prize_heading', 'Rumble Mix Prize Heading', 'trim|required');
+		$this->form_validation->set_rules('rumble_mix_prize_type[]', 'Rumble Mix Prize Type', 'trim|required');
+		if($lotto_type >= 3):
+			$this->form_validation->set_rules('rumble_mix_prize1', 'Rumble Mix Prize 1', 'trim|required');
+			$this->form_validation->set_rules('rumble_mix_prize2', 'Rumble Mix Prize 2', 'trim|required');
+		endif;
+		if($lotto_type >= 4):
+			$this->form_validation->set_rules('rumble_mix_prize3', 'Rumble Mix Prize 3', 'trim|required');
+		endif;
+		if($lotto_type >= 5):
+			$this->form_validation->set_rules('rumble_mix_prize4', 'Rumble Mix Prize 4', 'trim|required');
+		endif;
+		if($lotto_type >= 6):
+			$this->form_validation->set_rules('rumble_mix_prize5', 'Rumble Mix Prize 5', 'trim|required');
+		endif;
+			$this->form_validation->set_rules('rumble_mix_prize'.$lotto_type, 'Rumble Mix Prize '.$lotto_type, 'trim|required');
 
-		/*if($_FILES['prize_image']['name']){
+		// Reverse Prize Validation.. 
+		$this->form_validation->set_rules('reverse_prize_heading', 'Rumble Mix Prize Heading', 'trim|required');
+		$this->form_validation->set_rules('reverse_prize_type[]', 'Rumble Mix Prize Type', 'trim|required');
+		if($lotto_type >= 3):
+			$this->form_validation->set_rules('reverse_prize1', 'Rumble Mix Prize 1', 'trim|required');
+			$this->form_validation->set_rules('reverse_prize2', 'Rumble Mix Prize 2', 'trim|required');
+		endif;
+		if($lotto_type >= 4):
+			$this->form_validation->set_rules('reverse_prize3', 'Rumble Mix Prize 3', 'trim|required');
+		endif;
+		if($lotto_type >= 5):
+			$this->form_validation->set_rules('reverse_prize4', 'Rumble Mix Prize 4', 'trim|required');
+		endif;
+		if($lotto_type >= 6):
+			$this->form_validation->set_rules('reverse_prize5', 'Rumble Mix Prize 5', 'trim|required');
+		endif;
+			$this->form_validation->set_rules('reverse_prize'.$lotto_type, 'Rumble Mix Prize '.$lotto_type, 'trim|required');
 
-			$this->form_validation->set_rules('prize_image', 'Image', 'required');
-		}
-		*/
 		if($this->form_validation->run() && $error == 'NO'): 
-
 		   
 			$param['product_id']		= 	(int)$this->session->userdata('productID4Prize');
-			//$param['product_name']		= 	addslashes($productData[1]);
 			$param['title']				= 	addslashes($this->input->post('title'));
 			$param['title_slug']		= 	url_title(strtolower($this->input->post('title')));
 			$param['description']		= 	addslashes($this->input->post('description'));
 			
-			$param['prize_type']		= 	addslashes($this->input->post('prize_type'));
-
-			if($param['prize_type'] == "Cash"):
-				$param['prize1']			= 	(int)addslashes($this->input->post('prize1'));
-				$param['prize2']			= 	(int)addslashes($this->input->post('prize2'));
-				$param['prize3']			= 	(int)addslashes($this->input->post('prize3'));
-			else:
-				$param['prize1']			= 	'';
-				$param['prize2']			= 	'';
-				$param['prize3']			= 	'';
+			//Stright param fields..
+			$param['stright_prize_heading']			  =  $this->input->post('stright_prize_heading');
+			$param['stright_prize_type']	 		  =  $this->input->post('stright_prize_type');
+			if($lotto_type >= 3):
+				$param['stright_prize1']	 	 	  =  (int)addslashes($this->input->post('stright_prize1'));
+				$param['stright_prize2']	 	 	  =  (int)addslashes($this->input->post('stright_prize2'));
 			endif;
+			if($lotto_type >= 4):
+				$param['stright_prize3']	 	 	  =  (int)addslashes($this->input->post('stright_prize3'));
+			endif;
+			if($lotto_type >= 5):
+				$param['stright_prize4']	 	 	  =  (int)addslashes($this->input->post('stright_prize4'));
+			endif;
+			if($lotto_type >= 6):
+				$param['stright_prize5']	 	 	  =  (int)addslashes($this->input->post('stright_prize5'));
+			endif;
+				$param['stright_prize'.$lotto_type]	  =  (int)addslashes($this->input->post('stright_prize'.$lotto_type));
+
+			//Rumble Mix param fields..
+			$param['rumble_mix_prize_heading']	 =  $this->input->post('rumble_mix_prize_heading');
+			$param['rumble_mix_prize_type']	 =  $this->input->post('rumble_mix_prize_type');
+			if($lotto_type >= 3):
+				$param['rumble_mix_prize1']	 	 	  =  (int)addslashes($this->input->post('rumble_mix_prize1'));
+				$param['rumble_mix_prize2']	 	 	  =  (int)addslashes($this->input->post('rumble_mix_prize2'));
+			endif;
+			if($lotto_type >= 4):
+				$param['rumble_mix_prize3']	 	 	  =  (int)addslashes($this->input->post('rumble_mix_prize3'));
+			endif;
+			if($lotto_type >= 5):
+				$param['rumble_mix_prize4']	 	 	  =  (int)addslashes($this->input->post('rumble_mix_prize4'));
+			endif;
+			if($lotto_type >= 6):
+				$param['rumble_mix_prize5']	 	 	  =  (int)addslashes($this->input->post('rumble_mix_prize5'));
+			endif;
+				$param['rumble_mix_prize'.$lotto_type]	  =  (int)addslashes($this->input->post('rumble_mix_prize'.$lotto_type));
+
+			//Reverse param fields..
+			$param['reverse_prize_heading']	 =  $this->input->post('reverse_prize_heading');
+			$param['reverse_prize_type']	 =  $this->input->post('reverse_prize_type');
+			if($lotto_type >= 3):
+				$param['reverse_prize1']	 	 	  =  (int)addslashes($this->input->post('reverse_prize1'));
+				$param['reverse_prize2']	 	 	  =  (int)addslashes($this->input->post('reverse_prize2'));
+			endif;
+			if($lotto_type >= 4):
+				$param['reverse_prize3']	 	 	  =  (int)addslashes($this->input->post('reverse_prize3'));
+			endif;
+			if($lotto_type >= 5):
+				$param['reverse_prize4']	 	 	  =  (int)addslashes($this->input->post('reverse_prize4'));
+			endif;
+			if($lotto_type >= 6):
+				$param['reverse_prize5']	 	 	  =  (int)addslashes($this->input->post('reverse_prize5'));
+			endif;
+				$param['reverse_prize'.$lotto_type]	  =  (int)addslashes($this->input->post('reverse_prize'.$lotto_type));
+				$param['lotto_type']	  			  =  (int)$this->input->post('lotto_type');
+
 			
 			if($_FILES['prize_image']['name']):
 				$ufileName						= 	$_FILES['prize_image']['name'];
@@ -896,8 +995,8 @@ public function addprize($editId='')
 			$param['prize_image_alt']	= 	addslashes($this->input->post('prize_image_alt'));
 
 			if($this->input->post('CurrentDataID') ==''):
-				$param['prize_id']		=	(int)$this->common_model->getNextSequence('da_prize');
-				$param['prize_seq_id']	=	$this->common_model->getNextIdSequence('prize_seq_id','prize');
+				$param['prize_id']			=	(int)$this->common_model->getNextSequence('da_prize');
+				$param['prize_seq_id']		=	$this->common_model->getNextIdSequence('prize_seq_id','prize');
 				$param['creation_ip']		=	currentIp();
 				$param['creation_date']		=	date('Y-m-d H:i');
 				$param['created_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
@@ -905,22 +1004,24 @@ public function addprize($editId='')
 				$alastInsertId				=	$this->common_model->addData('da_prize',$param);
 				$this->session->set_flashdata('alert_success',lang('addsuccess'));
 			else:
-
-				$categoryId					=	$this->input->post('CurrentDataID');
+				$CurrentDataID					=	$this->input->post('CurrentDataID');
 				$param['update_ip']			=	currentIp();
 				$param['update_date']		=	(int)$this->timezone->utc_time();//currentDateTime();
 				$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
-				$this->common_model->editData('da_prize',$param,'prize_id',(int)$categoryId);
+				$this->common_model->editData('da_prize',$param,'prize_id',(int)$CurrentDataID);
 				$this->session->set_flashdata('alert_success',lang('updatesuccess'));
-			endif;
-
-			//redirect(correctLink('MASTERDATAPRODUCTTYPE',getCurrentControllerPath('index')));
-			redirect('products/allproducts/prizeList/'.base64_encode($param['product_id']));
+			endif;	
+			
+			redirect('products/alllottoproducts/prizeList/'.base64_encode($param['product_id']));
 		endif;
 	endif;
+
+	$productDetails 	=	$this->common_model->getDataByParticularField('da_products','products_id',(int)(int)$this->session->userdata('productID4Prize'));
+	$data['lotto_type'] = $productDetails['lotto_type'];
+	// echo '<pre>';print_r($data['productDetails']);die;
 	
 	$this->layouts->set_title('Add/Edit Prize');
-	$this->layouts->admin_view('products/allproducts/addprize',array(),$data);
+	$this->layouts->admin_view('products/alllottoproducts/addprize',array(),$data);
 }	// END OF FUNCTION	
 
 /***********************************************************************
@@ -944,7 +1045,7 @@ function deletePrize($deleteId='')
 
 /***********************************************************************
 ** Function name 	: updatestock
-** Developed By 	: Afsar Ali
+** Developed By 	: Dilip Halder
 ** Purpose  		: This function used for delete data
 ** Date 			: 23 MAY 2022
 ************************************************************************/
@@ -952,7 +1053,7 @@ function updatestock($pid=''){
 
 	$data['error'] 						= 	'';
 		$data['activeMenu'] 				= 	'producrs';
-		$data['activeSubMenu'] 				= 	'allproducts';
+		$data['activeSubMenu'] 				= 	'alllottoproducts';
 		if($pid):
 			$data['EDITDATA']				=	$this->common_model->getDataByParticularField('da_products','products_id',(int)$pid);
 		endif;
@@ -981,16 +1082,16 @@ function updatestock($pid=''){
 				$param['updated_by']		=	(int)$this->session->userdata('HCAP_ADMIN_ID');
 				$this->common_model->editData('da_products',$param,'products_id',(int)$pid);
 				$this->session->set_flashdata('alert_success',lang('updatesuccess'));
-				redirect('products/allproducts/index/');
+				redirect('products/alllottoproducts/index/');
 			endif;
 		endif;
 		$this->layouts->set_title('Add Stock');
-		$this->layouts->admin_view('products/allproducts/stockupdate',array(),$data);
+		$this->layouts->admin_view('products/alllottoproducts/stockupdate',array(),$data);
 } // END OF FUNCTION
 
 /***********************************************************************
 ** Function name 	: orderstatus
-** Developed By 	: Afsar Ali
+** Developed By 	: Dilip Halder
 ** Purpose  		: This function used for change order status
 ** Date 			: 23 MAY 2022
 ************************************************************************/
@@ -1002,12 +1103,12 @@ function orderstatus($changeStatusId='',$statusType='')
 	$this->common_model->editData('da_orders',$param,'order_id',$changeStatusId);
 	$this->session->set_flashdata('alert_success',lang('statussuccess'));
 	
-	redirect(correctLink('ALLPRODUCTSDATA',getCurrentControllerPath('index')));
+	redirect(correctLink('ALLLOTOPRODUCTSDATA',getCurrentControllerPath('index')));
 }
 
 /***********************************************************************
 ** Function name 	: changesoldoutstatus
-** Developed By 	: Afsar Ali
+** Developed By 	: Dilip Halder
 ** Purpose  		: This function used for change soldout status
 ** Date 			: 17 MAY 2023
 ************************************************************************/
@@ -1020,7 +1121,7 @@ function changesoldoutstatus($changeStatusId='',$statusType='')
 	$this->common_model->editData('da_products',$param,'products_id',(int)$changeStatusId);
 	$this->session->set_flashdata('alert_success',lang('statussuccess'));
 	
-	redirect(correctLink('ALLPRODUCTSDATA',getCurrentControllerPath('index')));
+	redirect(correctLink('ALLLOTOPRODUCTSDATA',getCurrentControllerPath('index')));
 }
 
 }

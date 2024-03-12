@@ -146,6 +146,7 @@ public function index()
 	endif;
 } // END OF FUNCTION
 
+
 /***********************************************************************
 ** Function name 	: check
 ** Developed By 	: AFSAR AlI
@@ -173,9 +174,9 @@ public function test_function($oid=""){
 	// $table 	      = "wn_daily_winners";
 	// $where['where'] = array('created_by' => "Admin");
 	// $users		    = $this->common_model->getdata('count',$table,$where);
-	echo "<pre>";
-	print_r($users);
-	die();
+	// echo "<pre>";
+	// print_r($users);
+	// die();
 
 }
 

@@ -158,7 +158,6 @@ public function getNextOrderId($tableName='')
 	endif;
 }	// END OF FUNCTION
 
-
 /***********************************************************************
 ** Function name 	: getNextUWINOrderId
 ** Developed By 	: Dilip Halder
@@ -306,7 +305,7 @@ public function getData2($action='',$tbl_name='',$wcon='',$shortField='',$num_pa
 	if($num_page):				$this->mongo_db->limit($cnt);
 								$this->mongo_db->offset($num_page);
 	elseif($num_page == 'zero'):$this->mongo_db->limit($cnt);
-								$this->mongo_db->offset(0);								
+								$this->mongo_db->offset(0);						
 	endif;
 	if($action == 'count'):	
 		return $this->mongo_db->count($tbl_name);
@@ -407,6 +406,7 @@ public function getsummeryReport($action='',$tbl_name='',$wcon='',$shortField=''
 				  		                    			'availableArabianPoints'=>array('$last' => '$availableArabianPoints'),
 				  		                    			'end_balance' => array('$first' => '$end_balance'),
 				  		                    			'isVoucher'   => array('$push' => '$isVoucher'),
+				  		                    			'product_qty' => array('$push' => '$product_qty'),
 	  		                 		  				   )),
 								  	  				array('$sort'=>$shortField),
 													);

@@ -491,11 +491,10 @@ background-color: var(--color-background);
             <?php //endif; ?>
 
 
-            <?php  //if($enabledPayment['noon'] == 'enable'): 
-             if($this->session->userdata('DZL_USERID') == '100000000001983' || $this->session->userdata('DZL_USERID') == '100000000013118' ): ?>
+            <?php  if($enabledPayment['ngenius'] == 'enable'):  ?>
              <div class="form__radio">
                 <label for="noon">
-                  <?=$count++?>. Ngenius </label>
+                  <?=$count++?>. <?=$enabledPayment['title_ngenius']?> </label>
                 <input id="Ngenius" value="Ngenius" name="payment_method" type="radio"/>
              </div>
             <?php endif; ?>

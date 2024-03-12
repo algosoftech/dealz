@@ -222,7 +222,6 @@ class Usertopup extends CI_Controller {
 							$recharge_user_email_type = "EMAIL";
 					    }
 						$checkUser = $this->geneal_model->getOnlyOneData('da_users',$where1['where']);
-
 					    if(!empty($checkUser)):
 					    	if((int)$checkUser['users_id'] != (int)$this->input->get('users_id')):
 						    	
@@ -240,9 +239,7 @@ class Usertopup extends CI_Controller {
 							        	endif;
 
 							        	if($totalRechargeAmount < $user_data['availableArabianPoints']):
-						        		
-						        		// From user update arabian points
-										//$availableArabianPoints 	= 	((int)$user_data['availableArabianPoints'] - (int)$this->input->post('recharge_amount'));
+						        		 
 										if($this->input->post('percentage')):
 											$rechargeAmount 			=	(int)$this->input->post('recharge_amount');
 											$percent 					=	$this->input->post('percentage');
@@ -257,8 +254,14 @@ class Usertopup extends CI_Controller {
 											$availableArabianPoints 	= 	((float)$user_data['availableArabianPoints'] - (float)$this->input->post('recharge_amount'));
 											$totalRechargeAmount = (float)$this->input->post('recharge_amount');
 										endif;
+
+
+										// Deduting from Sale person account start
 								        $updatefield        			= 	array( 'availableArabianPoints' => (float)$availableArabianPoints );
 								        $this->geneal_model->editData('da_users', $updatefield, 'users_id', (int)$this->input->get('users_id'));
+										// Deduting from Sale person account end
+
+
 
 								        /* Load Balance Table -- from user*/
 									    $fromuserparam["load_balance_id"]	=	(int)$this->geneal_model->getNextSequence('da_loadBalance');

@@ -1,90 +1,165 @@
 <?php include('common/mobile/header.php') ?>
 
-<style type="text/css">
-
-    .invoice-text-para p {
+<style>
+    h1.ticket-heading ,.my-order-section{
         text-align: center;
-        font-size: 14px;
-        color: #545454;
+        font-family: sans-serif;
+        font-weight: 400;
+        font-size: 25px;
+        border-top: 2px dashed #808080bd;
+        border-bottom: 2px dashed #808080bd;
+        padding: 5px 0px;
+    }
+
+    .order-details-container {
+        width:100%;
+    }
+
+    .order-deatail-section {
+        width: 100%;
+        display: inline-block;
+
+    }
+
+    table,tr {
+        width:100%;
+        line-height :1.6;
+    }
+
+    .order-title ,.order-details {
+        width: 50%;
+        font-family: sans-serif;
+    }
+
+    .order-title{
+        text-align: left;
+    }
+
+    .order-details{
+        text-align: right;
+    }
+
+    .my-order-section{
+        margin-top: 21px;
+    }
+
+    .font-bold{
+        font-weight:600;
+    }
+
+
+    .ticket-heading span {
+        font-weight: 600;
+    }
+
+
+    .heading-section h1 {
+        font-size: 24px;
+        text-align: center;
+        font-weight: 700;
+        font-family: sans-serif;
+    }
+    .footer-container{
+        text-align: center;
+        font-family: sans-serif;
+    }
+
+    a:link, a:active {
+/*        color: #000 !important;*/
+        text-decoration: none;
+    }
+    a{
+        color:#000 !important;
+        font-weight: 600;
+
+    }
+
+    .color-default-bt{
+        color: #ffffff !important;
+        text-decoration: none;
+    }
+
+    @media screen and (min-device-width: 360px) and (max-device-width: 600px) {
+        body {
+            background-color: #fff !important;
+            margin: 0px;
+        }
+    }
+
+
+    .company-heading-section {
+      font-family: sans-serif;  
+      text-align: center;
+      line-height: 0.3;
+    }
+
+    .logo{
+        min-width: 160px;
+        max-width: 160px;
+        margin-bottom: 20px;
     }
     
-    .order-date-section{
-        margin: 20px 0;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 10px;
+    .promotional-section ,.border-top-bottom{
+         text-align: center;
+        font-family: sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        border-top: 2px dashed #808080bd;
+        border-bottom: 2px dashed #808080bd;
+        padding: 5px 0px;
     }
-
-    .invoice-details .table-responsive {
-        margin: 20px 0;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-    }
-
-    .link-list-section {
-        width: 100%;
-        display: inline-flex;
-        justify-content: space-between;
-    }
-
-    .download-invoice, .shop-more {
-        background: #c9261f;
-        margin: 0px 10px;
-        padding: 18px;
-        height: 30px;
-        font-size: 12px;
-        color: #ffffff;
-        line-height: 0;
-        border-radius: 10px;
+    .border-bottom{
         text-align: center;
+        font-family: sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        border-bottom: 2px dashed #808080bd;
+        padding: 5px 0px; 
+    }
+    table {
+        margin: 20px auto;
     }
 
-    .login_tab .nav-tabs .nav-link {
-        text-align: center;
+    .coupon-heading {
+        vertical-align: baseline;
     }
 
-    .coupon {
-        position: relative;
-        margin: 10px auto;
-        background-image: url(<?=base_url('assets/img/coupen-img.png')?>);
-        background-size: 100% 100%;
-        background-position: 0 0, 200px 0;
-        background-repeat-x: no-repeat;
-        color: #fff;
-        overflow: hidden;
-    }
-
-    .coupon .about-coupen{
+    .heading-section, .country-code-section {
         display: flex;
+        width: 100%;
+        justify-content: center;
+        cursor: pointer;
     }
 
-    .coupon .about-coupen div {
-        margin: 0 15px;
-        padding: 12px 10px;
+    .thankyou-container {
+        margin-top: 25px;
     }
 
-    .coupen-box .invoice-details p span, .coupon .about-coupen h4, .coupon .about-coupen p  {
-        color: #000;
-        font-weight: 600;
-        font-size: 13px;
+    .orderInvoice-container {
+        margin: 30px auto;
     }
 
-    .coupon .coupen-footer {
-        background: #b12021;
-        color: #fff;
-        padding: 8px;
+    .color-default-btn{
+        background: #e22c2d;
+        color: #ffffff !important;
+        padding: 5px 20px;
+        border-radius: 7px;
+        display: inline;
+        font-size: 15px;
+        border: 1px solid #e22c2d;
+        width: 95%;
         text-align: center;
     }
 
-    .coupen-footer p {
-        margin: unset;
+    .order-success-contailler{
+        margin: auto;
+        background-color: #fff;
+        padding: 19px 15px 19px;
+        box-shadow: 1px 1px 5px 0 rgb(209 209 209);
+        border-radius: 12px;
     }
 
-    .about-coupen .coupen-img img {
-        height: 135px;
-        width: 135px;
-    }
-
+   
 </style>
 
     <div class="main_wrapper">
@@ -96,141 +171,142 @@
             <div class="inner_pagedata">
                <section class="info_pages">
 
-                            <div class="section">
+                    <div class="section">
                                 
-                                <div class="text-center">
-                                    <img src="<?=base_url('/assets/img/right.png')?>" class="img-fluid d-block mx-auto" alt="right_img">
+                       <div class="row">
+                <div class="col-sm=12 col-md-12 col-lg-12">
+                    <div class="orderInvoice-container">
+                        <div class='order-success-contailler'>
+                            <div class='row' style='margin: 0px 35px;'>
+                                <div style='text-align: center;margin:auto;'>
+                                    <img class='logo' src="<?=base_url('assets/img/dealzlogo.png')?>" alt='logo'>
                                 </div>
+                            </div>
+                            <div class='company-heading-section'>
+                                <h3 class='ticket-heading'> DEALZARABIA TRADING L.L.C </h3>
+                                <div>Tel: +971 4355 8533</div>
 
-                                <h2>Thank you</h2>
-                                <div class="invoice-text-para">
-                                    <p>Please find below your Invoice and order details.</p>
-                                </div>
+                            </div>
+                            <table class='my-order-section'>
+                                <tr>
+                                    <td class='order-title'>My Order # </td>
+                                    <td class='order-details'><?=$orderData['order_id'];?></td>
+                                </tr> 
+                            </table>
+                            <table>
+                                <tr>
+                                    <td class='order-title'> Purchased On  </td>
+                                    <td class='order-details'><?=date('d M, Y H:i A ', strtotime($orderData['created_at']));?></td>
+                                </tr>
+                            </table>
+                            <table class='border-top-bottom'>
+                                <tr>
+                                    <td class='order-title'> Description </td>
+                                    <td class='order-details'>Amount</td>
+                                </tr>
+                            </table>
+                            
+                              <?php
+                                $TotalQTY   = 0;
+                                $TotalPrice = 0;
+                                foreach($orderDetails as $Pkey => $OD):  
+                                    $SNo = ($Pkey+1) .')';
+                                $CPwcon['where'] = array('product_id' => $OD["product_id"]);                                  
+                                $CPData          =   $this->geneal_model->getData2('single', 'da_prize', $CPwcon);    
+                                $CPwcon['where'] = array('products_id' => (int)$OD["product_id"]);                                  
+                                $PData           =   $this->geneal_model->getData2('single', 'da_products', $CPwcon);
+                              ?>  
 
-                                
-                               <div class="login_tab">
-                                <ul class="nav nav-tabs">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" data-bs-toggle="tab" href="#Invoice">Invoice</a>
-                                      </li>
-                                    <li class="nav-item ">
-                                      <a class="nav-link" data-bs-toggle="tab" href="#Coupons">Coupons</a>
-                                    </li>
-                                </ul>
-
-                                <!-- Tab panes -->
-                      <div class="tab-content">
-                        <div class="tab-pane active" id="Invoice">
-                            <div id="Invoice" class="tab-pane fade show active">
-                                <div class="invoice-details">
-                                    <p class="text-heading">Tax Invoice</p>
-                                   
-                                    <div class="order-date-section">
-                                        <p>Order Id <span><?php echo $order_id;?></span></p>
-                                        <?php if($stripe_token): ?>
-                                            <p>Transaction Id <span><?php echo $stripe_token;?></span></p>
-                                        <?php endif; ?>
-                                        <p>Purchased on : <span><?php echo date('d M, Y h:i A' ,strtotime($orderData['created_at']))?></span></p>
-                                    </div>
-
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <tr>
-                                                <th>Product</th>    
-                                                <th>Quantity</th>   
-                                                <th>Subtotal</th>   
-                                            </tr>
-                                            <?php foreach($orderDetails as $OD):
-                                                $CPwcon['where']                    =   [ 'product_id' => $OD["product_id"] ];                                  
-                                                $CPData                             =   $this->geneal_model->getData2('single', 'da_prize', $CPwcon);           
-                                            ?>
-                                            <tr>
-                                                <td><?php echo stripslashes($OD['product_name']);?></td> 
-                                                <td> AED  <?= $OD['price'].'x'. $OD['quantity']?></td>  
-                                                <td>AED <?php echo number_format($OD['subtotal'],2);?></td>
-                                            </tr>
-
-                                            <tr >
-                                                <td colspan="2">Including VAT</td>  
-                                                <td>AED <?=@number_format($orderData['total_price'],2)?></td>   
-                                            </tr>
-                                            <?php endforeach;?>
-                                        </table>
-                                    </div>
-                                    
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <tr>
-                                                <td>Discount</td>   
-                                                <td class="text-right">AED  <?=@number_format($cashback,2)?> </td> 
-                                            </tr>
-                                            <?php if($orderData['payment_mode'] == 'arabianpoint' || $orderData['payment_mode'] == 'Arabian Points'): ?>
-                                                <tr>
-                                                    <td>Paid Using Arabian Points</td>  
-                                                    <td class="text-right">AED <?=@number_format($orderData['total_price'],2)?></td>    
-                                                </tr>
-                                                
-                                            <?php else: ?>
-                                                <tr>
-                                                    <td>Paid Using Card</td>    
-                                                    <td class="text-right">AED <?=@number_format($orderData['total_price'],2)?></td>    
-                                                </tr>
+                                <table class='border-bottom'>
+                                 <tr>
+                                    <td class='order-title'><?=$SNo. $OD['product_name'] .' x '. $OD['quantity'];?></td>  
+                                    <td class='order-details'><?=$OD['subtotal']. " AED";?></td> 
+                                 </tr>
+                                 <tr>
+                                    <td class='order-title coupon-heading'>Coupon Code:</td>    
+                                    <td class='order-details'>
+                                        <?php foreach($couponDetails as $Couponkey => $coupon ):  ?>
+                                            <?php if($OD['product_id'] == $coupon['product_id'] ): ?>
+                                                <?= $coupon['coupon_code']."<br>";?>
                                             <?php endif; ?>
-                                        </table>
+                                        <?php endforeach;  ?>
+                                    </td>
+                                 </tr>
+
+                                 <tr>
+                                    <td class='order-title coupon-heading'>Promotional Campaign Value</td>    
+                                    <td class='order-details'><?=$CPData['title'];?></td>
+                                 </tr>
+                                 <tr>  
+                                    <td class='order-title coupon-heading'>Promotional Campaign Validity</td>    
+                                    <td class='order-details'><?=$PData['draw_date'];?></td>   
+                                 </tr>
+                                    <?php 
+                                    $TotalQTY   += $OD['quantity'];
+                                    $TotalPrice += $OD['subtotal'];
+                                    endforeach;  
+                                    ?>
+                                </table>
+
+                                <table class='border-bottom'> 
+                                    <tr>
+                                        <td class='order-title'> Total Qty.</td>
+                                        <td class='order-details'><?=$TotalQTY;?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class='order-title'>NetAmount <br> <span>(inclusive Vat)</span></td>
+                                        <td class='order-details'><?=$TotalPrice;?> AED</td>
+                                    </tr>
+                                    <tr>
+                                    <?php if($orderData['payment_mode'] == 'arabianpoint' || $orderData['payment_mode'] == 'Arabian Points'): ?>
+                                        <td class='order-title'>Total AED<br> <span>(Paid Using Arabian Points)</span></td>
+                                    <?php else: ?>  
+                                        <td class='order-title'>Total AED<br> <span>(Paid Using Card)</span></td>
+                                    <?php endif; ?> 
+                                        <td class='order-details'><?=$TotalPrice;?> AED</td>
+                                    </tr>
+                                </table>
+
+                                <div class='footer-container thankyou-container'>
+                                    <div class='heading-section'>
+                                        <h1>Thank you for Shopping</h1>
+                                    </div>
+                                    <div>
+                                        <p> A Promotional Coupon has been issued with the Purchase</p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                       
-
-
-                        <div class="tab-pane fade" id="Coupons">
-                           
-
-
-                        <?php foreach ($couponDetails as $coupon): ?>
-                        <div class="coupon">
-                            <div class="about-coupen">
-                                <?php 
-                                    $SPwhereCon['where']    =   array('products_id' => (int)$coupon['product_id'] );
-                                    $ProductData            =   $this->geneal_model->getData2('single','da_products',$SPwhereCon);
-                                ?>
-                                <div class="coupen-img">
-                                    <?php if(file_get_contents(base_url($ProductData['product_image'])) ):  ?>
-                                        <img src="<?=base_url($ProductData['product_image']);?>" class="img-fluid" alt="<?=$ProductData['product_image_alt'];?>">
-                                    <?php else: ?>
-                                        <img src="<?=base_url('assets/img/NO_IMAGE.jpg');?>" class="img-fluid" alt="<?=$ProductData['product_image_alt'];?>">
-                                    <?php endif;?>
+                                <div class='footer-container'>
+                                    <div class='heading-section'>
+                                        <h1>For more details</h1>
+                                    </div>
+                                    <div>
+                                        <p class='information-section'> visit <a href='".$base_url."'>www.dealzarabia.com</a> <br>
+                                            call us @ <a href='tel:+971554691351'>+971 4355 8533</a> 
+                                        </p>
+                                        <p> Email: info@dealzarabia.com</p>
+                                    </div>
                                 </div>
-                                <div class="coupen-info">
-                                    
-                                    <p>Products: <span><?=$coupon['product_title']?></span></p>
-                                    <p>Purchased on: <span><?=date('d M, Y h:i A' ,strtotime($coupon['created_at']))?></span></p>
-                                    <p>Draw Date : <span><?=date('d M, Y' ,strtotime($ProductData['draw_date'].' '.$ProductData['draw_time']))?></span></p>
+
+                                <div class='row' style='margin: 0px 35px;'>
+                                    <div style='text-align: center;margin:auto;'>
+                                        <img src="<?=base_url('/assets/img/ap_help_qr_code.png');?>" alt='QR'>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="coupen-footer">
-                                <p>Coupon No: <?=$coupon['coupon_code']?></p>
-                            </div>
+
+                                <table> 
+                                    <tr>
+                                        <td class='order-title'> 
+                                         <a href="<?=base_url('order/download-invoice/'.$order_id);?>" class="color-default-btn float-left">Download Invoice</a>
+                                        </td>
+                                        <td class='order-details'>
+                                         <a href="<?=base_url('/')?>" class="color-default-btn float-right">Shop More</a>
+                                        </td>
+                                    </tr>
+                                </table>
                         </div>
-                        <?php endforeach; ?>
-
-
-
-                        </div>
-                      </div>
                     </div>
-                      
-                    <div class="link-list-section">
-                        <div class="link-list">
-                            <a  href="<?=base_url().'order/download-invoice/'.$order_id ;?>" class="download-invoice nav-link"> Download Invoice </a>
-                        </div>
-
-                        <div class="link-list">
-                            <a href="<?=base_url()?>" class="shop-more nav-link">Shop More</a>
-                        </div>
-                        
-                    </div>
+                </div>
+            </div>          
 
                   
                     </div>

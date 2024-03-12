@@ -353,7 +353,7 @@ class Lotto extends CI_Controller {
 			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
 		endif;
 	}
-	
+   
 	/* * *********************************************************************
 	 * * Function name : productSettings
 	 * * Developed By  : Dilip Halder
@@ -380,7 +380,7 @@ class Lotto extends CI_Controller {
 		else:
 			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
 		endif;
-	}
+	}	
 
 	/* * *********************************************************************
 	 * * Function name : winnerTestimonial
@@ -527,5 +527,4 @@ class Lotto extends CI_Controller {
 			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
 		endif;
 	}
-	
 }

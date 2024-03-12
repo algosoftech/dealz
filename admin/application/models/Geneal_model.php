@@ -161,7 +161,7 @@ class Geneal_model extends CI_Model
 		endif;
 
 		$currentQuery					=	array(array('$lookup'=>array('from'=>'da_users','localField'=>'user_id','foreignField'=>'users_id','as'=>'from_users')),
-												  array('$lookup'=>array('from'=>'da_products','localField'=>'product_id','foreignField'=>'products_id','as'=>'from_product')),
+												  array('$lookup'=>array('from'=>'da_lotto_products','localField'=>'product_id','foreignField'=>'products_id','as'=>'from_product')),
 
 												  array('$lookup'=>array('from'=>'da_lotto_orders','localField'=>'order_id','foreignField'=>'order_id','as'=>'from_order')),
 

@@ -52,7 +52,7 @@ class Notification_model extends CI_Model
 			//	$headers 	= 	array('Authorization: key='.BRAINTRAIN_USER_IOS_KEY,'Content-Type:application/json');
 			//endif;
 
-			$legency_key = 'AAAA8ZhMvTA:APA91bEpo8br1w4lkZ_ND-DyVVfz40wwYBUJKEXydUF4W6FS4nHKCxIJ2JR6gN3UeEEYp7oEYwYUJF6gTNNqeruW9ujIXeBHxmaqz5jgflAfWWMDH2TwXuV_QI2t2iNkfrfwmock5jQL';
+			$legency_key = 'AAAAdIFBqHc:APA91bEvSlUhFNCWCn6M40D_SX8HFFw3WkzvOk_CHw_OFXuE_UuqmODNXvDsDf1arDfkHKoYPBDaZXhlIH6iibb2-qRpylKj-f_TXY-xAmXL5iKvepJ92w8KCSW2TBO-xeArjK_A1Rdd';
 			$headers = array('Authorization: key='.$legency_key,'Content-Type: application/json');
 
 			#Send Reponse To FireBase Server 	
@@ -134,17 +134,17 @@ class Notification_model extends CI_Model
 
 			$device_id = array($device_id);
 
-			$legency_key 			= 	'AAAA8ZhMvTA:APA91bEpo8br1w4lkZ_ND-DyVVfz40wwYBUJKEXydUF4W6FS4nHKCxIJ2JR6gN3UeEEYp7oEYwYUJF6gTNNqeruW9ujIXeBHxmaqz5jgflAfWWMDH2TwXuV_QI2t2iNkfrfwmock5jQL';
+			$legency_key 			= 	'AAAAdIFBqHc:APA91bEvSlUhFNCWCn6M40D_SX8HFFw3WkzvOk_CHw_OFXuE_UuqmODNXvDsDf1arDfkHKoYPBDaZXhlIH6iibb2-qRpylKj-f_TXY-xAmXL5iKvepJ92w8KCSW2TBO-xeArjK_A1Rdd';
 			$deviceType 			= 	'Andriod';
 
 			$message 		= 	array('body'=>$message,
 										'title'=>$title,
 										'icon'=>'myIcon',
 										'sound'=>'mySound',
-										"android_channel_id"=>"Dealz_admin_channel",
+										"android_channel_id"=>"ArabianPlus_admin_channel",
 										'badge'=>1
 										); 
-			$data			=	array('notification'=>$title,'message'=>$message, 'android_channel_id' => 'Dealz_admin_channel');
+			$data			=	array('notification'=>$title,'message'=>$message, 'android_channel_id' => 'ArabianPlus_admin_channel');
 
 			$response   			=  $this->notification_model->sendNotificationToMultipleUserFunction($device_id,$message,$data,$deviceType); 
 		endif;

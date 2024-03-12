@@ -980,6 +980,9 @@ public function couponList()
 	$data = array();
 	$this->load->library("pagination");
 
+	$this->clearCoupons();
+
+
 	$tblName 				=	'da_coupons';
 	$shortField 			= 	array('created_at'=> -1 );
 	$whereCon['where']		= 	array('users_id'=>(int)$this->session->userdata('DZL_USERID'),'coupon_status'=>'Live');
@@ -988,7 +991,14 @@ public function couponList()
 	$totalPage 				=	$this->geneal_model->getData2('count',$tblName,$whereCon,$shortField,'0','0');
 	$config 				= [ 'base_url'=>base_url('my-coupon'),'per_page'=>10,'total_rows'=>$totalPage ];
 	$this->pagination->initialize($config);
-	$data['coupons']  =	$this->geneal_model->getData2('multiple', $tblName, $whereCon,$shortField,$this->uri->segment(2),$config['per_page']);
+	
+	if($this->uri->segment(2)):
+		$startFrom = $this->uri->segment(2);
+	else:
+		$startFrom = 0;
+	endif;
+
+	$data['coupons']  =	$this->geneal_model->getData2('multiple', $tblName, $whereCon,$shortField,$startFrom,$config['per_page']);
 
 	$data['page'] 			=	'Coupon List';
 
@@ -1614,7 +1624,7 @@ public function couponList()
 			$whereConsales['where']		=	array('users_type' => 'Sales Person','status' => "A" );
 			
 			if($this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"):
-				$whereConsales['where_in']	=   array("0" => "users_email" ,"1"=>array("manawalanwaseem@gmail.com","shafimak25@gmail.com","ismailkk0520@gmail.com","jaseer26@gmail.com","jaleel.dmi@gmail.com","ajmal2nasar@gmail.com","asrafk.ae@gmail.com"));
+				$whereConsales['where_in']	=   array("0" => "users_email" ,"1"=>array("manawalanwaseem@gmail.com","shafimak25@gmail.com","jaseer26@gmail.com","ajmal2nasar@gmail.com"));
 			elseif($this->session->userdata('DZL_USERSTYPE') == "Super Retailer"):
 				$whereConsales['where_in']	=   array("0" => "users_email" ,"1"=>array("dealzfaisal@gmail.com","shabeer0606@gmail.com","ashiqpcpalam@gmail.com"));
 				// $whereConsales['where'] =	array(

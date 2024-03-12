@@ -9,6 +9,10 @@ $( function() {
 } );
 </script>
 
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css" />
+<script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
+<script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
+
 <?php include('common/mobile/header.php') ?>
     <div class="main_wrapper">
         <div class="mob_wrapper inner_bodyarea">
@@ -72,12 +76,31 @@ $( function() {
                         <?php endif; ?>
 
                         <?php if($DueManagement): ?>
+                            
+                            <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
+                                    <table id="myTable" class="display">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Total Sales</th>
+                                                <th>AP</th>
+                                            </tr>
+                                        </thead>
+                            <?php endif; ?>
+
                             <?php foreach($DueManagement as $key => $item ) :  ?>
-                                <div class="cardbox">
                                     
 
-                            <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
-                                    <ul>
+                              <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
+                                    
+                                        <tr>
+                                            <td><?= $item['users_name'].' ' .$item['last_name'];?></td>
+                                            <td><?= $item['todaySales'];?></td>
+                                            <td><?= $item['availableArabianPoints'];?></td>
+                                        </tr>
+                                    
+
+                                    <!-- <ul>
                                      <li class="red_txt">
                                             <strong>Name</strong>
                                             <span> <?= $item['users_name'].' ' .$item['last_name'];?> </span>
@@ -90,7 +113,7 @@ $( function() {
                                             <strong>Available ArabianPoints</strong>
                                             <span> <?= $item['availableArabianPoints'];?> </span>
                                         </li>
-                                    </ul> 
+                                    </ul>  -->
                                     <?php else: ?>
                                         <ul>
                                             <li class="red_txt">
@@ -148,6 +171,12 @@ $( function() {
                                         
                                 </div>
                             <?php endforeach; ?>
+
+                            <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
+                                    </table>
+                                     
+                            <?php endif; ?>
+
                         <?php endif; ?>
                    </div>
                 </section>
@@ -166,7 +195,11 @@ $( function() {
     <script src="<?=base_url('assets/');?>mobile/js/dealzscript.js"></script>
 
     <script type="text/javascript" src="<?=base_url('assets/');?>/countdownTimer/multi-countdown.js"></script>
-
+    <script>
+        let table = new DataTable('#myTable', {
+            responsive: true
+        });
+    </script>
 
 <?php $useragent=$_SERVER['HTTP_USER_AGENT'];
 

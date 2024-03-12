@@ -17,8 +17,8 @@ $(function(){
                         <?php /* ?><h5 class="m-b-10">Welcome <?=sessionData('HCAP_ADMIN_FIRST_NAME')?></h5><?php */ ?>
                     </div>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="<?php echo base_url('maindashboard'); ?>"><i class="feather icon-home"></i></a></li>
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Daily Winner List</a></li>
+                        <li class="breadcrumb-item"><a href="<?php echo getCurrentDashboardPath('dashboard/index'); ?>"><i class="feather icon-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Sub Winners List</a></li>
                     </ul>
                 </div>
             </div>
@@ -30,7 +30,7 @@ $(function(){
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header">
-                <h5>Manage Daily Winner List</h5>
+                <h5>Manage Sub Winners List</h5>
                 <!-- <a href="<?php echo getCurrentControllerPath('addeditdata'); ?>" class="btn btn-sm btn-primary pull-right" style="margin-left:10px;">Sub Winner</a>
                 <a href="javaScriptcript:void{0}" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#exportModal">Export excel</a> -->
 

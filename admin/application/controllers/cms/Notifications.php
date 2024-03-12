@@ -201,7 +201,7 @@ class Notifications extends CI_Controller {
 						$notification_Ids_array  	=	array_chunk($notification_Id_array, 500);
 						if($notification_Ids_array):
 							foreach($notification_Ids_array as $notification_Ids):
-								$legency_key 			= 	'AAAAMa0rZsg:APA91bH1OhWfs7PXQX6MaApB3CqBjqETD3mdBxYYwtQ_i3bQYS2X-iJVLWgc5lY-wbeuB3-cwntDzz-D5M3z_qlH_AAO4Z8RSJ2ILviFovrdLhnO26i852DUJR0yj5yM2HoZJ5m36qPl';
+								$legency_key 			= 	'AAAAdIFBqHc:APA91bEvSlUhFNCWCn6M40D_SX8HFFw3WkzvOk_CHw_OFXuE_UuqmODNXvDsDf1arDfkHKoYPBDaZXhlIH6iibb2-qRpylKj-f_TXY-xAmXL5iKvepJ92w8KCSW2TBO-xeArjK_A1Rdd';
 								//$legency_key 			= 	'AAAAMa0rZsg:APA91bH1OhWfs7PXQX6MaApB3CqBjqETD3mdBxYYwtQ_i3bQYS2X-iJVLWgc5lY-wbeuB3-cwntDzz-D5M3z_qlH_AAO4Z8RSJ2ILviFovrdLhnO26i852DUJR0yj5yM2HoZJ5m36qPl';
 						        $deviceType 			= 	'Andriod';
 								$img_path 				=	fileBaseUrl.$param['image'];

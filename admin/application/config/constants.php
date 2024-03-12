@@ -88,8 +88,7 @@ defined('SHOW_NO_OF_DATA')      OR 	define('SHOW_NO_OF_DATA', 10); // show no of
 
 defined('MAIL_FROM_MAIL')      OR define('MAIL_FROM_MAIL', 'info@dealzarabia.com'); 
 defined('MAIL_SITE_FULL_NAME') OR define('MAIL_SITE_FULL_NAME', 'Dealz Arabia'); 
-// defined('SENDGRID_KEY') 	   OR define('SENDGRID_KEY', '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');  
-defined('SENDGRID_KEY') 	   OR define('SENDGRID_KEY', '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'); 
+defined('SENDGRID_KEY') 	   OR define('SENDGRID_KEY', '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'); 
 
 
 defined('ANDRIOD_API_ACCESS_KEY')		OR 	define('ANDRIOD_API_ACCESS_KEY','');
@@ -106,9 +105,9 @@ defined('CURRENT_TIME')					OR 	define('CURRENT_TIME',time());
 /////////////   Localhost 		/////////////////
 if($_SERVER['SERVER_NAME']=='localhost'):
 	defined('TIME_DIFFRENCE')			OR 	define('TIME_DIFFRENCE','0'); 
-	defined('MAIN_URL')     			OR 	define('MAIN_URL','http://'.$_SERVER['HTTP_HOST'].'/d-arabia/');
-	$fileBaseUrl 						=	'http://'.$_SERVER['HTTP_HOST'].'/d-arabia/';
-	$fileFCPATH 						=	$_SERVER['DOCUMENT_ROOT'].'/d-arabia/';
+	defined('MAIN_URL')     			OR 	define('MAIN_URL','http://'.$_SERVER['HTTP_HOST'].'/dealzarabia/');
+	$fileBaseUrl 						=	'http://'.$_SERVER['HTTP_HOST'].'/dealzarabia/';
+	$fileFCPATH 						=	$_SERVER['DOCUMENT_ROOT'].'/dealzarabia/';
 
 ///////////// 	/////////////////	
 else: 
@@ -130,4 +129,4 @@ defined('fileFCPATH')     				OR 	define('fileFCPATH',$fileFCPATH);
 /////////////// SMS Details ///////////////////
 defined('SMSCOUNTRYUSER')     			OR 	define('SMSCOUNTRYUSERE','pltech');
 // defined('SMSCOUNTRYPASSWORD')     		OR 	define('SMSCOUNTRYPASSWORD','pltech@DXB123');
-defined('SMSCOUNTRYPASSWORD')     		OR 	define('SMSCOUNTRYPASSWORD','8520dlZDxb@@');
+defined('SMSCOUNTRYPASSWORD')     		OR 	define('SMSCOUNTRYPASSWORD','246QuDxb@9nZ2@f');

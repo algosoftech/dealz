@@ -18,8 +18,8 @@ class Pagebanners extends CI_Controller {
 	 + + Developed By 	: Manoj Kumar
 	 + + Purpose  		: This function used for index
 	 + + Date 			: 31 MARCH 2022
-	 + + Updated Date 	: 22 January 2024
-	 + + Updated By   	: Dilip Halder
+	 + + Updated Date 	: 
+	 + + Updated By   	:
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function index()
@@ -146,6 +146,9 @@ class Pagebanners extends CI_Controller {
 					if(file_exists($filePath)):
 						$unewFileName =	$ufileExt['filename'] .'_'.$this->common_model->random_strings(8).'.'.$ufileExt['extension'];
 					endif;
+
+
+
 
 					$this->load->library("upload_crop_img");
 					$uimageLink						=	$this->upload_crop_img->_upload_image($ufileName,$utmpName,'homepageSliderImage',$unewFileName,'');

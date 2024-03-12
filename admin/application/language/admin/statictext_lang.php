@@ -83,3 +83,5 @@ $lang['DD']											=	'Delivered';
 $lang['Coupon_Generaion']							=	'Coupon Generated successfully';
 $lang['Coupon_Not_Generaion']						=	'Coupon Not Generated';
 $lang['winner_announced']						    =	'Winner Announced.';
+
+$lang['PRODUCT_COLLECTED']						    =	'Product Collected';

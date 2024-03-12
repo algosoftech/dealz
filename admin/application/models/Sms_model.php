@@ -94,18 +94,104 @@ class Sms_model extends CI_Model
 	** Purpose  : This is use for send Login Otp Sms To User
 	** Date : 24 APRIL 2023
 	************************************************************************/
-	public function sendOtpVarification($mobile='',$otp)
-	{
-	 	$message		=	"Your 4 digit OTP is. ".$otp;
-		$senderid		=	"DLZARBA";
+	public function sendOtpVarification($mobile='',$otp,$country_code='+971')
+	{	
+		$country_code = '+971';
+		$mobileNumber = $country_code.$mobile;
+		$enableSMS    = $this->common_model->getData('single','da_enablesms'); 
 
-		if($mobile == "919539894273"):
-			$mobileNumber   =   '+91'.$mobile;
-		else:
-			$mobileNumber   =   '+971'.$mobile;
-		endif;
-		$returnMessage	=	$this->sendMessageFunction1($mobileNumber,$message,$senderid);
-		return $returnMessage;
+		// Finding country code and sending sms using sms country.
+        if($enableSMS['smscountry'] == "enable"):
+
+        	$SMSCOUNTRY = explode(',', $enableSMS['sms_country_available_country']);
+
+			// Removed extra space from country code ...
+			foreach ($SMSCOUNTRY as $key => $item):
+				$SMSCOUNTRY[$key] = trim($item);
+			endforeach;
+            // checking country code exist or Not...
+			if(in_array($country_code, $SMSCOUNTRY) ):
+				if($mobileNumber && $otp):
+					$message		=	"Your OTP is ".$otp.".";
+					$senderid		=	"DLZARBA";
+					$returnMessage	=	$this->sendMessageFunction1($mobileNumber,$message,$senderid);
+					return $returnMessage;
+				endif;
+			endif; 
+        endif;
+
+        // Finding country code and sending sms using digitizebird.
+        if($enableSMS['digitizebird'] == "enable"):
+
+        	$SMSCOUNTRY1 = explode(',', $enableSMS['digitizebird_available_country']);
+			
+			// Removed extra space from country code ...
+			foreach ($SMSCOUNTRY1 as $key => $item1):
+				$SMSCOUNTRY1[$key] = trim($item1);
+			endforeach;
+
+            // checking country code exist or Not...
+			if(in_array($country_code, $SMSCOUNTRY1) ):
+				if($mobileNumber && $otp):
+					$message		=	"Your OTP is ".$otp.".";
+					$senderid 		= 'DLZRBIA';
+					$returnMessage	=	$this->sendMessageDigitizebirdFunction($mobileNumber,$message,$senderid);
+					return $returnMessage;
+				endif;
+			endif; 
+        endif;
+		
+
+	 	// $message		=	"Your 4 digit OTP is. ".$otp;
+		// $senderid		=	"DLZARBA";
+
+		// if($mobile == "919539894273"):
+		// 	$mobileNumber   =   '+91'.$mobile;
+		// else:
+		// 	$mobileNumber   =   '+971'.$mobile;
+		// endif;
+		// $returnMessage	=	$this->sendMessageFunction1($mobileNumber,$message,$senderid);
+		// return $returnMessage;
+	}
+
+	/***********************************************************************
+	** Function name : sendMessageDigitizebirdFunction
+	** Developed By  : Dilip Halder
+	** Purpose       : This is use for send Login Otp Sms To User
+	** Date          : 11 March 2024
+	************************************************************************/
+	public function sendMessageDigitizebirdFunction($phone='',$message='',$senderid='')
+	{
+		try {
+			if(!empty($phone) && !empty($message) && !empty($senderid)):
+				
+				//old api key $ApiKey 		= 'ybG+HgfvR2YzK/LOlwwBXU7YRhKu+LK5Vi6Mfg5N5AI=';
+				$ApiKey 		= 'PCgknHnosPB+5u2KJaENRJjK325IZm0pMyss16634Qk=';
+				$ClientId 		= '6a9adaa5-6f1a-4133-8670-29204bd7509e';
+				$CompanyId 		= '7';
+				$message = urlencode($message);
+				$url = "https://user.digitizebirdsms.com/api/v2/SendSMS?SenderId=$senderid&Is_Unicode=false&Is_Flash=true&Message=$message&MobileNumbers=$phone&ApiKey=$ApiKey&ClientId=$ClientId&CompanyId=$CompanyId";
+				
+				$curl = curl_init();
+				curl_setopt_array($curl, array(
+					CURLOPT_URL => $url,
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_ENCODING => '',
+					CURLOPT_MAXREDIRS => 10,
+					CURLOPT_TIMEOUT => 0,
+					CURLOPT_FOLLOWLOCATION => true,
+					CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+					CURLOPT_SSL_VERIFYPEER => false,
+					CURLOPT_CUSTOMREQUEST => 'GET',
+					CURLOPT_HTTPHEADER => array( 'accept: text/plain' ),
+				));
+				$response = curl_exec($curl);
+				curl_close($curl);
+				return $response; 
+			endif;
+		} catch (\Throwable $th) {
+			return "FAIL";
+		}
 	}
 
 	/***********************************************************************
@@ -266,14 +352,10 @@ class Sms_model extends CI_Model
 	/***********************************************************************
 	** Function name 	: sendLottoTicketDetails
 	** Developed By 	: Dilip Halder
-	** Purpose  		: This is use for send success reset password Sms To User
+	** Purpose  		: This is use to send sms on user numbers..
 	** Date 			: 30 January 2024
-	** Updatead By 		:  
-	** Date 			: 
 	************************************************************************/
 	function sendLottoTicketDetails($oid = ''){
-
-		// Getting order details.
 		$tblName 				= 'da_lotto_orders';
 		$shortField 			= array('_id'=> -1 );
 		$whereCon['where']		= array('order_id'=>$oid);
@@ -297,10 +379,10 @@ class Sms_model extends CI_Model
 			$where['where'] 	=	array('users_id' => (int)$UserId);
 			$UserData			=	$this->common_model->getData('single',$tbl, $where,[]);
 			
-			// $country_code =	$UserData['country_code'];
-			// $users_mobile =	$UserData['users_mobile'];
-			$country_code =	"+91";
-			$users_mobile =	"8700144841";
+			$country_code =	$UserData['country_code'];
+			$users_mobile =	$UserData['users_mobile'];
+			// $country_code =	"+91";
+			// $users_mobile =	"8700144841";
 
 			$message		=	"You canceled your purchase of a $total_price AED ticket with the order ID $oid and the coupon code $couponList .";
 			$senderid		=	"DLZARBA";

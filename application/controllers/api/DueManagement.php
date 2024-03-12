@@ -292,24 +292,20 @@ class DueManagement extends CI_Controller {
 				if($Salesperson_Due|| $DueManagement ):
 					$dueData        = $DueManagement?$DueManagement : $Salesperson_Due;
 					$TotalRecharge  =   0;
+					$todayTotalSale =   0;
 					foreach($dueData as $key => $items):
 					 	$TotalRecharge = $TotalRecharge + $items['recharge_amt'];
 
 					 	$UserIdTo = $items['user_id_to'];
 						$tblName 					=	'da_ticket_orders';
 						$shortField 				= 	array('sequence_id'=> -1 );
-						if( $data['fromDate'] &&  $data['toDate']):
 						$whereCona  				=	array(
-														'user_id' => (int)$UserIdTo  , 'status' => array('$ne'=> 'CL'),
-														'created_at' => array(  '$gte' => $data['fromDate'] , '$lte' => $data['toDate'])
-													 );
-						else:
-						$whereCona  				=	array(
-														'user_id' => (int)$UserIdTo  , 'status' => array('$ne'=> 'CL'),
-														'created_at' => array('$gte' => date('Y-m-d 00:01')  , '$lte' => date('Y-m-d 23:59'))
-												 	);
-						endif;
+															'user_id' => (int)$UserIdTo  , 'status' => array('$ne'=> 'CL'),
+															'created_at' => array(  '$gte' => $data['fromDate']?$data['fromDate']:date('Y-m-d 00:01') , '$lte' => $data['toDate']?$data['toDate']:date('Y-m-d 23:59'))
+														);
 						$todaysales					= $this->geneal_model->todaysales($tblName,$whereCona,$shortField);
+
+						$todayTotalSale += $todaysales;
 						if($DueManagement):
 							$DueManagement[$key]['todaySales'] = $todaysales;
 							$data['DueManagement']   = $DueManagement?$DueManagement:'';
@@ -319,8 +315,8 @@ class DueManagement extends CI_Controller {
 						endif;
 
 					endforeach;	
+					$data['todayTotalSale']   	  = $todayTotalSale;
 					$data['TotalRecharge']   	  = $TotalRecharge;
-
 
 					// Todays total sales details.
 					$whereCon['where_gte'] 		= 	array(array("created_at",date('Y-m-d 00:01')));
@@ -328,7 +324,6 @@ class DueManagement extends CI_Controller {
 					$tblName 			 		= 	'da_dueManagement';
 					$shortField  				= 	array('due_management_id'=> -1 );
 					$todayDueManagement 		=	$this->geneal_model->duemanagementweb('multiple',$tblName,$whereCon,$shortField);
-
 					$todayTotalRecharge = 0;
 					if($todayDueManagement):
 						foreach ($todayDueManagement as $key => $item):

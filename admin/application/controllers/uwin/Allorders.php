@@ -152,7 +152,7 @@ class Allorders extends CI_Controller {
 		$OrdersDetails	= $data['ALLDATA']  = 	$this->common_model->getData('multiple',$tblName,$whereCon,$shortField,$perPage,$page);
 		// echo '<pre>';print_r($data);die();
 		
-		$this->layouts->set_title('U Win | Dealz Arabia');
+		$this->layouts->set_title('All Orders | U Win | Dealz Arabia');
 		$this->layouts->admin_view('uwin/allorders/index',array(),$data);
 	}	// END OF FUNCTION
 
@@ -167,8 +167,8 @@ class Allorders extends CI_Controller {
 	public function addeditdata($editId='')
 	{		
 		$data['error'] 						= 	'';
-		$data['activeMenu'] 				= 	'orders';
-		$data['activeSubMenu'] 				= 	'alllottooders';
+		$data['activeMenu'] 				= 	'uwin';
+		$data['activeSubMenu'] 				= 	'allorders';
 		
 		if($editId):
 			$data['orderData']				=	$this->common_model->getDataByParticularField('da_lotto_orders','order_id',$editId);

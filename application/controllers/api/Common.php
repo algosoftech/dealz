@@ -206,7 +206,7 @@ class Common extends CI_Controller {
 		$data['orderData'] = $orderData;
 	
 		// $this->load->view('web_api/order_pdf_template', $data);
-		$this->load->view('web_api/order_pdf_template_table', $data);
+		$this->load->view('web_api/online_order_template', $data);
 		$this->DownlodeOrderPDF($oid.'.pdf');
 		return;
 	}

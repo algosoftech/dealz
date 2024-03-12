@@ -1636,10 +1636,12 @@ class Users extends CI_Controller {
 	}
 
 	/* * *********************************************************************
-	 * * Function name : getNotification
-	 * * Developed By : Manoj Kumar
-	 * * Purpose  : This function used for get Notification
-	 * * Date : 11 JULY 2022
+	 * * Function name  : getNotification
+	 * * Developed By   : Manoj Kumar
+	 * * Purpose  		: This function used for get Notification
+	 * * Date 			: 11 JULY 2022
+	 * * Updated By     : Dilip Halder
+	 * * Updated Date   : 26 February 2024
 	 * * **********************************************************************/
 	public function getNotification()
 	{	
@@ -1658,13 +1660,16 @@ class Users extends CI_Controller {
 
 				if(!empty($userDetails)):
 					if($userDetails['status'] == 'A'):
-						$where1 		=	[ 'users_id' => (int)$this->input->get('users_id') ];
-						$tblName1 		=	'da_notifications_details';
-						$order1 		=	array('_id'=> -1 );
-						$userAddress 	=	$this->geneal_model->getData($tblName1, $where1, $order1);
+						$tblName1 = 'da_notifications_details';
+						$where1['where'] = array('users_id' => (int)$this->input->get('users_id'));
+						$oneMonthAgoDate = strtotime('-1 month');
+						$where1['where_gte'] 	 =	array(array(0 =>'creation_date' , 1 => (int)$oneMonthAgoDate ));
+						$order1 = array('_id' => -1);
+						$userAddress = $this->common_model->getData('multiple', $tblName1, $where1, $order1);
 
 						$where2['where']	=	array('users_id' => (int)$this->input->get('users_id'), 'is_read' => 'N');
-						$not_read_data 		=	$this->geneal_model->getData2('count',$tblName1,$where2,$order1);
+						$where2['where_gte']=	array(array(0 =>'creation_date' , 1 => (int)$oneMonthAgoDate ));
+						$not_read_data 		=	$this->common_model->getData('count',$tblName1,$where2,$order1);
 
 						$result['not_read_userNotification_count'] = $not_read_data;
 

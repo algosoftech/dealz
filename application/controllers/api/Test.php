@@ -511,6 +511,171 @@ class Test extends CI_Controller {
 			
 
 	}
+
+	/* * *********************************************************************
+	 * * Function name : newDueManagement
+	 * * Developed By : Dilip Halder
+	 * * Purpose  : This function used for  get Summary Report
+	 * * Date : 26 September 2023
+	 * * **********************************************************************/
+	public function newDueManagement()
+	{	
+		$apiHeaderData 		=	getApiHeaderData();
+		$this->generatelogs->putLog('APP',logOutPut($_POST));
+		$result 			= 	array();
+
+		if(requestAuthenticate(APIKEY,'GET')):
+
+			if( $this->input->get('users_id') == ''): 
+				echo outPut(0,lang('SUCCESS_CODE'),lang('USER_ID_EMPTY'),$result);
+			else:
+
+				$DZL_USERID  =   $this->input->get('users_id');
+				$fromDate    =  $this->input->get('fromDate');
+				$toDate      =  $this->input->get('toDate');
+				// Sales Person..
+				if($DZL_USERID):
+					$UserwhereCon['where'] = array('users_id' => (int)$DZL_USERID );
+					$USERDATA   = $this->common_model->getData('single','da_users',$UserwhereCon);
+				endif;
+					$UsersType  = $USERDATA['users_type'];
+
+				// Binded Users..
+				$tblName 	 		  = 'da_users';
+				$whereCon['where']    = array('bind_person_id'=> (string)$DZL_USERID , 'status' => 'A');
+				$shortField  		  = array('users_id',-1);
+				$BindedUsers   		  = $this->common_model->getData('multiple',$tblName,$whereCon,$shortField);
+
+				// Search by product/retailer details....
+				$salesperson = $this->input->get('salesperson');
+				if(empty($salesperson)):
+
+					$USERID = array();
+					$DueManagement = array();
+					foreach ($BindedUsers as $key => $items):
+						$USERID[] = $items['users_id']; 
+
+						$tbl_name   =  'da_dueManagement';
+						// $where      = array( 'user_id_deb' => (int)$DZL_USERID, 'user_id_to'  => ['$in' => $USERID] );
+						$where      = array( 'user_id_deb' => (int)$DZL_USERID, 'user_id_to'  => $items['users_id'] );
+						$matchStage = array('$match' => $where);
+						$groupStage = array('$group' => array(
+						    '_id' => '$user_id_to',
+						    'count' => array('$sum' => 1),
+
+						    'users_name' 				=> array('$last' =>  $items['users_name']),
+						    'last_name' 				=> array('$last' =>  $items['last_name']),
+						    'country_code' 				=> array('$last' =>  $items['country_code']),
+						    'users_mobile' 				=> array('$last' =>  $items['users_mobile']),
+						    'users_email' 				=> array('$last' =>  $items['users_email']),
+						    'availableArabianPoints' 	=> array('$last' =>  $items['availableArabianPoints']),
+						    'sender_users_name' 		=> array('$last' =>  $USERDATA['users_name']),
+						    'sender_last_name' 		    => array('$last' =>  $USERDATA['last_name']),
+						    'sender_country_code' 		=> array('$last' =>  $USERDATA['country_code']),
+						    'sender_users_mobile' 		=> array('$last' =>  $USERDATA['users_mobile']),
+						    'sender_users_email' 		=> array('$last' =>  $USERDATA['users_email']),
+						    'user_id_deb' 				=> array('$last' =>  '$user_id_deb'),
+						    'bind_person_id'    		=> array('$last' =>  '$user_id_deb'),
+						    'user_id_to'        		=> array('$last' =>  '$user_id_to'),
+						    'recharge_amt'      		=> array('$sum' => '$recharge_amt'),
+						    'cash_collected'    		=> array('$sum' => '$cash_collected'),
+						    'due_amount'        		=> array('$sum' => '$due_amount'),
+						    'advanced_amount'   		=> array('$sum' => '$advanced_amount'),
+						    'created_by'       	 		=> array('$last' => '$created_by'),
+						    'user_type'        		 	=> array('$last' => '$user_type'),
+						    'created_at'        		=> array('$last' => '$created_at'),
+						));
+
+						$sortStage 			  = array('$sort' => array('_id' => -1)); // Assuming you want to sort by user_id_to
+						$aggregatePipeline 	  = array($matchStage, $groupStage, $sortStage);
+						$DueManagementArray   = $this->mongo_db->aggregate($tbl_name, $aggregatePipeline, array('batchSize' => 4)); 
+						
+						if($DueManagementArray):
+							$DueManagement[] =  $DueManagementArray[0];
+						endif;
+					endforeach;
+					// $data['DueManagement']   = $DueManagement?$DueManagement:'';
+				else:
+					$data['salesperson'] = $salesperson;
+					if(is_numeric($salesperson)):
+						$sValue = (int)$salesperson;
+						$whereCondition['where']	 = 	array( 'users_mobile' => (int)$sValue ,'status' => 'A');
+						// $whereCon['where']	 = 	array( 'sender_users_mobile' => (int)$sValue ,'record_type' => 'Debit','user_type' => 'Promoter');
+					else:
+						$sValue = $salesperson;
+						$whereCondition['where']	 = 	array( 'users_email' => $sValue ,'status' => 'A');
+						// $whereCon['where']	 = 	array( 'sender_users_email' => $sValue ,'record_type' => 'Debit','user_type' => 'Promoter');
+					endif;
+
+					$Salesperson	   =  $this->common_model->getParticularFieldByMultipleCondition(array('users_id'),'da_users',$whereCondition);
+					$DZL_USERID        =  $Salesperson['users_id']; 
+					$whereCon['where'] = array('user_id_deb' => (int)$DZL_USERID,'bind_person_id' => (string)$DZL_USERID );
+
+					$tblName 			 = 	'da_dueManagement';
+					$shortField 		 = 	array('due_management_id'=> -1 );
+					$Salesperson_Due  	 =	$this->geneal_model->duemanagementweb('multiple',$tblName,$whereCon,$shortField);
+					// $data['Salesperson_Due']    = $Salesperson_Due?$Salesperson_Due:'';
+				endif;
+
+				if($UsersType == "Super Salesperson"):
+					$tblName 				= 	'da_users';
+					$shortField 			= 	'';
+					$whereConsales['where']		=	array('users_type' => 'Sales Person','status' => "A" );
+					$whereConsales['where_in']	=   array("0" => "users_email" ,"1"=>array("manawalanwaseem@gmail.com","shafimak25@gmail.com","ismailkk0520@gmail.com","jaseer26@gmail.com","jaleel.dmi@gmail.com"));
+
+					$salesPersonList 		    = 	$this->common_model->getData('multiple',$tblName,$whereConsales,$shortField);
+					$data['salespersonList']    = $salesPersonList;
+
+				endif;
+				if($Salesperson_Due|| $DueManagement ):
+					$dueData        = $DueManagement?$DueManagement : $Salesperson_Due;
+
+					$TotalRecharge  =   0;
+					$todayTotalSale =   0;
+					foreach($dueData as $key => $items):
+					 	$TotalRecharge = $TotalRecharge + $items['recharge_amt'];
+
+					 	$UserIdTo = $items['user_id_to'];
+						$tblName 					=	'da_ticket_orders';
+						$shortField 				= 	array('sequence_id'=> -1 );
+						$whereCona  				=	array(
+															'user_id' => (int)$UserIdTo  , 'status' => array('$ne'=> 'CL'),
+															'created_at' => array(  '$gte' => $data['fromDate']?$data['fromDate']:date('Y-m-d 00:01') , '$lte' => $data['toDate']?$data['toDate']:date('Y-m-d 23:59'))
+														);
+						$todaysales					= $this->geneal_model->todaysales($tblName,$whereCona,$shortField);
+
+						
+
+						$todayTotalSale += $todaysales;
+						if($DueManagement):
+							$DueManagement[$key]['todaySales'] = $todaysales;
+							$data['DueManagement']   = $DueManagement?$DueManagement:'';
+						else:
+							$Salesperson_Due[$key]['todaySales'] = $todaysales;
+							$data['Salesperson_Due']   = $Salesperson_Due?$Salesperson_Due:'';
+						endif;
+
+					endforeach;	
+
+
+
+					$data['todayTotalSale']   	  = $todayTotalSale;
+					$data['TotalRecharge']   	  = $TotalRecharge;
+					$data['todayTotalRecharge']   = $todayTotalRecharge;
+
+				endif;
+				if($data):
+					$results = $data;
+					echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_ACTION'),$results);	
+				else:
+					echo outPut(0,lang('SUCCESS_CODE'),lang('DATA_NOT_FOUND'),$results);	
+				endif;
+
+			endif;
+		else:
+			echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
+		endif;
+	}
 		
    
 	

@@ -18,8 +18,8 @@ class Generaldata extends CI_Controller {
 	 + + Developed By 	: Ashish Umrao
 	 + + Purpose  		: This function used for index
 	 + + Date 			: 31 MARCH 2022
-	 + + Updated Date 	: 29 January 2024
-	 + + Updated By   	: Dilip Halder
+	 + + Updated Date 	: 
+	 + + Updated By   	: 
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	public function index()

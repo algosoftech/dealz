@@ -225,16 +225,11 @@ class Allrecharge extends CI_Controller {
 
 				$addpoints	=	(int)$_POST['addArabianPoints'];
 				
-				if (is_numeric($user)) {
-					if(strlen($user) >= 9){
-						$user_data = $this->common_model->getDataByParticularField('da_users', 'users_mobile', (int)$user);
-					}else{
-						$user_data = $this->common_model->getDataByParticularField('da_users', 'users_mobile', $user);
-					}
-				}else{
-
+				if (is_numeric($user)):
+					$user_data = $this->common_model->getDataByParticularField('da_users', 'users_mobile', (int)$user);
+				else:
 					$user_data = $this->common_model->getDataByParticularField('da_users', 'users_email', $user);
-				}
+				endif;
 				//echo '<pre>';print_r($user_data);die();
 				if(!empty($user_data)){
 					//echo $this->input->post('percentage');die();

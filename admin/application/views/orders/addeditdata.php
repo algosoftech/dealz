@@ -266,6 +266,15 @@ table td {
                                                 <td class="text-left">Collection Point </td>
                                                 <td class="text-left" colspan="4"><?php echo $orderData['collection_point_name'].' - '.$orderData['emirate_name']; ?></td>                                  
                                             </tr>
+                                            <tr>
+                                                <td class="text-left">Collection Code </td>
+                                                <td class="text-left" colspan="1">
+                                                    <b><?php echo base64_decode($orderData['collection_code']); ?></b>
+                                                </td>
+                                                <td class="text-left" colspan="3">
+                                                    <a href="<?=base_url('orders/allorders/updatecollection/'.$orderData['order_id'])?>" class="btn btn-sm btn-primary">Update Status</a>
+                                                </td>                                  
+                                            </tr>
                                         </thead>
                                         <tbody>    
                                             <tr>

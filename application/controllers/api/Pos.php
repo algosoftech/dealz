@@ -666,7 +666,152 @@ class Pos extends CI_Controller {
 		}
 	}
 
-	/* * *********************************************************************
+	 /* * *********************************************************************
+	 * * Function name : SummaryReportSearch
+	 * * Developed By : Dilip Halder
+	 * * Purpose  : This function used for  get Summary Report
+	 * * Date : 20 March 2023
+	 * * Updated by : Dilip Halder
+	 * * Udated Date : 26-04-2023
+	 * * **********************************************************************/
+	// public function SummaryReportSearch()
+	// {
+
+
+	// 	$apiHeaderData 		=	getApiHeaderData();
+	// 	$this->generatelogs->putLog('APP',logOutPut($_POST));
+	// 	$result 							= 	array();
+
+	// 	if(requestAuthenticate(APIKEY,'GET')):
+			
+	// 		if( $this->input->get('users_id') == ''): 
+	// 			echo outPut(0,lang('SUCCESS_CODE'),lang('USER_ID_EMPTY'),$result);
+	// 		else:
+
+	// 		 	$product_title =  $from_date = $this->input->get('product_title');
+	// 	  		$start_date = date('Y-m-d 00:00' ,strtotime($this->input->get('start_date')) );
+	// 	      	$end_date = date('Y-m-d 23:59' ,strtotime($this->input->get('end_date')));
+	// 			$wcon['where']          = array();
+
+	// 			 if( !empty($product_title)  &&  $this->input->get('start_date')    &&  $this->input->get('end_date') ):
+	// 			 //	echo 'product-date-start-end';
+	// 			 	$wcon['where']          =  array('user_id' => (int)$this->input->get('users_id') , 
+	// 												'product_title' => $product_title ,
+	// 			   									'created_at' => array('$gte' => $start_date ,'$lte' => $end_date ),
+	// 			   									'status' => array('$ne'=> 'CL')
+	// 			   								);
+	// 			elseif( $this->input->get('start_date') !='' && $this->input->get('end_date') !='' ):
+	// 			 	//echo 'date-start-end';
+					
+	// 				$wcon['where']          =  array('user_id' => (int)$this->input->get('users_id') ,
+	// 			   									 'created_at' => array('$gte' => $start_date ,'$lte' => $end_date ),
+	// 			   									 'status' => array('$ne'=> 'CL')
+	// 			   								);
+	// 			elseif(!empty($product_title) ):
+	// 			 	//echo 'product';
+					
+	// 				$wcon['where']          =  array('user_id' => (int)$this->input->get('users_id') ,
+	// 												 'product_title' => $product_title ,
+	// 												 'status' => array('$ne'=> 'CL')
+	// 			   								);
+	// 			elseif( $this->input->get('start_date') !='' ):
+	// 			 	//echo 'product';
+					
+	// 				$wcon['where']          =  array('user_id' => (int)$this->input->get('users_id') ,
+	// 												  'created_at' => array('$gte' => $start_date ),
+	// 												  'status' => array('$ne'=> 'CL')
+	// 			   								);
+	// 			else:
+	// 			 	//echo 'else';
+					
+	// 				$wcon['where']          =  array('user_id' => (int)$this->input->get('users_id'),
+	// 												 'status' => array('$ne'=> 'CL')
+	// 			   								);
+	// 			endif;
+
+
+	// 			$wconUserCon['where']  =  array('users_id' => (int)$this->input->get('users_id'));
+	// 			$userResult			   =  $this->geneal_model->getData2('single', 'da_users', $wconUserCon);
+
+	// 			$result['totalArabianPoints'] 			= $userResult['totalArabianPoints'];
+	// 			$result['availableArabianPoints'] 		= $userResult['availableArabianPoints'];
+				
+				
+	// 			$tbl 				=	'da_ticket_orders';
+	// 		 	$shortField 		=	array('sequence_id' => -1 );
+	// 			$orderList 			= $this->common_model->getData('multiple',$tbl,$wcon ,$shortField);
+				
+	// 			$productId 				= array();
+	// 			//Getting product IDs
+	// 			foreach($orderList as $key => $items):
+	// 			  if(!in_array($items['product_id'],$productId)):
+	// 				$productId[] = $items['product_id'];
+	// 			  endif;
+	// 			endforeach;
+
+	// 			$productImage = array();
+	// 			$products = array();
+
+	// 			foreach ($productId as $key => $pid):
+	// 				// Gettting product image from product collection.
+	// 				$tableName 		  = 'da_products' ;
+	// 				$where['where']   = array( 'products_id' => (int)$pid);
+	// 				$product    	  = $this->common_model->getDataByNewQuery(array('product_image'),'single',$tableName,$where);
+
+
+	// 				$product_image = $product['product_image'] ;
+
+	// 				// Creating Data package as per product id.....
+	// 				$sum = 0;
+	// 				$sales_count = 0;
+	// 				foreach($orderList as $key => $items):
+	// 						if($items['product_id'] == $pid):
+	// 							if($sum == 0):
+	// 							   $data['product_is_donate']  = array();
+	// 							endif;
+
+	// 							$sum 									       = $sum + $items['total_price'];
+	// 							$sales_count  						   		   = $sales_count+(int)$items['product_qty'];
+	// 						 	$data['_id']       				       		   = $items['product_title'];
+	// 						    $data['price']			  		       		   = $items['total_price'];
+	// 						    $data['product_image']			       		   = array($product_image);
+	// 							$data['sales_count']  						   = $sales_count;
+	// 						    $data['sales'] 			  		       		   = $sum;
+	// 						    $data['product_is_donate'][]       	   		   = $items['product_is_donate'];
+	// 						    $availableArabianPoints[]  					   = $items['availableArabianPoints'];
+	// 						    $end_balance[] 			   				       = $items['end_balance'];
+	// 						endif;
+
+	// 				endforeach;
+
+	// 				    $data['availableArabianPoints']   =   reset($end_balance);
+	// 				    $data['end_balance']   =   end($end_balance);
+	// 					array_push($products, $data);
+							
+	// 			endforeach;
+
+	// 			$result['products'] = $products;
+	// 			// $result['products']		=	$this->geneal_model->GetQuickOrderTotalCount('multiple', $tbl, $wcon,$shortField);
+
+	// 			if($this->input->get('product_title') || $this->input->get('start_date')  || $this->input->get('end_date') ):
+	// 				$result['totalArabianPoints'] 	  =	$result['products'][0]['availableArabianPoints'];
+	// 				$result['availableArabianPoints'] =	$result['products'][0]['end_balance'];
+	// 			endif;
+				
+	// 			if(!empty($result)):
+	// 				$results = $result;
+	// 				echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_ACTION'),$results);	
+	// 			else:
+	// 				echo outPut(0,lang('SUCCESS_CODE'),lang('DATA_NOT_FOUND'),$results);	
+	// 			endif;
+
+	// 		endif;
+	// 	else:
+	// 		echo outPut(0,lang('FORBIDDEN_CODE'),lang('FORBIDDEN_MSG'),$result);
+	// 	endif;
+	// }
+
+	 /* * *********************************************************************
 	 * * Function name : SummaryReportSearch
 	 * * Developed By : Dilip Halder
 	 * * Purpose  : This function used for  get Summary Report

@@ -63,14 +63,16 @@ class Sms_model extends CI_Model
 	}
 
 
+	
+
 	public function sendMessageDigitizebirdFunction($phone='',$message='',$senderid='')
 	{
 		try {
 			if(!empty($phone) && !empty($message) && !empty($senderid)):
 				
 				//old api key $ApiKey 		= 'ybG+HgfvR2YzK/LOlwwBXU7YRhKu+LK5Vi6Mfg5N5AI=';
-				$ApiKey 		= 'r8J3+a64Tni3MRp/0VDKEHPL2D4iu+Q/7LlLgL01f9c=';
-				$ClientId 		= '3cb6faf0-b21c-4094-8409-cd3a0b3e03de';
+				$ApiKey 		= 'PCgknHnosPB+5u2KJaENRJjK325IZm0pMyss16634Qk=';
+				$ClientId 		= '6a9adaa5-6f1a-4133-8670-29204bd7509e';
 				$CompanyId 		= '7';
 				$message = urlencode($message);
 				$url = "https://user.digitizebirdsms.com/api/v2/SendSMS?SenderId=$senderid&Is_Unicode=false&Is_Flash=true&Message=$message&MobileNumbers=$phone&ApiKey=$ApiKey&ClientId=$ClientId&CompanyId=$CompanyId";

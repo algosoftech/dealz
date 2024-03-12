@@ -57,68 +57,33 @@ $(function(){
                 <h5>Manage Voucher List</h5>
               </div>
               <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-6 col-md-6 col-lg-6">
-                      <form class="" method="post" enctype="multipart/form-data" >
-                        <div class="row">
-                          <div class="col-sm-12 col-md-12 col-lg-12">
-                            <fieldset>
-                              <legend>Daily Dealz Plus</legend>
-                              <h6>
-                                  Uplaod Daily Draws CSV 
-                                  <sup>
-                                    <a href="<?=fileBaseUrl.'assets/csv-sample.csv'?>">Sample</a>
-                                  </sup>
-                                </h6>
-                                <div class="upload-btn-wrapper">
-                                  <button class="select-btn">Upload a file</button>
-                                  <input type="file" name="csvFile"  id="daily-dealz-plus" accept=".csv" />
-                                </div>
-                                <div class="upload-btn-wrapper">
-                                  <button class="uplaod-btn btn btn-sm btn-primary" id="daily-upload-btn" disabled title="Upload CSV file first" >Upload</button>
-                                </div>
-                                <div class="upload-btn-wrapper">
-                                  <input type="reset" class="btn btn-sm btn-secondary" value="Cancel">
-                                </div>
-                            </fieldset>
-                          </div>
-                        </div>
-                      </form>
+
+                <form class="" method="post" enctype="multipart/form-data" >
+
+                  <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                      <div class="upload-btn-wrapper">
+                        <button class="select-btn">Upload a file</button>
+                        <input type="file" name="csvFile"  id="file-select" accept=".csv" />
+                      </div>
+                      <div class="upload-btn-wrapper">
+                        <button class="uplaod-btn btn btn-sm btn-primary" id="uplaod-btn" disabled title="Upload CSV file first" >Upload</button>
+                      </div>
+                      <div class="upload-btn-wrapper">
+                        <input type="reset" class="btn btn-sm btn-secondary" value="Cancel">
+                      </div>
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-6">
-                      <form class="" method="post" action="<?=getCurrentControllerPath('upload_subwinners')?>"  enctype="multipart/form-data" >
-                        <div class="row">
-                          <div class="col-sm-12 col-md-12 col-lg-12">
-                            <fieldset>
-                              <legend>Sub Winners</legend>
-                              <h6>
-                                Uplaod Daily Draws CSV 
-                                <sup>
-                                  <a href="<?=fileBaseUrl.'assets/csv-sample.csv'?>">Sample</a>
-                                </sup>
-                              </h6>
-                                <div class="upload-btn-wrapper">
-                                  <button class="select-btn">Upload a file</button>
-                                  <input type="file" name="csvFile"  id="subwinner" accept=".csv" />
-                                </div>
-                                <div class="upload-btn-wrapper">
-                                  <button class="uplaod-btn btn btn-sm btn-primary" id="subwinner-upload-btn" disabled title="Upload CSV file first" >Upload</button>
-                                </div>
-                                <div class="upload-btn-wrapper">
-                                  <input type="reset" class="btn btn-sm btn-secondary" value="Cancel">
-                                </div>
-                            </fieldset>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                </div>
+                  </div>
+                  
+                </form>
 
 
                 <form id="Data_Form" name="Data_Form" method="get" action="<?php echo $forAction; ?>">
                   <div class="dt-responsive table-responsive">
                     <div id="simpletable_wrapper" class="dataTables_wrapper dt-bootstrap4">
                       
+                      
+
                       <div class="row">
                         <div class="col-sm-3 col-md-3">
                           <div class="dataTables_length" id="simpletable_length">
@@ -136,12 +101,6 @@ $(function(){
                           </div>
                         </div>
                         <div class="col-sm-3 col-md-3">
-                          <select id="select-module" class="custom-select custom-select-sm form-control form-control-sm" name="select-module">
-                            <option <?php if($selected_module == "Daily Dealz Plus"): echo 'selected'; endif; ?> value="Daily Dealz Plus">Daily Dealz Plus</option>
-                            <option <?php if($selected_module == "Sub Winners"): echo 'selected'; endif; ?>  value="Sub Winners">Sub Winners</option>
-                          </select>
-                        </div>
-                        <div class="col-sm-2 col-md-2">
                           <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
                             <option value="">Select Field</option>
                             <option value="status" <?php if($searchField == 'status')echo 'selected="selected"'; ?>>Status (Active, Inactive )</option>
@@ -153,11 +112,10 @@ $(function(){
                         <div class="col-sm-3 col-md-3">
                           <input type="text" name="searchValue" id="searchValue" value="<?php echo $searchValue; ?>" class="form-control form-control-sm" placeholder="Enter Search Text">
                         </div>
-                        <div class="col-sm-1 col-md-1">
+                        <div class="col-sm-3 col-md-3">
                           <input type="submit" name="Search" value="Search" class="btn btn-sm btn-primary">
                         </div>
                       </div>
-
                       <div class="row">
                         <div class="col-sm-12">
                           <div class="table-responsive">
@@ -183,7 +141,7 @@ $(function(){
                                   <td><?=stripslashes($ALLDATAINFO['first_name'].' '.$ALLDATAINFO['last_name'] )?></td>
                                   <td><?=stripslashes($ALLDATAINFO['order_id']?$ALLDATAINFO['order_id']:"N/A")?></td>
                                   <td><?=$ALLDATAINFO['code']?></td>
-                                  <td><?=number_format($ALLDATAINFO['amount'],2)?></td>
+                                  <td><?=number_format((float)$ALLDATAINFO['amount'],2)?></td>
                                   <td><?=$ALLDATAINFO['created_at'];?></td>
                                     <td style="text-align: right;">
                                       <?php if($ALLDATAINFO['status'] == 1 ): ?>
@@ -296,24 +254,9 @@ $(function(){
 </div>
 
 <script>
-  $('#daily-dealz-plus').on('change', function(){
+  $('#file-select').on('change', function(){
     let file = $(this).val();
-    $('#daily-upload-btn').attr('disabled' , false);
-  });
-
-  $('#subwinner').on('change', function(){
-    let file = $(this).val();
-    $('#subwinner-upload-btn').attr('disabled' , false);
-  });
-
-  $("#select-module").on('change' ,function(){
-    let selectedModule = $(this).val();
-    if(selectedModule == "Daily Dealz Plus"){
-      window.location.href ="<?=base_url('draws/voucher/index')?>";
-    }else{
-      window.location.href ="<?=base_url('draws/voucher/subwinner')?>"
-    }
-
+    $('#uplaod-btn').attr('disabled' , false);
   });
 
 </script>

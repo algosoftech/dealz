@@ -696,9 +696,9 @@ public function  __construct()
         // $return_can =  base_url('/telr-cancel/'.$ORparam["order_id"]);
         // $return_decl = base_url('/telr-fail/'.$ORparam["order_id"]);
 
-        $return_auth = "https://dealzarabia.com/telr-success/".$ORparam["order_id"];
-        $return_can =  "https://dealzarabia.com//telr-cancel/".$ORparam["order_id"];
-        $return_decl = "https://dealzarabia.com/telr-fail/".$ORparam["order_id"];
+        $return_auth = base_url("telr-success/".$ORparam["order_id"]);
+        $return_can  = base_url("telr-cancel/".$ORparam["order_id"]);
+        $return_decl = base_url("telr-fail/".$ORparam["order_id"]);
 
 		if($ORparam["user_email"] == ''){
           $ORparam["user_email"] = "dealzarabiasales1@gmail.com";
@@ -838,11 +838,11 @@ public function  __construct()
 
 	        if($paymentData && $paymentData['order_status'] != 'Initialized'):
 	            if($paymentData['order_status'] == 'Success'):
-	                echo 'Success'.'_____https://dealzarabia.com/order-success/';     die;
+	                echo 'Success'.'_____'.base_url('/order-success/');     die;
 	            elseif($paymentData['order_status'] == 'Cancel'):
-	                echo 'Success'.'_____https://dealzarabia.com/';    die;
+	                echo 'Success'.'_____'.base_url('/');    die;
 	            elseif($paymentData['order_status'] == 'Fail'):
-	                echo 'Success'.'_____https://dealzarabia.com/';    die;
+	                echo 'Success'.'_____'.base_url('/');    die;
 	            endif;              
 	        endif;
 	    endif;
@@ -1580,12 +1580,10 @@ public function  __construct()
 
 
 	/* * *********************************************************************
-	 * * Function name 	: download_invoice
-	 * * Developed By 	: Dilip
-	 * * Purpose  		: This function used for download invoice
-	 * * Date 			: 01 FEB 2023
-	 * * Updated BY 	: Dilip Halder
-	 * * Updated Date 	: 24 January 2024
+	 * * Function name : download_invoice
+	 * * Developed By : Dilip
+	 * * Purpose  : This function used for download invoice
+	 * * Date :: 01 FEB 2023
 	 * * **********************************************************************/
 	public function download_invoice($oid ='')
 	{
@@ -1595,95 +1593,21 @@ public function  __construct()
 		$shortField 			= 	array('_id'=> -1 );
 		$whereCon['where']		= 	array('order_id'=>$oid);
 	
-		$orderData     			=	$this->geneal_model->getData2('single', $tblName, $whereCon,$shortField);
-		// $orderData  =	$this->geneal_model->getordersList('single', $tblName, $whereCon,$shortField);
-		
-		// OrderDetails
-		// User details fetching
-		$where2 			    =	array('users_id' => (int)$orderData['user_id']);
-		$userData				=	$this->geneal_model->getOnlyOneData('da_users', $where2);
-		// echo "<pre>"; print_r($orderData); die();
+		$orderData  =	$this->geneal_model->getordersList('single', $tblName, $whereCon,$shortField);
+			
+		$where2 					=	['users_id' => (int)$orderData['user_id'] ];
+		$userData					=	$this->geneal_model->getOnlyOneData('da_users', $where2);
 
-		// coupon code start here.
-        $tblName                =   'da_coupons';
-        $shortField             =   array('coupon_id'=> 1 );
-        $whereCon['where']      =   array('order_id'=> $oid);
-        $couponlist             =  $this->geneal_model->getData2('multiple', $tblName, $whereCon,$shortField);
-        // coupon code end here.
-
-       // Product details code start here.
-        $tblName                =  'da_orders_details';
-        $shortField             =  array('_id'=> -1 );
-        $whereCon['where']      =  array('order_id'=>$oid);
-        $orderDetails         =  $this->geneal_model->getData2('multiple', $tblName, $whereCon,$shortField);
-
-
-        $productName = array();
-        $key = 0;// 
-        foreach($couponlist as $couponKey => $coupons):
-            // Product details code start here.
-            $tblName                =  'da_products';
-            $shortField             =  array('_id'=> -1 );
-            $whereCon['where']      =  array('products_id'=>(int)$coupons['product_id']);
-            $ProductDetails         =  $this->geneal_model->getData2('single', $tblName, $whereCon,$shortField);
-            $price                  = $ProductDetails['adepoints']?$ProductDetails['adepoints']:$ProductDetails['points'];
-
-          	$tblName                =  'da_prize';
-            $shortField             =  array('_id'=> -1 );
-            $whereCon['where']      =  array('product_id'=>(int)$coupons['product_id']);
-            $PrizeData         =  $this->geneal_model->getData2('single', $tblName, $whereCon,$shortField);
-
-
-            // echo "<pre>";
-            // print_r();
-            // die();
-
-            if(!in_array($ProductDetails['title'],array_column($productData, 'title'))):
-                $productData[$key]['title']             = $ProductDetails['title'];
-                $productData[$key]['price']             = $price;
-                $productData[$key]['draw_date']         = $ProductDetails['draw_date'];
-                $productData[$key]['draw_time']         = $ProductDetails['draw_time'];
-                $productData[$key]['prize_title']		= $PrizeData['title'];
-               foreach($orderDetails as $ORD_details):
-                    if($ProductDetails['products_id'] == $ORD_details['product_id']):
-                         $productData[$key]['quantity'] = $ORD_details['quantity'];
-                    endif;
-                endforeach;
-
-
-                foreach($couponlist as $couponKey => $coupon):
-                    if($ProductDetails['products_id'] == $coupon['product_id']):
-                         $productData[$key]['coupon'][]         = $coupon['coupon_code'];
-                    endif;
-                endforeach;
-                $key++;
-            endif;
-        endforeach;
-
-        
-
-        $totalQTY = 0;
-        foreach ($orderDetails as $key => $ORD_Details):
-        	$totalQTY +=$ORD_Details['quantity'];
-        endforeach;
-        	
-
-
-		$data['orderData'] 		= $orderData;
-		$data['productData'] 	= $productData;
-		$data['totalQTY'] 		= $totalQTY;
-		$data['name'] 	   		= $userData['users_name'].' '.$userData['last_name'];
-		$data['mobile']    		= $userData['country_code'] .' '.$userData['users_mobile'];
-
-		// echo "<pre>"; print_r($data); die();
-
+		//$name = explode('@',$data['orderData']['user_email']);
+		$name = $userData['users_name'];
+		$data['orderData'] = $orderData;
+		$data['name'] = $name;
+	
 		// $this->load->view('web_api/order_pdf_template', $data);
 		// $this->load->view('web_api/order_pdf_template_table', $data);
-		$this->load->view('web_api/pos_order_template', $data);
+		$this->load->view('web_api/online_order_template', $data);
 
-		
-
-		// $this->DownlodeOrderPDF($oid.'.pdf');
+		$this->DownlodeOrderPDF($oid.'.pdf');
 		return;
 	}
 
@@ -2007,6 +1931,8 @@ public function  __construct()
 	** Developed By : Dilip Halder
 	** Purpose      : This function used for make telr payment
 	** Date         : 20 December 2023
+	** Updated By   : Dilip Halder
+	** Updated Date : 26 February 2024
 	************************************************************************/
 	public function ngenius()
 	{	
@@ -2019,23 +1945,24 @@ public function  __construct()
 
 		$decodedData = urldecode($serializedArray);
 		$ORparam = unserialize(urldecode($decodedData));
-
-		 
-
-
 		// Creating auth for new order.
-	 	$apikey = "ZmE1OTkzYzktMmQzYy00ZTI3LTg2NTUtZmUzZDVlMjc3ZWFiOmJiZjNiZDY5LTUyN2QtNGU3My05ZjM2LWEwNjFiNWY2MTA1Yg==";		// enter your API key here
+	 	// $apikey = "ZmE1OTkzYzktMmQzYy00ZTI3LTg2NTUtZmUzZDVlMjc3ZWFiOmJiZjNiZDY5LTUyN2QtNGU3My05ZjM2LWEwNjFiNWY2MTA1Yg==";		//  TEST enter your API key here
+	 	// $URL    = "https://api-gateway.sandbox.ngenius-payments.com/identity/auth/access-token"; 
+	 	$apikey = "ZDYxNWMwNjEtOWZmYy00NmU4LTg1ZjctNzJkYThkMTJlODc3OmVkN2NlNzZhLTQ5NDQtNDg2OC04ZGFhLTljZTkxZWVhMGIxZg==";		// enter your API key here
+	 	$URL    = "https://api-gateway.ngenius-payments.com/identity/auth/access-token"; 
 		$ch = curl_init(); 
-		curl_setopt($ch, CURLOPT_URL, "https://api-gateway.sandbox.ngenius-payments.com/identity/auth/access-token"); 
+		curl_setopt($ch, CURLOPT_URL,$URL); 
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 		    "accept: application/vnd.ni-identity.v1+json",
 		    "authorization: Basic ".$apikey,
 		    "content-type: application/vnd.ni-identity.v1+json"
 		   )); 
+		curl_setopt($ch, CURLOPT_VERBOSE, true);   
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);   
 		curl_setopt($ch, CURLOPT_POST, 1); 
-		curl_setopt($ch, CURLOPT_POSTFIELDS,  "{\"realmName\":\"ni\"}"); 
+		curl_setopt($ch, CURLOPT_POSTFIELDS,  ""); 
 		$output = json_decode(curl_exec($ch)); 
+		
 		$access_token = $output->access_token;
 		$this->session->set_userdata('access_token' , $access_token);
 		// Order Creating code start here...
@@ -2048,20 +1975,25 @@ public function  __construct()
 		
 		$postData->merchantAttributes->maskPaymentInfo = false;
 		$postData->merchantAttributes->merchantOrderReference = $ORparam['order_id'];
-		$postData->merchantAttributes->redirectUrl = "https://dealzarabia.com/ngenius-order-status";
-		$postData->merchantAttributes->cancelUrl = "https://dealzarabia.com/ngenius-order-status";
+		$postData->merchantAttributes->redirectUrl = base_url('ngenius-order-status');
+		$postData->merchantAttributes->cancelUrl = base_url('ngenius-order-status');
       	// $postData->merchantAttributes->cancelUrl = "https://dealzarabia.com";
       	$postData->merchantAttributes->skipConfirmationPage = true;
       	$postData->merchantAttributes->skip3DS = true;
 		
-
-		$outlet = "a7b64f18-0fee-4dcd-b326-debc3c867a73";
 		$token  = $access_token;
 		$json   = json_encode($postData);
 
-		$ch = curl_init();
+		// Test details
+		// $outlet = "a7b64f18-0fee-4dcd-b326-debc3c867a73";   
+		// $URL    = "https://api-gateway.sandbox.ngenius-payments.com/transactions/outlets/".$outlet."/orders";
 
-		curl_setopt($ch, CURLOPT_URL, "https://api-gateway.sandbox.ngenius-payments.com/transactions/outlets/".$outlet."/orders");
+
+		$outlet = "e72708e2-8658-4b91-a1e1-047990aba51a";
+		$URL    = "https://api-gateway.ngenius-payments.com/transactions/outlets/".$outlet."/orders";
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$URL);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 		"Authorization: Bearer ".$token, 
 		"Content-Type: application/vnd.ni-payment.v2+json",
@@ -2069,8 +2001,8 @@ public function  __construct()
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-
 		$output = json_decode(curl_exec($ch));
+
 		$order_reference = $output->reference;
 		$order_paypage_url = $output->_links->payment->href;
 

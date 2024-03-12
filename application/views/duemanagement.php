@@ -193,6 +193,11 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
+    <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
+
     <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -358,26 +363,29 @@
 
               <div class="row form_user">
 
-                <table>
-                  <tr>
-                    <th style="text-align:center;">S.No</th>
-                    <th style="text-align:center;">User's Details</th>
-                    <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
-                      <th style="text-align:center;">Total Sales</th>
-                      <th style="text-align:center;">Available ArabianPoints</th>
-                    <?php else: ?>
-                      <th style="text-align:center;">Today's Sale</th>
-                      <th style="text-align:center;">Total Recharges</th>
-                      <th style="text-align:center;">Recharge Amount</th>
-                      <th style="text-align:center;">Cash Collected Amount</th>
-                      <th style="text-align:center;">Due Amount</th>
-                      <th style="text-align:center;">Advance Amount</th>
-                      <!-- <th style="text-align:center;">Created At</th> -->
-                      <th style="text-align:center;">Action</th>
-                    <?php endif; ?>
-                  </tr>
+                <table id="myTable" class="display">
+                  <thead>
+                    <tr>
+                      <th style="text-align:center;">S.No</th>
+                      <th style="text-align:center;">User's Details</th>
+                      <?php if( !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Retailer" ||  !empty($salesperson) && $this->session->userdata('DZL_USERSTYPE') == "Super Salesperson"): ?>
+                        <th style="text-align:center;">Total Sales</th>
+                        <th style="text-align:center;">Available ArabianPoints</th>
+                      <?php else: ?>
+                        <th style="text-align:center;">Today's Sale</th>
+                        <th style="text-align:center;">Total Recharges</th>
+                        <th style="text-align:center;">Recharge Amount</th>
+                        <th style="text-align:center;">Cash Collected Amount</th>
+                        <th style="text-align:center;">Due Amount</th>
+                        <th style="text-align:center;">Advance Amount</th>
+                        <!-- <th style="text-align:center;">Created At</th> -->
+                        <th style="text-align:center;">Action</th>
+                      <?php endif; ?>
+                    </tr>
+                  </thead>
 
                   <?php if($DueManagement): ?>
+                  <tbody>
                     <?php foreach ($DueManagement as $key => $item): ?>
                       <tr>
                       <td><?php echo $key+1;  ?> </td>
@@ -431,11 +439,11 @@
 
                       </tr>
                     <?php endforeach ?>
-
                   <?php else: ?>
                     <tr><td colspan="9" > Data not found. </td></tr>
                   <?php endif; ?>
                       
+                  </tbody>
                   </table>
                   <?= $this->pagination->create_links(); ?>
               </div>
@@ -481,7 +489,11 @@
 </script>
 <!-- Main Slider Js -->
 
-
+<script>
+    let table = new DataTable('#myTable', {
+        responsive: true
+    });
+</script>
 
 
 

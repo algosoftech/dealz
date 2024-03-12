@@ -1,27 +1,3 @@
-<style>
-  .upload-btn-wrapper {
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
-  }
-
-  .select-btn {
-      border: 1px solid gray;
-      color: gray;
-      background-color: white;
-      padding: 2px 10px;
-      font-size: 16px;
-      min-width: 200px;
-  }
-
-  .upload-btn-wrapper input[type=file] {
-    font-size: 100px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-  }
-</style>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
 <script>
@@ -42,7 +18,7 @@ $(function(){
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="<?php echo getCurrentDashboardPath('dashboard/index'); ?>"><i class="feather icon-home"></i></a></li>
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">All Voucher List</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Draw Winners List</a></li>
                     </ul>
                 </div>
             </div>
@@ -54,71 +30,16 @@ $(function(){
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header">
-                <h5>Manage Voucher List</h5>
+                <h5>Manage Draw Winners List</h5>
+                <!-- <a href="<?php echo getCurrentControllerPath('addeditdata'); ?>" class="btn btn-sm btn-primary pull-right" style="margin-left:10px;">Sub Winner</a>
+                <a href="javaScriptcript:void{0}" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#exportModal">Export excel</a> -->
+
               </div>
               <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-6 col-md-6 col-lg-6">
-                      <form class="" method="post" enctype="multipart/form-data" >
-                        <div class="row">
-                          <div class="col-sm-12 col-md-12 col-lg-12">
-                            <fieldset>
-                              <legend>Daily Dealz Plus</legend>
-                              <h6>
-                                  Uplaod Daily Draws CSV 
-                                  <sup>
-                                    <a href="<?=fileBaseUrl.'assets/csv-sample.csv'?>">Sample</a>
-                                  </sup>
-                                </h6>
-                                <div class="upload-btn-wrapper">
-                                  <button class="select-btn">Upload a file</button>
-                                  <input type="file" name="csvFile"  id="daily-dealz-plus" accept=".csv" />
-                                </div>
-                                <div class="upload-btn-wrapper">
-                                  <button class="uplaod-btn btn btn-sm btn-primary" id="daily-upload-btn" disabled title="Upload CSV file first" >Upload</button>
-                                </div>
-                                <div class="upload-btn-wrapper">
-                                  <input type="reset" class="btn btn-sm btn-secondary" value="Cancel">
-                                </div>
-                            </fieldset>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="col-sm-6 col-md-6 col-lg-6">
-                      <form class="" method="post" action="<?=getCurrentControllerPath('upload_subwinners')?>"  enctype="multipart/form-data" >
-                        <div class="row">
-                          <div class="col-sm-12 col-md-12 col-lg-12">
-                            <fieldset>
-                              <legend>Sub Winners</legend>
-                              <h6>
-                                Uplaod Daily Draws CSV 
-                                <sup>
-                                  <a href="<?=fileBaseUrl.'assets/csv-sample.csv'?>">Sample</a>
-                                </sup>
-                              </h6>
-                                <div class="upload-btn-wrapper">
-                                  <button class="select-btn">Upload a file</button>
-                                  <input type="file" name="csvFile"  id="subwinner" accept=".csv" />
-                                </div>
-                                <div class="upload-btn-wrapper">
-                                  <button class="uplaod-btn btn btn-sm btn-primary" id="subwinner-upload-btn" disabled title="Upload CSV file first" >Upload</button>
-                                </div>
-                                <div class="upload-btn-wrapper">
-                                  <input type="reset" class="btn btn-sm btn-secondary" value="Cancel">
-                                </div>
-                            </fieldset>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                </div>
-
-
                 <form id="Data_Form" name="Data_Form" method="get" action="<?php echo $forAction; ?>">
                   <div class="dt-responsive table-responsive">
                     <div id="simpletable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                      
+                     
                       <div class="row">
                         <div class="col-sm-3 col-md-3">
                           <div class="dataTables_length" id="simpletable_length">
@@ -136,42 +57,40 @@ $(function(){
                           </div>
                         </div>
                         <div class="col-sm-3 col-md-3">
-                          <select id="select-module" class="custom-select custom-select-sm form-control form-control-sm" name="select-module">
-                            <option <?php if($selected_module == "Daily Dealz Plus"): echo 'selected'; endif; ?> value="Daily Dealz Plus">Daily Dealz Plus</option>
-                            <option <?php if($selected_module == "Sub Winners"): echo 'selected'; endif; ?>  value="Sub Winners">Sub Winners</option>
-                          </select>
-                        </div>
-                        <div class="col-sm-2 col-md-2">
                           <select name="searchField" id="searchField" class="custom-select custom-select-sm form-control form-control-sm">
                             <option value="">Select Field</option>
-                            <option value="status" <?php if($searchField == 'status')echo 'selected="selected"'; ?>>Status (Active, Inactive )</option>
                             <option value="order_id" <?php if($searchField == 'order_id')echo 'selected="selected"'; ?>>Order ID </option>
-                            <option value="code" <?php if($searchField == 'code')echo 'selected="selected"'; ?>>Coupon Code </option>
-                            <option value="created_at" <?php if($searchField == 'created_at')echo 'selected="selected"'; ?>>Created Date</option>
+                            <option value="coupon_code" <?php if($searchField == 'coupon_code')echo 'selected="selected"'; ?>>Coupon Code </option>
+                            <option value="product_name" <?php if($searchField == 'product_name')echo 'selected="selected"'; ?>>Product Name </option>
+
+                            <option value="draw_date" <?php if($searchField == 'draw_date')echo 'selected="selected"'; ?>>Draw Date (YYYY-MM-DD) </option>
+                            <option value="setteld_by_name" <?php if($searchField == 'setteld_by_name')echo 'selected="selected"'; ?>>Setteld Name </option>
+                            <option value="collection_status" <?php if($searchField == 'collection_status')echo 'selected="selected"'; ?>>Collection Status (Zero and 1) </option>
+
                           </select>
                         </div>
                         <div class="col-sm-3 col-md-3">
                           <input type="text" name="searchValue" id="searchValue" value="<?php echo $searchValue; ?>" class="form-control form-control-sm" placeholder="Enter Search Text">
                         </div>
-                        <div class="col-sm-1 col-md-1">
+                        <div class="col-sm-3 col-md-3">
                           <input type="submit" name="Search" value="Search" class="btn btn-sm btn-primary">
                         </div>
                       </div>
-
                       <div class="row">
                         <div class="col-sm-12">
                           <div class="table-responsive">
                             <table id="simpletable" class="table table-striped table-bordered nowrap dataTable" role="grid" aria-describedby="simpletable_info">
                               <thead style="text-align: center;">
                                 <tr role="row">
-                                  <th width="5%" style="text-align: center;">S.No.</th>
-                                  <th width="20%">Name</th>
-                                  <th width="20%">Order ID</th>
-                                  <th width="20%">Coupon Code</th>
-                                  <th width="20%">Amount</th>
-                                  <th width="20%">Created Date</th>
-                                  <th width="20%">status</th>
-                                  <th width="10%">Action</th>
+                                <th width="5%" style="text-align: center;">S.No.</th>
+                                <th width="20%">Order ID</th>
+                                <th width="20%">Coupon Code</th>
+                                <!-- <th width="10%">Draw Date</th> -->
+                                <th width="10%">Product Name </th>
+                                <th width="20%">Setteld By</th>
+                                <th width="20%">Setteld Amount</th>
+                                <th width="20%">Setteld Status</th>
+                                <th width="10%">Action</th>
                                 </tr>
                               </thead>
                               <tbody style="text-align: center;">
@@ -180,34 +99,34 @@ $(function(){
                                 ?>
                                 <tr role="row" class="<?php echo $rowClass; ?>">
                                   <td style="text-align: center;"><?=$i++?></td>
-                                  <td><?=stripslashes($ALLDATAINFO['first_name'].' '.$ALLDATAINFO['last_name'] )?></td>
-                                  <td><?=stripslashes($ALLDATAINFO['order_id']?$ALLDATAINFO['order_id']:"N/A")?></td>
-                                  <td><?=$ALLDATAINFO['code']?></td>
+                                  <td><?=stripslashes($ALLDATAINFO['order_id'])?></td>
+                                  <td><?=$ALLDATAINFO['coupon_code']?></td>
+                                  <td>
+                                    <?=stripslashes($ALLDATAINFO['product_name'])?>
+                                    <br>
+                                    Draw Date : <?=date('d-M-Y',strtotime($ALLDATAINFO['draw_date']))?> 
+                                  </td>
+                                  <td><?=$ALLDATAINFO['setteld_by_name']?$ALLDATAINFO['setteld_by_name']:'--'?></td>
                                   <td><?=number_format($ALLDATAINFO['amount'],2)?></td>
-                                  <td><?=$ALLDATAINFO['created_at'];?></td>
-                                    <td style="text-align: right;">
-                                      <?php if($ALLDATAINFO['status'] == 1 ): ?>
-                                        <?=showStatus('A')?>
-                                      <?php else: ?>
-                                        <?=showStatus('I')?>
-                                      <?php endif; ?>
+                                  <td>
+                                    <?php if($ALLDATAINFO['setteld_status'] == 1): ?>
+                                      <span style="color:green">Paid</span>
+                                    <?php else: ?>
+                                      <span style="color:red">Due</span>
+                                    <?php endif; ?>
                                   </td>
                                   <td>
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                       <ul class="dropdown-menu" role="menu">
+                                         <li> <a href="<?php echo getCurrentControllerPath('userdetails/'.$ALLDATAINFO['order_id'].'/'.$ALLDATAINFO['users_id'])?>"  ><i class="fas fa-eye"></i>VIEW DETAILS</a> </li>
                                         <li>
-                                          <?php if($ALLDATAINFO['status'] == 1): ?>
-                                            <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['voucher_id'].'/0')?>" onClick="return confirm('Do you want to change status');" ><i class="fas fa-thumbs-down"></i>Inactive</a>
-                                          <?php elseif($ALLDATAINFO['status'] == 0): ?>
-                                            <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['voucher_id'].'/1')?>" onClick="return confirm('Do you want to change status');"><i class="fas fa-thumbs-up"></i> Active</a>
+                                          <?php if($ALLDATAINFO['setteld_status'] == 0): ?>
+                                            <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['order_id'].'/A')?>" onClick="return confirm('Want to mark as paid!');" ><i class="fas fa-thumbs-up"></i>Approve</a>
+                                          <?php elseif($ALLDATAINFO['setteld_status'] == '1'): ?>
+                                            <a href="<?php echo getCurrentControllerPath('changestatus/'.$ALLDATAINFO['order_id'].'/R')?>" onClick="return confirm('Want to mark as due!');"><i class="fas fa-thumbs-down"></i> Reverse</a>
                                           <?php endif; ?>
                                         </li>
-                                        <?php if($ALLDATAINFO['soft_delete'] == 0): ?>
-                                          <li> 
-                                              <a href="<?php echo getCurrentControllerPath('deletedata/'.$ALLDATAINFO['voucher_id'])?>" onClick="return confirm('Do you want to delete');" ><i class="fas fa-trash"></i>Delete</a> 
-                                          </li>
-                                        <?php endif; ?>
                                       </ul>
                                     </div>
                                   </td>
@@ -294,26 +213,3 @@ $(function(){
     </div>
   </div>
 </div>
-
-<script>
-  $('#daily-dealz-plus').on('change', function(){
-    let file = $(this).val();
-    $('#daily-upload-btn').attr('disabled' , false);
-  });
-
-  $('#subwinner').on('change', function(){
-    let file = $(this).val();
-    $('#subwinner-upload-btn').attr('disabled' , false);
-  });
-
-  $("#select-module").on('change' ,function(){
-    let selectedModule = $(this).val();
-    if(selectedModule == "Daily Dealz Plus"){
-      window.location.href ="<?=base_url('draws/voucher/index')?>";
-    }else{
-      window.location.href ="<?=base_url('draws/voucher/subwinner')?>"
-    }
-
-  });
-
-</script>

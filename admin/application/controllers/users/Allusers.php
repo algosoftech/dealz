@@ -56,6 +56,19 @@ class Allusers extends CI_Controller {
 
 					$num_len  = strlen($searchValue);
 
+					if($num_len < 7){
+						$max_len  = 8;
+						$len_required = $max_len - $num_len;
+						$preNumber =  str_repeat(0, $len_required);
+						$postNumber =  str_repeat(9, $len_required);
+
+						$mobile_number_start = $searchValue.$preNumber;
+						$mobile_number_end = $searchValue.$postNumber;
+					}elseif($num_len <= 8){
+						$completeNumber = 'yes';
+					}
+
+
 					if($num_len < 9){
 						$max_len  = 9;
 						$len_required = $max_len - $num_len;
@@ -287,8 +300,10 @@ class Allusers extends CI_Controller {
 				$param['pickup_point_holder']	= 	$this->input->post('pickup_point_holder');
 				$param['area']					= 	$this->input->post('area');
 				//For Bind Freelancer to sales person
-				if( $this->input->post('user_type') == 'Retailer' && $this->input->post('bind_user_type') == 'Sales Person' || 
-					$this->input->post('user_type') == 'Promoter' && $this->input->post('bind_user_type') == 'Sales Person') {
+				// if( $this->input->post('user_type') == 'Retailer' && $this->input->post('bind_user_type') == 'Sales Person' || 
+				// 	$this->input->post('user_type') == 'Promoter' && $this->input->post('bind_user_type') == 'Sales Person') {
+				
+				if( $this->input->post('user_type') != 'Users'):
 					$sales_person 					=	explode('|',$this->input->post('sales_person'));
 					$param['store_name']	    	= 	addslashes($this->input->post('store_name'));
 					$param['bind_person_id']		=	$sales_person['0'];
@@ -300,8 +315,8 @@ class Allusers extends CI_Controller {
 					$param['company_address']	=	'Golden Business Centre , Port Saeed , Dubai';
 					$param['buy_ticket']		=	'Y';
 					$param['buy_voucher']		=	'Y';
-					
-				}
+				endif;
+
 				//End
 				//For Bind Freelancer to Freelancer
 				if( $this->input->post('user_type') == 'Retailer' && $this->input->post('bind_user_type') == 'Freelancer' || 
