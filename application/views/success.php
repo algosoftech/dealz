@@ -277,7 +277,7 @@
                                         <h1>For more details</h1>
                                     </div>
                                     <div>
-                                        <p class='information-section'> visit <a href='".$base_url."'>www.dealzarabia.com</a> <br>
+                                        <p class='information-section'> visit <a href='<?=base_url();?>'><?=base_url();?></a> <br>
                                             call us @ <a href='tel:+971554691351'>+971 4355 8533</a> 
                                         </p>
                                         <p> Email: info@dealzarabia.com</p>

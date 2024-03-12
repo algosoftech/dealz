@@ -240,7 +240,7 @@ class Sms_model extends CI_Model
 		    // checking country code exist or Not...
 			if(in_array($country_code, $SMSCOUNTRY) ):
 				if($mobileNumber && $users_name):
-					$message		=	"Dear ".$users_name." , welcome to DealzArabia.Your Account has been created successfully. For more info, please visit https://dealzarabia.com/";
+					$message		=	"Dear ".$users_name." , welcome to DealzArabia.Your Account has been created successfully. For more info, please visit ".base_url('/');
 					$senderid		=	"DLZARBA";
 					$returnMessage	=	$this->sendMessageFunction($mobileNumber,$message,$senderid);
 					return $returnMessage;
@@ -262,7 +262,7 @@ class Sms_model extends CI_Model
 		    // checking country code exist or Not...
 			if(in_array($country_code, $SMSCOUNTRY1) ):
 				if($mobileNumber && $users_name):
-					$message		=	"Dear ".$users_name." , welcome to DealzArabia.Your Account has been created successfully. For more info, please visit https://dealzarabia.com/";
+					$message		=	"Dear ".$users_name." , welcome to DealzArabia.Your Account has been created successfully. For more info, please visit ".base_url('/');
 					// $senderid		=	"AD-DLZRBIA";
 					$senderid		=	"DLZRBIA";
 					$returnMessage	=	$this->sendMessageDigitizebirdFunction($mobileNumber,$message,$senderid);
@@ -579,9 +579,9 @@ class Sms_model extends CI_Model
 						$mobileNumber   =   $country_code.$mob;
 
 						if($orderDetails['isVoucher'] == "Y" &&  $is_donated == "Y" || $orderDetails['isVoucher'] == "Y" ):
-							$message = "Thank you for purchasing Ticket ".$coupon_code." for the draw on ".$draw_date.". We wish you the best of luck in becoming the next winner of ".$win." Download Order pdf : https://dealzarabia.com/downloadQuickInvoice/".$order_id;
+							$message = "Thank you for purchasing Ticket ".$coupon_code." for the draw on ".$draw_date.". We wish you the best of luck in becoming the next winner of ".$win." Download Order pdf : ".base_url("downloadQuickInvoice/".$order_id);
 						else:
-							$message = "Thank you for purchasing the ".$product_name." with Ticket ".$coupon_code." for the draw on ".$draw_date.". We wish you the best of luck in becoming the next winner of ".$win." Download Order pdf : https://dealzarabia.com/downloadQuickInvoice/".$order_id;
+							$message = "Thank you for purchasing the ".$product_name." with Ticket ".$coupon_code." for the draw on ".$draw_date.". We wish you the best of luck in becoming the next winner of ".$win." Download Order pdf : ".base_url("downloadQuickInvoice/".$order_id);
 						endif;
 
 						$returnMessage	=	$this->sendMessageFunction($mobileNumber,$message,$senderid);
@@ -613,9 +613,9 @@ class Sms_model extends CI_Model
 						$mobileNumber   =   $country_code.$mob1;
 						
 						if($orderDetails['isVoucher'] == "Y" &&  $is_donated == "Y" || $orderDetails['isVoucher'] == "Y" ):
-							$message = "Thank you for purchasing Ticket ".$coupon_code." for the draw on ".$draw_date.". We wish you the best of luck in becoming the next winner of ".$win." Download Order pdf : https://dealzarabia.com/downloadQuickInvoice/".$order_id;
+							$message = "Thank you for purchasing Ticket ".$coupon_code." for the draw on ".$draw_date.". We wish you the best of luck in becoming the next winner of ".$win." Download Order pdf : ".base_url("downloadQuickInvoice/".$order_id);
 						else:
-							$message = "Thank you for purchasing the ".$product_name." with Ticket ".$coupon_code." for the draw on ".$draw_date.". We wish you the best of luck in becoming the next winner of ".$win." Download Order pdf : https://dealzarabia.com/downloadQuickInvoice/".$order_id;
+							$message = "Thank you for purchasing the ".$product_name." with Ticket ".$coupon_code." for the draw on ".$draw_date.". We wish you the best of luck in becoming the next winner of ".$win." Download Order pdf : ".base_url("downloadQuickInvoice/".$order_id);
 						endif;
 
 						$returnMessage	=	$this->sendMessageDigitizebirdFunction($mobileNumber,$message,$senderid);
