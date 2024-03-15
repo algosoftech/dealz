@@ -127,6 +127,7 @@ class Generaldata extends CI_Controller {
 			$this->form_validation->set_rules('whatsapp_authorization_key', 'WhatsApp Authorization Key', 'trim|required');
 			$this->form_validation->set_rules('android_version', 'Andooid Version', 'trim|required');
 			$this->form_validation->set_rules('ios_version', 'IOS Version', 'trim|required');
+			$this->form_validation->set_rules('app_url', 'Application URL', 'trim|required');
 
 			if($this->form_validation->run() && $error == 'NO'): 
 
@@ -156,6 +157,7 @@ class Generaldata extends CI_Controller {
 				$param['whatsapp_authorization_key'] = 	stripslashes($this->input->post('whatsapp_authorization_key'));
 				$param['android_version']		= 	stripslashes($this->input->post('android_version'));
 				$param['ios_version']		    = 	stripslashes($this->input->post('ios_version'));
+				$param['app_url']		    	= 	stripslashes($this->input->post('app_url'));
 
 			if($this->input->post('CurrentDataID') ==''):
 					$param['general_data_id']		=	(int)$this->common_model->getNextSequence('da_general_data');

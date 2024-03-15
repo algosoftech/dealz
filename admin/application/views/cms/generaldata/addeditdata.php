@@ -169,6 +169,14 @@
                             <?php endif; ?>
                           </div>
 
+                          <div class="form-group-inner col-lg-6 col-md-6 col-sm-6 col-xs-12 <?php if(form_error('app_url')): ?><?php endif; ?>">
+                            <label>App URL <span class="required">*</span></label>
+                            <input type="url" name="app_url" id="app_url" value="<?php if(set_value('app_url')): echo set_value('app_url'); else: echo stripslashes($EDITDATA['app_url']);endif; ?>" class="form-control valid required" placeholder="Application URL">
+                            <?php if(form_error('app_url')): ?>
+                              <span for="app_url" generated="true" class="help-inline"><?php echo form_error('app_url'); ?></span>
+                            <?php endif; ?>
+                          </div>
+
 
                         </div>
                          
