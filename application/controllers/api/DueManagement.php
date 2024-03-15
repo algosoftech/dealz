@@ -221,9 +221,14 @@ class DueManagement extends CI_Controller {
 			else:
 
 				$DZL_USERID  =   $this->input->get('users_id');
+				
 				if($DZL_USERID):
 					$UsersType	 =	$this->common_model->getPaticularFieldByFields('users_type','da_users','users_id',(int)$DZL_USERID);
 				endif;
+
+				echo "<pre>";
+				print_r($UsersType);
+				die();
 
 
 				$tblName 	 =	'da_dueManagement';
