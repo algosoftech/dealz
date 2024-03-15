@@ -61,13 +61,13 @@ class Products extends CI_Controller {
 				$HSwcon['where']          	=  	['page' => 'Homeslider','status'=>'A','show_on'=>'Mobile'];//array('page'=> array('$ne'=> 'Homebanner') );
 				$HSorder 					=	['slider_id' => 'asc'];
 
-				$result = 	$this->geneal_model->getData2('multiple', $HStbl, $HSwcon,$HSorder);
+				$HomeSlider = 	$this->geneal_model->getData2('multiple', $HStbl, $HSwcon,$HSorder);
 
-				if(empty($result)):
-					$result = array();
+				if(empty($HomeSlider)):
+					$HomeSlider = array();
 				endif;
 
-				$result['homeSlider']		=	$result;
+				$result['homeSlider']		=	$HomeSlider;
 			else:
 				$HStbl 						=	'da_homepage_slider';
 				$HSwcon['where']          	=  	['page' => 'Appvideo', 'type' => 'V','status'=>'A'];//array('page'=> array('$ne'=> 'Homebanner') );
@@ -272,6 +272,7 @@ class Products extends CI_Controller {
 				}
 				$result['product_request_count'] = $count;
 			endif;
+
 			// Product Request Count End ...
 			echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_MSG'),$result);
 		else:
