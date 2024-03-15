@@ -221,45 +221,36 @@ class DueManagement extends CI_Controller {
 			else:
 
 				$DZL_USERID  =   $this->input->get('users_id');
-				
 				if($DZL_USERID):
 					$UsersType	 =	$this->common_model->getPaticularFieldByFields('users_type','da_users','users_id',(int)$DZL_USERID);
 				endif;
-
-				echo "<pre>";
-				print_r($UsersType);
-				die();
-
-
-				$tblName 	 =	'da_dueManagement';
-				$shortField  = 	array('due_management_id'=> -1 );
-
-				$fromDate =  $this->input->get('fromDate');
-				$toDate   =  $this->input->get('toDate');
+				$fromDate    =  $this->input->get('fromDate');
+				$toDate      =  $this->input->get('toDate');
 
 				if($fromDate):
 					$data['fromDate'] 		= date('Y-m-d 00:01' ,strtotime($fromDate));
 					$whereCon['where_gte'] 	= array(array("created_at",$data['fromDate']));
-				else:
-					// $data['fromDate'] 		= date('Y-m-d 00:01');
-					// $whereCon['where_gte'] 	= array(array("created_at",$data['fromDate']));
+				// else:
+				// 	$data['fromDate'] 		= date('Y-m-d 00:01');
+				// 	$whereCon['where_gte'] 	= array(array("created_at",$data['fromDate']));
 				endif;
+
 				if($toDate):
-					// $data['toDate'] 		= date('Y-m-d 23:59' ,strtotime($toDate));
-					// $whereCon['where_lte'] 	= array(array("created_at",$data['toDate']));
-				else:
-					$data['toDate'] 		= date('Y-m-d 23:59');
+					$data['toDate'] 		= date('Y-m-d 23:59' ,strtotime($toDate));
 					$whereCon['where_lte'] 	= array(array("created_at",$data['toDate']));
+				// else:
+				// 	$data['toDate'] 		= date('Y-m-d 23:59');
+				// 	$whereCon['where_lte'] 	= array(array("created_at",$data['toDate']));
 				endif;
+				
 				$whereCon['where']	 	    = array('user_id_deb' => (int)$DZL_USERID,'bind_person_id' => (string)$DZL_USERID );
 
 				// Search by product/retailer details....
 				$salesperson = $this->input->get('salesperson');
-
 				if(empty($salesperson)):
 
 					$tbl 			 =  'da_dueManagement';
-				 	$shortField 	 =  array('due_management_id' => -1 );
+				 	$shortField 	 =  array('created_at' => -1 );
 					$DueManagement 	 =  $this->geneal_model->duemanagementweb('multiple',$tbl,$whereCon ,$shortField);
 					// $data['DueManagement']   = $DueManagement?$DueManagement:'';
 				else:
@@ -279,7 +270,7 @@ class DueManagement extends CI_Controller {
 					$whereCon['where'] = array('user_id_deb' => (int)$DZL_USERID,'bind_person_id' => (string)$DZL_USERID );
 
 					$tblName 			 = 	'da_dueManagement';
-					$shortField 		 = 	array('due_management_id'=> -1 );
+					$shortField 		 = 	array('created_at'=> -1 );
 					$Salesperson_Due  	 =	$this->geneal_model->duemanagementweb('multiple',$tblName,$whereCon,$shortField);
 					// $data['Salesperson_Due']    = $Salesperson_Due?$Salesperson_Due:'';
 				endif;
@@ -339,6 +330,7 @@ class DueManagement extends CI_Controller {
 					$data['todayTotalRecharge']   = $todayTotalRecharge;
 					
 				endif;
+
 				if($data):
 					$results = $data;
 					echo outPut(1,lang('SUCCESS_CODE'),lang('SUCCESS_ACTION'),$results);	

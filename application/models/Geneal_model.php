@@ -2089,7 +2089,7 @@ public function getDataByParticularField($tableName='',$fieldName='',$fieldValue
 								'sender_users_email'=>'$sender.users_email',
 								'created_by'=>'$sender.users_type',
 								'user_type'=>'$users.users_type',
-								'created_at'=>'$created_at',
+								'created_at'=>1,
 							));
 
 		$whereCondition		=	array();
